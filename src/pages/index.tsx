@@ -22,7 +22,7 @@ export default function Home() {
             </Head>
             <main className="">
                 <h1>Mercado Pago Payment and Wallet for NEXT JS</h1>
-                <PaymentMercadoPago />
+                {/* <PaymentMercadoPago /> */}
                 <WalletMercadoPago />
             </main>
         </>

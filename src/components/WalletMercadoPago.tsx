@@ -46,7 +46,7 @@ const checkoutData = {
 };
 
 // Inicializa o SDK do Mercado Pago
-const mercadoPagoKey = process.env.NEXT_PUBLIC_MERCADO_PAGO_PUBLIC_KEY;
+const mercadoPagoKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
 
 //Caminho para API de Criar Preferência
 const createPreferenceAPI = process.env.NEXT_PUBLIC_PATH_API_CREATE_PREFERENCE;

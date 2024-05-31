@@ -23,14 +23,14 @@ function generateOrderID_ULID() {
     return customOrderID;
 }
 
-const MP_NEW_ACCESS_TOKEN = process.env.MP_NEW_ACCESS_TOKEN;
+const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 
-if (!MP_NEW_ACCESS_TOKEN) {
+if (!MP_ACCESS_TOKEN) {
     throw new Error("The MP_ACCESS_TOKEN environment variable is not defined");
 }
 
 // Adicione as credenciais
-const client = new MercadoPagoConfig({ accessToken: MP_NEW_ACCESS_TOKEN }); // Jogar o Access Token para o .env
+const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN }); // Jogar o Access Token para o .env
 
 /*  Gerenciador de Criação de Preferências. 
     
@@ -66,9 +66,9 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
                 body: {
                     items: cartItems,
                     back_urls: {
-                        success: "https://chocolateria.vercel.app/checkout_mp_success",
-                        failure: "https://chocolateria.vercel.app/checkout_mp_failure",
-                        pending: "https://chocolateria.vercel.app/checkout_mp_pending",
+                        success: "https://farol-das-ideias.vercel.app/",
+                        failure: "https://farol-das-ideias.vercel.app/",
+                        pending: "https://farol-das-ideias.vercel.app/",
                     },
                     external_reference: external_reference,
                 },

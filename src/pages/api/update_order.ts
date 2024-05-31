@@ -38,8 +38,8 @@ admin.initializeApp({
     databaseURL: "https://pragmatas-dev.firebaseio.com",
 });
 
-const MP_NEW_ACCESS_TOKEN = process.env.MP_NEW_ACCESS_TOKEN;
-const secret = process.env.MP_NEW_WEBHOOK_TEST_KEY;
+const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
+const secret = process.env.MP_WEBHOOK_TEST_KEY;
 
 export default async function orderUpdateHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
@@ -121,7 +121,7 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                                 const fullPaymentInfo = await axios.get(`https://api.mercadopago.com/v1/payments/${payment_id}`, {
                                     headers: {
                                         "Content-Type": "application/json",
-                                        Authorization: `Bearer ${MP_NEW_ACCESS_TOKEN}`,
+                                        Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
                                     },
                                 });
 

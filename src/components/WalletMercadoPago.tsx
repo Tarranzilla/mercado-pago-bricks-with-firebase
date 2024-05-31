@@ -174,7 +174,7 @@ const WalletMercadoPago = () => {
 
     return (
         <Wallet
-            initialization={{ redirectMode: "modal" }}
+            initialization={{ redirectMode: "blank" }}
             customization={customization}
             onSubmit={onSubmit}
             onReady={onReady}

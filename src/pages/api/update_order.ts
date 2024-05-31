@@ -11,6 +11,9 @@ import axios, { AxiosError } from "axios";
 
 import { Order } from "@/types/Order";
 
+// Verifica se a aplicação está em produção
+const isProduction = process.env.IS_PRODUCTION === "true";
+
 if (!process.env.FIREBASE_PROJECT_ID) {
     throw new Error("The FIREBASE_PROJECT_ID environment variable is not defined");
 }
@@ -38,8 +41,8 @@ admin.initializeApp({
     databaseURL: "https://pragmatas-dev.firebaseio.com",
 });
 
-const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
-const secret = process.env.MP_WEBHOOK_TEST_KEY;
+const MP_ACCESS_TOKEN = isProduction ? process.env.MP_PROD_ACCESS_TOKEN : process.env.MP_DEV_ACCESS_TOKEN;
+const secret = isProduction ? process.env.MP_PROD_WEBHOOK_KEY : process.env.MP_DEV_WEBHOOK_KEY;
 
 export default async function orderUpdateHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {

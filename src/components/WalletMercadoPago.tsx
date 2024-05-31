@@ -45,8 +45,11 @@ const checkoutData = {
     observation: "No Observations",
 };
 
+// Verifica se a aplicação está em produção
+const isProduction = process.env.IS_PRODUCTION === "true";
+
 // Inicializa o SDK do Mercado Pago
-const mercadoPagoKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
+const mercadoPagoKey = isProduction ? process.env.NEXT_PUBLIC_MP_PROD_PUBLIC_KEY : process.env.NEXT_PUBLIC_MP_DEV_PUBLIC_KEY;
 
 //Caminho para API de Criar Preferência
 const createPreferenceAPI = process.env.NEXT_PUBLIC_PATH_API_CREATE_PREFERENCE;

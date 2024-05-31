@@ -23,7 +23,10 @@ function generateOrderID_ULID() {
     return customOrderID;
 }
 
-const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
+// Verifica se a aplicação está em produção
+const isProduction = process.env.IS_PRODUCTION === "true";
+
+const MP_ACCESS_TOKEN = isProduction ? process.env.MP_PROD_ACCESS_TOKEN : process.env.MP_DEV_ACCESS_TOKEN;
 
 if (!MP_ACCESS_TOKEN) {
     throw new Error("The MP_ACCESS_TOKEN environment variable is not defined");
@@ -66,9 +69,9 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
                 body: {
                     items: cartItems,
                     back_urls: {
-                        success: "https://farol-das-ideias.vercel.app/",
-                        failure: "https://farol-das-ideias.vercel.app/",
-                        pending: "https://farol-das-ideias.vercel.app/",
+                        success: "https://farol-das-ideias.vercel.app/checkout_success",
+                        failure: "https://farol-das-ideias.vercel.app/checkout_fail",
+                        pending: "https://farol-das-ideias.vercel.app/checkout_pending",
                     },
                     external_reference: external_reference,
                 },

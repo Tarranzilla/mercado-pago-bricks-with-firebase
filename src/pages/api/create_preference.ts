@@ -64,6 +64,16 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
 
         // Provavelmente aqui eu já poderia inserir varias informações sobre o cliente, endereço e formas de pagamento!
 
+        /*
+            Isso está acontecendo por causa da url de init_point 
+            
+            Antes funcionava da mesma forma que produção, assim:
+            https://www.mercadopago.com.br/checkout/v1/redirect?pref_id.....
+
+            Agora deve ser assim no ambiente de teste
+            https://sandbox.mercadopago.com.br/checkout/v1/redirect?pref_id.....
+        */
+
         preference
             .create({
                 body: {
@@ -74,6 +84,9 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
                         pending: "https://farol-das-ideias.vercel.app/checkout_pending",
                     },
                     external_reference: external_reference,
+                },
+                requestOptions: {
+                    idempotencyKey: external_reference,
                 },
             })
             .then(function (response) {

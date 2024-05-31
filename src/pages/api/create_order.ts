@@ -27,10 +27,12 @@ const serviceAccount: admin.ServiceAccount = {
     privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
 };
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://pragmatas-dev.firebaseio.com",
-});
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://pragmatas-dev.firebaseio.com",
+    });
+}
 
 /* Exemplo de Objeto de Pedido para ser enviado no Body da Requisição
 

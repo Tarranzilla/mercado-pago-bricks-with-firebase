@@ -36,10 +36,12 @@ const serviceAccount: admin.ServiceAccount = {
     privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
 };
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://pragmatas-dev.firebaseio.com",
-});
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://pragmatas-dev.firebaseio.com",
+    });
+}
 
 const MP_ACCESS_TOKEN = isProduction ? process.env.MP_PROD_ACCESS_TOKEN : process.env.MP_DEV_ACCESS_TOKEN;
 const secret = isProduction ? process.env.MP_PROD_WEBHOOK_KEY : process.env.MP_DEV_WEBHOOK_KEY;

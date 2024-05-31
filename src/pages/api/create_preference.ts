@@ -23,14 +23,14 @@ function generateOrderID_ULID() {
     return customOrderID;
 }
 
-const MP_ACCESS_TOKEN = process.env.MERCADO_PAGO_ACESS_TOKEN;
+const MP_NEW_ACCESS_TOKEN = process.env.MP_NEW_ACCESS_TOKEN;
 
-if (!MP_ACCESS_TOKEN) {
+if (!MP_NEW_ACCESS_TOKEN) {
     throw new Error("The MP_ACCESS_TOKEN environment variable is not defined");
 }
 
 // Adicione as credenciais
-const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN }); // Jogar o Access Token para o .env
+const client = new MercadoPagoConfig({ accessToken: MP_NEW_ACCESS_TOKEN }); // Jogar o Access Token para o .env
 
 /*  Gerenciador de Criação de Preferências. 
     

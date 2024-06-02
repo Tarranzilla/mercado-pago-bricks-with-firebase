@@ -1,12 +1,12 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // Axios para requisições HTTP
 import axios from "axios";
 
 // Framer motion para animações
-import { motion as m, AnimatePresence } from "framer-motion";
+import { motion as m, AnimatePresence, useScroll } from "framer-motion";
 
 // Funções Utilitárias
 import { generate_whatsapp_url_for_more_order_info } from "@/util/WhatsApp";
@@ -211,10 +211,82 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
 
 */
 
+export type User_Info_Container_Props = {
+    label: string;
+    placeholder: string;
+    address_prop: string;
+    isEditing: any;
+    setIsEditing: any;
+    address: Address;
+    editedAddress: Address;
+    handleAddressChange: any;
+};
+
+export const User_Info_Container: React.FC<User_Info_Container_Props> = ({
+    label,
+    placeholder,
+    address_prop,
+    isEditing,
+    setIsEditing,
+    address,
+    editedAddress,
+    handleAddressChange,
+}) => {
+    return (
+        <div className="User_Info_Item_Container">
+            <div className="User_Info_Item">
+                <p className="User_Info_Item_Label">{label}</p>
+
+                {/* Input de Edição ou Detalhe de Item */}
+                {isEditing[address_prop] ? (
+                    <input
+                        className="User_Info_Item_Input"
+                        type="text"
+                        placeholder={placeholder}
+                        value={editedAddress[address_prop]}
+                        onChange={(e) => handleAddressChange(address_prop, e.target.value)}
+                    />
+                ) : (
+                    <p className="User_Info_Item_Detail User_City">
+                        {editedAddress[address_prop] !== address[address_prop] ? `${editedAddress[address_prop]}*` : address[address_prop]}
+                    </p>
+                )}
+            </div>
+
+            {/* Botões de Edição */}
+            {isEditing[address_prop] ? (
+                <div
+                    className="User_Info_Item_Edit_Btn"
+                    onClick={() => {
+                        setIsEditing({ ...isEditing, [address_prop]: false });
+                    }}
+                >
+                    <span className="material-icons User_Tab_Edit_Icon">save</span>
+                    <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
+                </div>
+            ) : (
+                <div
+                    className="User_Info_Item_Edit_Btn"
+                    onClick={() => {
+                        setIsEditing({ ...isEditing, [address_prop]: true });
+                    }}
+                >
+                    <span className="material-icons User_Tab_Edit_Icon">edit</span>
+                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
 // Componente de Aba de Usuário
 export default function UserTab() {
     const firebase = useFirebase();
     const dispatch = useDispatch();
+
+    // Referência para o Scroll com Framer Motion
+    const scroll_ref = useRef(null);
+    const { scrollYProgress } = useScroll({ container: scroll_ref });
 
     if (!firebase) {
         throw new Error("Firebase context is not available");
@@ -546,32 +618,68 @@ export default function UserTab() {
         <>
             <AnimatePresence>
                 {isUserTabOpen && (
-                    <m.div initial={{ x: -1000 }} animate={{ x: 0 }} exit={{ x: -1000 }} transition={{ duration: 0.5 }} className="UserTab">
-                        <div className="UserTab_Content_Wrapper">
+                    <m.div initial={{ x: -1000 }} animate={{ x: 0 }} exit={{ x: -1000 }} transition={{ duration: 0.5 }} className="User_Tab">
+                        {/* Wrapper do Conteúdo da Aba do Usuário */}
+                        <div className="UserTab_Content_Wrapper" ref={scroll_ref}>
                             {user ? (
                                 <>
-                                    <div className="User_Tab_Section">
-                                        <h1 className="">Perfil</h1>
-                                        <div className="User_Tab_Ca">
-                                            {user.photoURL && user.displayName && (
-                                                <img className="User_Image" src={user.photoURL} alt={user.displayName} />
-                                            )}
-                                            {!user.photoURL && <span className="material-icons User_No_Image">person_pin</span>}
+                                    {/* Card de Informações Gerais */}
+                                    <div className="User_Tab_Card">
+                                        <h1 className="User_Tab_Card_Title">Informações Gerais</h1>
+                                        <div className="User_Tab_Card_Info">
+                                            <div className="User_Tab_Card_Info_Image_Container">
+                                                {user.photoURL && user.displayName && (
+                                                    <img className="User_Tab_Card_Info_Image" src={user.photoURL} alt={user.displayName} />
+                                                )}
+                                                {!user.photoURL && <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>}
 
-                                            <div className="User_Account_Info_Items">
-                                                <div className="User_Info_Item">
-                                                    <p className="User_Info_Label">Nome</p>
-                                                    <p className="User_Info_Detail User_Name">{localUser?.name || "Nenhum Nome"}</p>
+                                                <div className="User_Tab_Card_Info_Image_Edit_Btn">
+                                                    <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
+                                                        edit
+                                                    </span>
+                                                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="User_Tab_Card_Info_Items_List">
+                                                <div className="User_Info_Item_Container">
+                                                    <div className="User_Info_Item">
+                                                        <p className="User_Info_Item_Label">Nome</p>
+                                                        <p className="User_Info_Item_Detail User_Name">{localUser?.name || "Nenhum Nome"}</p>
+                                                    </div>
+                                                    <div className="User_Info_Item_Edit_Btn">
+                                                        <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
+                                                            edit
+                                                        </span>
+                                                        <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                                                    </div>
                                                 </div>
 
-                                                <div className="User_Info_Item">
-                                                    <p className="User_Info_Label">Email</p>
-                                                    <p className="User_Info_Detail User_Email">{localUser?.email}</p>
+                                                <div className="User_Info_Item_Container">
+                                                    <div className="User_Info_Item">
+                                                        <p className="User_Info_Item_Label">Email</p>
+                                                        <p className="User_Info_Item_Detail User_Email">{localUser?.email}</p>
+                                                    </div>
+                                                    <div className="User_Info_Item_Edit_Btn">
+                                                        <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
+                                                            edit
+                                                        </span>
+                                                        <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                                                    </div>
                                                 </div>
 
-                                                <div className="User_Info_Item">
-                                                    <p className="User_Info_Label">Telefone</p>
-                                                    <p className="User_Info_Detail User_ID">{localUser?.telephone}</p>
+                                                <div className="User_Info_Item_Container">
+                                                    <div className="User_Info_Item">
+                                                        <p className="User_Info_Item_Label">Telefone</p>
+                                                        <p className="User_Info_Item_Detail User_ID">{localUser?.telephone}</p>
+                                                    </div>
+
+                                                    <div className="User_Info_Item_Edit_Btn">
+                                                        <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
+                                                            edit
+                                                        </span>
+                                                        <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -585,235 +693,115 @@ export default function UserTab() {
                                         )}
                                     </div>
 
+                                    {/* Card de Informações de Entrega */}
                                     <div className="User_Tab_Card">
-                                        <h1 className="User_Adress_Title User_Page_Title">Endereço</h1>
-                                        <div className="User_Adress_Info_Items">
-                                            <div className="User_Info_Item">
-                                                <div className="Info_Item_Text">
-                                                    <p className="User_Info_Label">Rua</p>
-                                                    {isEditing.street ? (
-                                                        <input
-                                                            className="User_Info_Input"
-                                                            type="text"
-                                                            placeholder="Nova Rua"
-                                                            value={editedAddress.street}
-                                                            onChange={(e) => handleAddressChange("street", e.target.value)}
-                                                        />
-                                                    ) : (
-                                                        <p className="User_Info_Detail User_City">
-                                                            {editedAddress.street !== address.street ? `${editedAddress.street}*` : address.street}
-                                                        </p>
-                                                    )}
-                                                </div>
+                                        <h1 className="User_Tab_Card_Title">Informações de Entrega</h1>
+                                        <div className="User_Tab_Card_Info_Items_List">
+                                            <User_Info_Container
+                                                key={"Rua"}
+                                                label="Rua"
+                                                placeholder="Nova Rua"
+                                                address_prop="street"
+                                                isEditing={isEditing}
+                                                setIsEditing={setIsEditing}
+                                                address={address}
+                                                editedAddress={editedAddress}
+                                                handleAddressChange={handleAddressChange}
+                                            />
 
-                                                {isEditing.street ? (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, street: false });
-                                                        }}
-                                                    >
-                                                        save
-                                                    </span>
-                                                ) : (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, street: true });
-                                                        }}
-                                                    >
-                                                        edit
-                                                    </span>
-                                                )}
-                                            </div>
+                                            <User_Info_Container
+                                                key={"Numero"}
+                                                label="Número"
+                                                placeholder="Novo Número"
+                                                address_prop="number"
+                                                isEditing={isEditing}
+                                                setIsEditing={setIsEditing}
+                                                address={address}
+                                                editedAddress={editedAddress}
+                                                handleAddressChange={handleAddressChange}
+                                            />
 
-                                            <div className="User_Info_Item">
-                                                <div className="Info_Item_Text">
-                                                    <p className="User_Info_Label">Número</p>
-                                                    {isEditing.number ? (
-                                                        <input
-                                                            className="User_Info_Input"
-                                                            type="text"
-                                                            placeholder="Novo Número"
-                                                            value={editedAddress.number}
-                                                            onChange={(e) => handleAddressChange("number", e.target.value)}
-                                                        />
-                                                    ) : (
-                                                        <p className="User_Info_Detail User_City">
-                                                            {editedAddress.number !== address.number ? `${editedAddress.number}*` : address.number}
-                                                        </p>
-                                                    )}
-                                                </div>
+                                            <User_Info_Container
+                                                key={"Complemento"}
+                                                label="Complemento"
+                                                placeholder="Novo Complemento"
+                                                address_prop="complement"
+                                                isEditing={isEditing}
+                                                setIsEditing={setIsEditing}
+                                                address={address}
+                                                editedAddress={editedAddress}
+                                                handleAddressChange={handleAddressChange}
+                                            />
 
-                                                {isEditing.number ? (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, number: false });
-                                                        }}
-                                                    >
-                                                        save
-                                                    </span>
-                                                ) : (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, number: true });
-                                                        }}
-                                                    >
-                                                        edit
-                                                    </span>
-                                                )}
-                                            </div>
+                                            <User_Info_Container
+                                                key={"Cidade"}
+                                                label="Cidade"
+                                                placeholder="Nova Cidade"
+                                                address_prop="city"
+                                                isEditing={isEditing}
+                                                setIsEditing={setIsEditing}
+                                                address={address}
+                                                editedAddress={editedAddress}
+                                                handleAddressChange={handleAddressChange}
+                                            />
 
-                                            <div className="User_Info_Item">
-                                                <div className="Info_Item_Text">
-                                                    <p className="User_Info_Label">Complemento</p>
-                                                    {isEditing.complement ? (
-                                                        <input
-                                                            className="User_Info_Input"
-                                                            type="text"
-                                                            placeholder="Novo Complemento"
-                                                            value={editedAddress.extra}
-                                                            onChange={(e) => handleAddressChange("complement", e.target.value)}
-                                                        />
-                                                    ) : (
-                                                        <p className="User_Info_Detail User_City">
-                                                            {editedAddress.complement !== address.complement
-                                                                ? `${editedAddress.complement}*`
-                                                                : address.complement}
-                                                        </p>
-                                                    )}
-                                                </div>
+                                            <User_Info_Container
+                                                key={"Estado"}
+                                                label="Estado"
+                                                placeholder="Novo Estado"
+                                                address_prop="state"
+                                                isEditing={isEditing}
+                                                setIsEditing={setIsEditing}
+                                                address={address}
+                                                editedAddress={editedAddress}
+                                                handleAddressChange={handleAddressChange}
+                                            />
 
-                                                {isEditing.complement ? (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, complement: false });
-                                                        }}
-                                                    >
-                                                        save
-                                                    </span>
-                                                ) : (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, complement: true });
-                                                        }}
-                                                    >
-                                                        edit
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            <div className="User_Info_Item">
-                                                <div className="Info_Item_Text">
-                                                    <p className="User_Info_Label">Cidade</p>
-                                                    {isEditing.city ? (
-                                                        <input
-                                                            className="User_Info_Input"
-                                                            type="text"
-                                                            placeholder="Nova Cidade"
-                                                            value={editedAddress.city}
-                                                            onChange={(e) => handleAddressChange("city", e.target.value)}
-                                                        />
-                                                    ) : (
-                                                        <p className="User_Info_Detail User_City">
-                                                            {editedAddress.city !== address.city ? `${editedAddress.city}*` : address.city}
-                                                        </p>
-                                                    )}
-                                                </div>
-
-                                                {isEditing.city ? (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, city: false });
-                                                        }}
-                                                    >
-                                                        save
-                                                    </span>
-                                                ) : (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, city: true });
-                                                        }}
-                                                    >
-                                                        edit
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            <div className="User_Info_Item">
-                                                <div className="Info_Item_Text">
-                                                    <p className="User_Info_Label">CEP</p>
-                                                    {isEditing.zip ? (
-                                                        <input
-                                                            className="User_Info_Input"
-                                                            type="text"
-                                                            placeholder="Novo CEP"
-                                                            value={editedAddress.zip}
-                                                            onChange={(e) => handleAddressChange("zip", e.target.value)}
-                                                        />
-                                                    ) : (
-                                                        <p className="User_Info_Detail User_City">
-                                                            {editedAddress.zip !== address.zip ? `${editedAddress.zip}*` : address.zip}
-                                                        </p>
-                                                    )}
-                                                </div>
-
-                                                {isEditing.zip ? (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, zip: false });
-                                                        }}
-                                                    >
-                                                        save
-                                                    </span>
-                                                ) : (
-                                                    <span
-                                                        className="material-icons User_Tab_Edit_Icon"
-                                                        onClick={() => {
-                                                            setIsEditing({ ...isEditing, zip: true });
-                                                        }}
-                                                    >
-                                                        edit
-                                                    </span>
-                                                )}
-                                            </div>
+                                            <User_Info_Container
+                                                key={"ZIP"}
+                                                label="Código Postal"
+                                                placeholder="Novo Código Postal"
+                                                address_prop="zip"
+                                                isEditing={isEditing}
+                                                setIsEditing={setIsEditing}
+                                                address={address}
+                                                editedAddress={editedAddress}
+                                                handleAddressChange={handleAddressChange}
+                                            />
 
                                             {isSomeAddressEdited && (
                                                 <div className="User_Info_Edit_Control">
-                                                    <button className="Order_SeeMore_Btn User_Info_Edit_Btn" onClick={discardChanges}>
-                                                        <span className="material-icons">delete_forever</span>Descartar Alterações
+                                                    <button className="User_Info_Edit_Control_Btn" onClick={discardChanges}>
+                                                        <span className="material-icons User_Info_Edit_Control_Btn_Icon">delete_forever</span>
+                                                        <p className="User_Info_Edit_Control_Btn_Text">Descartar Alterações</p>
                                                     </button>
-                                                    <button className="Order_SeeMore_Btn User_Info_Edit_Btn" onClick={updateAddress}>
-                                                        Atualizar Informações <span className="material-icons">update</span>
+                                                    <button className="User_Info_Edit_Control_Btn" onClick={updateAddress}>
+                                                        <span className="material-icons User_Info_Edit_Control_Btn_Icon">update</span>
+                                                        <p className="User_Info_Edit_Control_Btn_Text">Atualizar Informações</p>
                                                     </button>
                                                 </div>
                                             )}
                                         </div>
                                     </div>
 
+                                    {/* Card de Informações Sobre os Pedidos */}
                                     <div className="User_Tab_Card">
-                                        {" "}
-                                        <h1 className="User_Adress_Title User_Page_Title">Pedidos</h1>
-                                        <div className="User_Order_Info">
+                                        <h1 className="User_Tab_Card_Title">Pedidos</h1>
+                                        <div className="User_Order_List">
+                                            {/* Lista de Pedidos do Usuário */}
                                             {displayedOrders.map((order, index) => {
                                                 return <OrderItem key={index} order={order} index={index} />;
                                             })}
 
+                                            {/* Mensagem de Carrinho Vazio */}
                                             {noOrders && (
-                                                <p className="User_No_Orders">
-                                                    {" "}
-                                                    <span className="material-icons User_No_Orders_Icon">receipt_long</span>Você ainda não fez nenhum
-                                                    pedido
-                                                </p>
+                                                <div className="User_No_Orders">
+                                                    <span className="material-icons User_No_Orders_Icon">receipt_long</span>{" "}
+                                                    <p className="User_No_Orders_Text">Você ainda não fez nenhum pedido</p>
+                                                </div>
                                             )}
 
+                                            {/* Botão para ver mais do que os 3 pedidos mais recentes */}
                                             {!noOrders && orderList.length > 3 && (
                                                 <div className="User_Order_SeeMore">
                                                     <button
@@ -839,9 +827,10 @@ export default function UserTab() {
                                         </div>
                                     </div>
 
-                                    <button className="User_Btn" onClick={logout}>
-                                        <span className="material-icons">logout</span>
-                                        Logout
+                                    {/* Botão de Logout */}
+                                    <button className="Logout_Btn" onClick={logout}>
+                                        <span className="material-icons Logout_Btn_Icon">logout</span>
+                                        <p className="Logout_Btn_Text">Fazer Logout</p>
                                     </button>
                                 </>
                             ) : (
@@ -874,12 +863,74 @@ export default function UserTab() {
                                 </div>
                             )}
                         </div>
+
+                        {/* Barra de Progresso de Scroll */}
+                        <div className="Progress_Bar_Container">
+                            <div className="Progress_Bar_Wrapper">
+                                <m.div className="Progress_Bar" style={{ scaleX: scrollYProgress }} />
+                            </div>
+                        </div>
                     </m.div>
                 )}
             </AnimatePresence>
         </>
     );
 }
+
+/* User_Info_Item_Container Original
+
+<div className="User_Info_Item_Container">
+    <div className="User_Info_Item">
+        <p className="User_Info_Item_Label">Rua</p>
+
+                                                    
+                                                    {isEditing.street ? (
+                                                        <input
+                                                            className="User_Info_Item_Input"
+                                                            type="text"
+                                                            placeholder="Nova Rua"
+                                                            value={editedAddress.street}
+                                                            onChange={(e) => handleAddressChange("street", e.target.value)}
+                                                        />
+                                                    ) : (
+                                                        <p className="User_Info_Item_Detail User_City">
+                                                            {editedAddress.street !== address.street ? `${editedAddress.street}*` : address.street}
+                                                        </p>
+                                                    )}
+                                                </div>
+
+                                                
+                                                {isEditing.street ? (
+                                                    <div
+                                                        className="User_Info_Item_Edit_Btn"
+                                                        onClick={() => {
+                                                            setIsEditing({ ...isEditing, street: false });
+                                                        }}
+                                                    >
+                                                        <span className="material-icons User_Tab_Edit_Icon">save</span>
+                                                        <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        className="User_Info_Item_Edit_Btn"
+                                                        onClick={() => {
+                                                            setIsEditing({ ...isEditing, street: true });
+                                                        }}
+                                                    >
+                                                        <span className="material-icons User_Tab_Edit_Icon">edit</span>
+                                                        <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                                                    </div>
+                                                )}
+                                            </div>
+*/
+
+/*  Circulo de Progresso de Scroll
+
+    <svg id="progress" width="100" height="100" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="30" pathLength="1" className="bg" />
+        <m.circle cx="50" cy="50" r="30" pathLength="1" className="indicator" style={{ pathLength: scrollYProgress }} />
+    </svg>
+*/
 
 /*  Armazenamento de Imagens no Firestore (?)
 

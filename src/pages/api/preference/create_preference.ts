@@ -12,14 +12,14 @@ import { Cart_Item } from "@/types/Cart_Item";
 // Função para gerar um ID de pedido unico e aleatório
 function generateOrderID_UUID_V4() {
     let customOrderID = uuidv4();
-    console.log(customOrderID);
+    // console.log("UUID Gerado para o novo Pedido: ",customOrderID);
     return customOrderID;
 }
 
 // Função para gerar um ID de pedido ordenado e unico
 function generateOrderID_ULID() {
     let customOrderID = ulid();
-    console.log(customOrderID);
+    // console.log("ULID Gerado para o novo Pedido: ",customOrderID);
     return customOrderID;
 }
 
@@ -68,10 +68,10 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
             Isso está acontecendo por causa da url de init_point 
             
             Antes funcionava da mesma forma que produção, assim:
-            https://www.mercadopago.com.br/checkout/v1/redirect?pref_id.....
+            https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=201803820-35e8fbb3-516c-4582-9582-bb3fc0897c97
 
             Agora deve ser assim no ambiente de teste
-            https://sandbox.mercadopago.com.br/checkout/v1/redirect?pref_id.....
+            https://sandbox.mercadopago.com.br/checkout/v1/redirect?pref_id=201803820-35e8fbb3-516c-4582-9582-bb3fc0897c97
         */
 
         preference
@@ -90,15 +90,15 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
                 },
             })
             .then(function (response) {
-                console.log("Preference Created, Data Recieved From Mercado Pago:", response);
-                console.log(`Returning Preference ID: ${response.id} and External Reference ID: ${external_reference} as a Response.`);
+                // console.log("Preference Created, Response Data Recieved From Mercado Pago:", response);
+                // console.log(`Returning Preference ID: ${response.id} and External Reference ID: ${external_reference} as a Response.`);
                 res.json({
                     id: response.id,
                     external_reference: external_reference,
                 });
             })
             .catch(function (error) {
-                console.log(error);
+                console.log("Erro ao Criar Preferência!", error);
             });
     } else if (req.method === "GET") {
         res.status(200).send("OK");

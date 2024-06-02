@@ -1,5 +1,6 @@
-export type Cart_Item = {
-    id: string;
-    price: number;
+import Product from "./Product";
+
+export type CartItem = {
+    product: Product;
     quantity: number;
-}; // Definição do tipo de item do carrinho
+};

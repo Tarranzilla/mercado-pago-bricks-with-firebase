@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-// Firebase Admin SDK
-import admin, { ServiceAccount } from "firebase-admin";
-
 import { Order } from "@/types/Order";
+
+import { auth, firestore } from "@/lib/firebaseAdmin";
+
+/* Firebase Admin SDK
+import admin, { ServiceAccount } from "firebase-admin";
 
 if (!process.env.FIREBASE_PROJECT_ID) {
     throw new Error("The FIREBASE_PROJECT_ID environment variable is not defined");
@@ -33,6 +34,8 @@ if (!admin.apps.length) {
         databaseURL: "https://pragmatas-dev.firebaseio.com",
     });
 }
+
+*/
 
 /* Exemplo de Objeto de Pedido para ser enviado no Body da Requisição
 
@@ -69,9 +72,8 @@ const order: CheckoutOrder = {
 export default async function orderCreationHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         const order_data: Order = req.body;
-        console.log("Dados Recebidos para Criar o Pedido:", order_data);
+        // console.log("Dados Recebidos para Criar o Pedido:", order_data);
 
-        const firestore = admin.firestore();
         const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID; // UID do Projeto Espefífico no Firebase - Neste Caso a ID do projeto da Tropical Cacau
         const ordersCollectionRef = firestore.collection(`projects/${projectUID}/orders`);
 

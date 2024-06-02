@@ -11,6 +11,9 @@ const WalletMercadoPago = dynamic(() => import("@/components/WalletMercadoPago")
     ssr: false,
 });
 
+import UserTab from "@/components/User_Tab";
+import { User } from "mercadopago";
+
 export default function Home() {
     return (
         <>
@@ -23,6 +26,7 @@ export default function Home() {
             <main className="">
                 <h1>Mercado Pago Wallet for NEXT JS</h1>
                 {/* <PaymentMercadoPago /> */}
+                <UserTab />
                 <WalletMercadoPago />
             </main>
         </>

@@ -1,3 +1,5 @@
+@import "@material-design-icons/font";
+
 :root {
 }
 
@@ -28,4 +30,39 @@ main {
     flex-direction: column;
 
     gap: 2rem;
+}
+
+.UserTab_Content_Wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.User_Tab_Card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: gray;
+}
+
+.User_Account_Info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+.User_Account_Info_Items,
+.User_Adress_Info_Items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.User_Info_Item {
+    display: flex;
 }

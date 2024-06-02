@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 // Firebase Admin SDK
-import admin, { ServiceAccount } from "firebase-admin";
+import { firestore, auth } from "@/lib/firebaseAdmin";
 
 // Biblioteca de Criptografia
 import crypto from "crypto";
@@ -13,35 +13,6 @@ import { Order } from "@/types/Order";
 
 // Verifica se a aplicação está em produção
 const isProduction = process.env.IS_PRODUCTION === "true";
-
-if (!process.env.FIREBASE_PROJECT_ID) {
-    throw new Error("The FIREBASE_PROJECT_ID environment variable is not defined");
-}
-
-if (!process.env.FIREBASE_CLIENT_EMAIL) {
-    throw new Error("The FIREBASE_CLIENT_EMAIL environment variable is not defined");
-}
-
-if (!process.env.FIREBASE_PRIVATE_KEY) {
-    throw new Error("The FIREBASE_PRIVATE_KEY environment variable is not defined");
-}
-
-if (!process.env.FIREBASE_PRAGMATA_PROJECT_ID) {
-    throw new Error("The FIREBASE_PRAGMATA_PROJECT_ID environment variable is not defined");
-}
-
-const serviceAccount: admin.ServiceAccount = {
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-};
-
-if (!admin.apps.length) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: "https://pragmatas-dev.firebaseio.com",
-    });
-}
 
 const MP_ACCESS_TOKEN = isProduction ? process.env.MP_PROD_ACCESS_TOKEN : process.env.MP_DEV_ACCESS_TOKEN;
 const secret = isProduction ? process.env.MP_PROD_WEBHOOK_KEY : process.env.MP_DEV_WEBHOOK_KEY;
@@ -90,7 +61,6 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                 // Comparar a chave gerada com a chave extraída do cabeçalho
                 if (signatureValue === generatedSignature) {
                     // A assinatura é válida, agora você pode processar os dados e salvá-los no Firebase
-                    const firestore = admin.firestore();
                     const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID;
                     const ordersCollectionRef = firestore.collection(`projects/${projectUID}/orders`);
 

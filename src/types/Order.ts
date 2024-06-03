@@ -1,9 +1,9 @@
-import { CartItem } from "./Cart_Item";
+import { Cart_Item } from "./Cart_Item";
 
 export type Order = {
     order_preference_id: string;
     order_external_reference: string;
-    order_items: CartItem[];
+    order_items: Cart_Item[];
     order_date: any;
     order_type: string;
 

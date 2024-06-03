@@ -53,8 +53,8 @@ const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN }); // Jogar
 export default function preferenceHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         let cartItems = req.body.map((item: Cart_Item) => ({
-            title: item.id,
-            unit_price: item.price,
+            title: item.product.title,
+            unit_price: item.product.price,
             quantity: item.quantity,
         }));
 

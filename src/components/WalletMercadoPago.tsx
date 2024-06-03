@@ -11,22 +11,154 @@ import { Order } from "@/types/Order";
 // Dados do carrinho de compras, deve ser obtido do contexto da aplicação futuramente
 const cartItems: Cart_Item[] = [
     {
-        id: "1111",
         quantity: 1,
-        price: 100,
+        product: {
+            id: "1",
+            category: "Classicos",
+            type: "Barra de Chocolate",
+            variant: {
+                id: "1",
+                name: "Padrão",
+                price: 10.0,
+                description: "Barra de Chocolate ao Leite de 100g",
+            },
+
+            availableForSale: true,
+            isPromoted: true,
+            showInStore: true,
+
+            stockQtty: 100,
+
+            title: "Tropical Rio",
+            subtitle: "Barra de Chocolate ao Leite de 100g",
+            description: ["Chocolate ao leite cremoso e saboroso", "100g de puro prazer"],
+            price: 50,
+            weight: "100g",
+
+            ingredients: [
+                {
+                    id: "1",
+                    name: "Leite",
+                    description: ["Leite integral", "Leite em pó"],
+                },
+                {
+                    id: "2",
+                    name: "Açúcar",
+                    description: ["Açúcar refinado", "Açúcar mascavo"],
+                },
+            ],
+            images: [
+                {
+                    src: "https://www.example.com/image.jpg",
+                    alt: "Barra de Chocolate Tropical Rio",
+                    width: 800,
+                    height: 600,
+                },
+            ],
+            url_page_link: "tropical-rio",
+            url_full: "https://www.example.com/product/1/full",
+        },
     },
     {
-        id: "2222",
         quantity: 2,
-        price: 25,
+        product: {
+            id: "1",
+            category: "Classicos",
+            type: "Barra de Chocolate",
+            variant: {
+                id: "1",
+                name: "Padrão",
+                price: 10.0,
+                description: "Barra de Chocolate ao Leite de 100g",
+            },
+
+            availableForSale: true,
+            isPromoted: true,
+            showInStore: true,
+
+            stockQtty: 100,
+
+            title: "Tropical Rio",
+            subtitle: "Barra de Chocolate ao Leite de 100g",
+            description: ["Chocolate ao leite cremoso e saboroso", "100g de puro prazer"],
+            price: 50,
+            weight: "100g",
+
+            ingredients: [
+                {
+                    id: "1",
+                    name: "Leite",
+                    description: ["Leite integral", "Leite em pó"],
+                },
+                {
+                    id: "2",
+                    name: "Açúcar",
+                    description: ["Açúcar refinado", "Açúcar mascavo"],
+                },
+            ],
+            images: [
+                {
+                    src: "https://www.example.com/image.jpg",
+                    alt: "Barra de Chocolate Tropical Rio",
+                    width: 800,
+                    height: 600,
+                },
+            ],
+            url_page_link: "tropical-rio",
+            url_full: "https://www.example.com/product/1/full",
+        },
     },
     {
-        id: "3333",
         quantity: 3,
-        price: 33,
+        product: {
+            id: "1",
+            category: "Classicos",
+            type: "Barra de Chocolate",
+            variant: {
+                id: "1",
+                name: "Padrão",
+                price: 10.0,
+                description: "Barra de Chocolate ao Leite de 100g",
+            },
+
+            availableForSale: true,
+            isPromoted: true,
+            showInStore: true,
+
+            stockQtty: 100,
+
+            title: "Tropical Rio",
+            subtitle: "Barra de Chocolate ao Leite de 100g",
+            description: ["Chocolate ao leite cremoso e saboroso", "100g de puro prazer"],
+            price: 50,
+            weight: "100g",
+
+            ingredients: [
+                {
+                    id: "1",
+                    name: "Leite",
+                    description: ["Leite integral", "Leite em pó"],
+                },
+                {
+                    id: "2",
+                    name: "Açúcar",
+                    description: ["Açúcar refinado", "Açúcar mascavo"],
+                },
+            ],
+            images: [
+                {
+                    src: "https://www.example.com/image.jpg",
+                    alt: "Barra de Chocolate Tropical Rio",
+                    width: 800,
+                    height: 600,
+                },
+            ],
+            url_page_link: "tropical-rio",
+            url_full: "https://www.example.com/product/1/full",
+        },
     },
 ];
-const cartTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+const cartTotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
 // Dados do cliente, deve ser obtido do contexto da aplicação futuramente
 const customer = {

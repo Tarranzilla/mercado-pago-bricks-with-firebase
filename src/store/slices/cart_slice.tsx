@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Product from "@/types/Product";
 import products_list, { productCategories } from "@/data/products_list";
 import { Order } from "@/types/Order";
-import { CartItem } from "@/types/Cart_Item";
+import { Cart_Item } from "@/types/Cart_Item";
 
 export type TranslatedCartItem = {
     translatedTitle: string;
@@ -12,7 +12,7 @@ export type TranslatedCartItem = {
 };
 
 type CartState = {
-    cartItems: CartItem[];
+    cartItems: Cart_Item[];
     cartTotal: number;
     checkoutOrder: Order[];
 };

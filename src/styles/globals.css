@@ -37,6 +37,8 @@ main {
     text-align: center;
 }
 
+.Product_Creator,
+.Product_List,
 .User_Tab {
     display: flex;
     flex-direction: column;

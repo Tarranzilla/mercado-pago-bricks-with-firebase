@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 // Framer motion para animações
-import { motion as m, AnimatePresence, useScroll } from "framer-motion";
+import { motion as m, AnimatePresence, useScroll, useSpring } from "framer-motion";
 
 // Funções Utilitárias
 import { generate_whatsapp_url_for_more_order_info } from "@/util/WhatsApp";
@@ -465,6 +465,12 @@ export default function UserTab() {
     // Referência para o Scroll com Framer Motion
     const scroll_ref = useRef(null);
     const { scrollYProgress } = useScroll({ container: scroll_ref });
+
+    const scaleX = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001,
+    });
 
     if (!firebase) {
         throw new Error("Firebase context is not available");
@@ -1076,7 +1082,7 @@ export default function UserTab() {
                         {/* Barra de Progresso de Scroll */}
                         <div className="Progress_Bar_Container">
                             <div className="Progress_Bar_Wrapper">
-                                <m.div className="Progress_Bar" style={{ scaleX: scrollYProgress }} />
+                                <m.div className="Progress_Bar" style={{ scaleX }} />
                             </div>
                         </div>
                     </m.div>

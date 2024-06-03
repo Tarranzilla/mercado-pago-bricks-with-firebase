@@ -1,6 +1,9 @@
 import { Address } from "./Address";
 
+type AcceptedValues = string | boolean | Address | string[];
+
 export type User = {
+    [key: string]: AcceptedValues;
     id: string;
     name: string;
     email: string;

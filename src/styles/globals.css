@@ -173,6 +173,8 @@ main {
     margin-top: 0.5rem;
 }
 
+.User_Login_Btn,
+.User_Google_Login_Btn,
 .Logout_Btn,
 .User_Info_Edit_Control_Btn {
     display: flex;
@@ -189,6 +191,8 @@ main {
     width: 100%;
 }
 
+.User_Login_Btn_Text,
+.User_Google_Login_Btn_Text,
 .Logout_Btn_Text,
 .User_Info_Edit_Control_Btn_Text {
     text-transform: uppercase;
@@ -196,6 +200,8 @@ main {
     letter-spacing: 0.05rem;
 }
 
+.User_Login_Btn_Icon,
+.User_Google_Login_Btn_Icon,
 .Logout_Btn_Icon,
 .User_Info_Edit_Control_Btn_Icon {
     font-size: 1.25rem;
@@ -207,6 +213,57 @@ main {
     align-items: center;
     justify-content: center;
     width: 100%;
+}
+
+/* Aba de Login */
+
+.User_Login_Container_Separator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.User_Login_Container_Separator_Text {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    color: gray;
+    margin-block: 1rem;
+}
+
+.User_Login_Container_Separator_Line {
+    width: 100%;
+    height: 1px;
+    background-color: gray;
+}
+
+.Email_Login_Container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.User_Login_Input_Container {
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+
+.User_Login_Input {
+    padding: 1rem;
+    padding-right: 3.5rem;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.User_Login_Input_Icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1rem;
 }
 
 /* Barra de Progresso */

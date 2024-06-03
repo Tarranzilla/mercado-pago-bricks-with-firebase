@@ -211,54 +211,54 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
 
 */
 
-export type User_Info_Container_Props = {
+export type User_Address_Info_Container_Props = {
     label: string;
     placeholder: string;
-    address_prop: string;
-    isEditing: any;
-    setIsEditing: any;
-    address: Address;
-    editedAddress: Address;
-    handleAddressChange: any;
+    propertie: string;
+    localUser: User_Local;
+    editedLocalUser: User_Local;
+    handlelocalUserAddressChange: any;
 };
 
-export const User_Info_Container: React.FC<User_Info_Container_Props> = ({
+export const User_Address_Info_Container: React.FC<User_Address_Info_Container_Props> = ({
     label,
     placeholder,
-    address_prop,
-    isEditing,
-    setIsEditing,
-    address,
-    editedAddress,
-    handleAddressChange,
+    propertie,
+    localUser,
+    editedLocalUser,
+    handlelocalUserAddressChange,
 }) => {
+    const [isEditing, setIsEditing] = useState(false);
+
     return (
         <div className="User_Info_Item_Container">
             <div className="User_Info_Item">
                 <p className="User_Info_Item_Label">{label}</p>
 
                 {/* Input de Edição ou Detalhe de Item */}
-                {isEditing[address_prop] ? (
+                {isEditing ? (
                     <input
                         className="User_Info_Item_Input"
                         type="text"
                         placeholder={placeholder}
-                        value={editedAddress[address_prop]}
-                        onChange={(e) => handleAddressChange(address_prop, e.target.value)}
+                        value={editedLocalUser.address[propertie]}
+                        onChange={(e) => handlelocalUserAddressChange(propertie, e.target.value)}
                     />
                 ) : (
-                    <p className="User_Info_Item_Detail User_City">
-                        {editedAddress[address_prop] !== address[address_prop] ? `${editedAddress[address_prop]}*` : address[address_prop]}
+                    <p className="User_Info_Item_Detail">
+                        {editedLocalUser.address[propertie] !== localUser.address[propertie]
+                            ? `${editedLocalUser.address[propertie]}*`
+                            : localUser.address[propertie]}
                     </p>
                 )}
             </div>
 
             {/* Botões de Edição */}
-            {isEditing[address_prop] ? (
+            {isEditing ? (
                 <div
                     className="User_Info_Item_Edit_Btn"
                     onClick={() => {
-                        setIsEditing({ ...isEditing, [address_prop]: false });
+                        setIsEditing(false);
                     }}
                 >
                     <span className="material-icons User_Tab_Edit_Icon">save</span>
@@ -268,7 +268,185 @@ export const User_Info_Container: React.FC<User_Info_Container_Props> = ({
                 <div
                     className="User_Info_Item_Edit_Btn"
                     onClick={() => {
-                        setIsEditing({ ...isEditing, [address_prop]: true });
+                        setIsEditing(true);
+                    }}
+                >
+                    <span className="material-icons User_Tab_Edit_Icon">edit</span>
+                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export type User_String_Info_Container_Props = {
+    label: string;
+    placeholder: string;
+    propertie: string;
+    localUser: User_Local;
+    editedLocalUser: User_Local;
+    handleLocalUserChange: any;
+};
+
+export const User_Name_Info_Container: React.FC<User_String_Info_Container_Props> = ({
+    label,
+    placeholder,
+    propertie,
+    localUser,
+    editedLocalUser,
+    handleLocalUserChange,
+}) => {
+    const [isEditing, setIsEditing] = useState(false);
+
+    return (
+        <div className="User_Info_Item_Container">
+            <div className="User_Info_Item">
+                <p className="User_Info_Item_Label">{label}</p>
+
+                {/* Input de Edição ou Detalhe de Item */}
+                {isEditing ? (
+                    <input
+                        className="User_Info_Item_Input"
+                        type="text"
+                        placeholder={placeholder}
+                        value={editedLocalUser.name}
+                        onChange={(e) => handleLocalUserChange("name", e.target.value)}
+                    />
+                ) : (
+                    <p className="User_Info_Item_Detail">{editedLocalUser.name !== localUser.name ? `${editedLocalUser.name}*` : localUser.name}</p>
+                )}
+            </div>
+
+            {/* Botões de Edição */}
+            {isEditing ? (
+                <div
+                    className="User_Info_Item_Edit_Btn"
+                    onClick={() => {
+                        setIsEditing(false);
+                    }}
+                >
+                    <span className="material-icons User_Tab_Edit_Icon">save</span>
+                    <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
+                </div>
+            ) : (
+                <div
+                    className="User_Info_Item_Edit_Btn"
+                    onClick={() => {
+                        setIsEditing(true);
+                    }}
+                >
+                    <span className="material-icons User_Tab_Edit_Icon">edit</span>
+                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export const User_Email_Info_Container: React.FC<User_String_Info_Container_Props> = ({
+    label,
+    placeholder,
+    propertie,
+    localUser,
+    editedLocalUser,
+    handleLocalUserChange,
+}) => {
+    const [isEditing, setIsEditing] = useState(false);
+
+    return (
+        <div className="User_Info_Item_Container">
+            <div className="User_Info_Item">
+                <p className="User_Info_Item_Label">{label}</p>
+
+                {/* Input de Edição ou Detalhe de Item */}
+                {isEditing ? (
+                    <input
+                        className="User_Info_Item_Input"
+                        type="text"
+                        placeholder={placeholder}
+                        value={editedLocalUser.email}
+                        onChange={(e) => handleLocalUserChange("email", e.target.value)}
+                    />
+                ) : (
+                    <p className="User_Info_Item_Detail">
+                        {editedLocalUser.email !== localUser.email ? `${editedLocalUser.email}*` : localUser.email}
+                    </p>
+                )}
+            </div>
+
+            {/* Botões de Edição */}
+            {isEditing ? (
+                <div
+                    className="User_Info_Item_Edit_Btn"
+                    onClick={() => {
+                        setIsEditing(false);
+                    }}
+                >
+                    <span className="material-icons User_Tab_Edit_Icon">save</span>
+                    <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
+                </div>
+            ) : (
+                <div
+                    className="User_Info_Item_Edit_Btn"
+                    onClick={() => {
+                        setIsEditing(true);
+                    }}
+                >
+                    <span className="material-icons User_Tab_Edit_Icon">edit</span>
+                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export const User_Telephone_Info_Container: React.FC<User_String_Info_Container_Props> = ({
+    label,
+    placeholder,
+    propertie,
+    localUser,
+    editedLocalUser,
+    handleLocalUserChange,
+}) => {
+    const [isEditing, setIsEditing] = useState(false);
+
+    return (
+        <div className="User_Info_Item_Container">
+            <div className="User_Info_Item">
+                <p className="User_Info_Item_Label">{label}</p>
+
+                {/* Input de Edição ou Detalhe de Item */}
+                {isEditing ? (
+                    <input
+                        className="User_Info_Item_Input"
+                        type="text"
+                        placeholder={placeholder}
+                        value={editedLocalUser.telephone}
+                        onChange={(e) => handleLocalUserChange("telephone", e.target.value)}
+                    />
+                ) : (
+                    <p className="User_Info_Item_Detail">
+                        {editedLocalUser.telephone !== localUser.telephone ? `${editedLocalUser.telephone}*` : localUser.telephone}
+                    </p>
+                )}
+            </div>
+
+            {/* Botões de Edição */}
+            {isEditing ? (
+                <div
+                    className="User_Info_Item_Edit_Btn"
+                    onClick={() => {
+                        setIsEditing(false);
+                    }}
+                >
+                    <span className="material-icons User_Tab_Edit_Icon">save</span>
+                    <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
+                </div>
+            ) : (
+                <div
+                    className="User_Info_Item_Edit_Btn"
+                    onClick={() => {
+                        setIsEditing(true);
                     }}
                 >
                     <span className="material-icons User_Tab_Edit_Icon">edit</span>
@@ -300,13 +478,77 @@ export default function UserTab() {
     };
 
     // Estados do campo de login
+    const [loginWithEmailMode, setLoginWithEmailMode] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const temp_local_user: User_Local = {
+        id: "123456789",
+        name: "Test User",
+        email: "example@example.com",
+        avatar_url: "https://example.com/avatar.jpg",
+        isOwner: false,
+        isAdmin: false,
+        isEditor: false,
+        isSubscriber: false,
+        telephone: "1234567890",
+        address: {
+            street: "Rua Teste",
+            number: "123",
+            complement: "Casa",
+            city: "Teste",
+            state: "TS",
+            zip: "12345-678",
+        },
+        orders: [],
+    };
+
     // Estados do usuário, user é o usuário padrão do Google e localUser é o usuário do nosso banco de dados
     const [user, setUser] = useState<User | null>(null);
-    const [localUser, setLocalUser] = useState<User_Local | null>(null);
+    const [localUser, setLocalUser] = useState<User_Local>(temp_local_user);
+    const [editedLocalUser, setEditedLocalUser] = useState<User_Local>(temp_local_user);
     const [isAdmin, setIsAdmin] = useState(false);
+
+    // Funções para a atualização de dados do usuário
+    const handleLocalUserChange = (field: keyof User_Local, value: string | boolean | Address | string[]) => {
+        setEditedLocalUser((prevState) => ({ ...prevState, [field]: value }));
+    };
+
+    const handleLocalUserAddressChange = (field: keyof Address, value: string) => {
+        setEditedLocalUser((prevState) => ({ ...prevState, address: { ...prevState.address, [field]: value } }));
+    };
+
+    const updateLocalUser = async () => {
+        if (!user) {
+            console.log("User is not logged in, operation cannot proceed.");
+            return;
+        }
+
+        try {
+            // Enviar o usuário editado para a API
+            const response = await axios.post(`${NEXT_PUBLIC_PATH_API_UPDATE_USER}`, editedLocalUser);
+            // console.log("User data from API:", response.data);
+
+            // Se a resposta for 400, significa que faltam campos obrigatórios
+            if (response.status === 400) {
+                console.error("Missing required fields, cannot fetch user data");
+            }
+
+            // Se a resposta for 200, significa que o usuário foi atualizado com sucesso
+            if (response.status === 200) {
+                console.log("User data updated successfully");
+                setLocalUser(editedLocalUser);
+            }
+        } catch (error) {
+            console.log("Error fetching user data:", error);
+        }
+    };
+
+    const discardLocalUserChanges = () => {
+        setEditedLocalUser(localUser);
+    };
+
+    const isSomeLocalUserInfoEdited = Object.entries(editedLocalUser).some(([key, value]) => localUser[key] !== value);
 
     // Estado para ver mais do que 3 pedidos
     const [seeMore, setSeeMore] = useState(false);
@@ -317,66 +559,8 @@ export default function UserTab() {
     const displayedOrders = seeMore ? sortedOrders : sortedOrders.slice(0, 3);
     const noOrders = orderList.length === 0;
 
-    // Estados para a atualização de dados do usuário
-    const [address, setAddress] = useState<Address>({
-        city: "",
-        street: "",
-        number: "",
-        complement: "",
-        state: "",
-        zip: "",
-    });
-    const [editedAddress, setEditedAddress] = useState<Address>(address);
-    const [isEditing, setIsEditing] = useState({
-        city: false,
-        street: false,
-        number: false,
-        complement: false,
-        state: false,
-        zip: false,
-    });
-    const isSomeAddressEdited = Object.entries(editedAddress).some(([key, value]) => address[key] !== value);
-
-    const handleAddressChange = (field: string, value: string) => {
-        setEditedAddress({ ...editedAddress, [field]: value });
-    };
-
-    const updateAddress = async () => {
-        if (!user) {
-            console.log("User is not logged in, operation cannot proceed.");
-            return;
-        }
-
-        // Save the new address to Firestore here
-        const db = getFirestore();
-        const projectUID = FIREBASE_PROJECT_ID; // Replace with your project's UID
-        const userDocRef = doc(db, `projects/${projectUID}/users`, user.uid);
-
-        await setDoc(
-            userDocRef,
-            {
-                address: editedAddress,
-            },
-            { merge: true }
-        );
-
-        // Then set the new address and exit edit mode
-        setAddress(editedAddress);
-    };
-
-    const discardChanges = () => {
-        setIsEditing({
-            city: false,
-            street: false,
-            number: false,
-            complement: false,
-            state: false,
-            zip: false,
-        });
-        setEditedAddress(address);
-    };
-
     // Funções de Autenticação
+    // Login com Google
     const signIn = async () => {
         const auth = getAuth();
         const provider = new GoogleAuthProvider();
@@ -398,20 +582,20 @@ export default function UserTab() {
                         console.log("User not found, creating a new user document in the database");
                         let new_user: User_Local = {
                             id: result.user.uid,
-                            name: result.user.displayName ? result.user.displayName : "No name",
-                            email: result.user.email ? result.user.email : "No email",
-                            avatar_url: result.user.photoURL ? result.user.photoURL : "No avatar URL",
+                            name: result.user.displayName ? result.user.displayName : "Nenhum Nome Definido",
+                            email: result.user.email ? result.user.email : "Nenhum Email Definido",
+                            avatar_url: result.user.photoURL ? result.user.photoURL : "Nenhuma URL de Avatar Definida",
 
                             address: {
-                                street: "No street",
-                                number: "No number",
-                                complement: "No complement",
-                                city: "No city",
-                                state: "No state",
-                                zip: "No zip code",
+                                street: "Nenhuma Rua Definida",
+                                number: "Nenhum Número Definido",
+                                complement: "Nenhum Complemento Definido",
+                                city: "Nenhuma Cidade Definida",
+                                state: "Nenhum Estado Definido",
+                                zip: "Nenhum Código Postal Definido",
                             },
 
-                            telephone: "No telephone number",
+                            telephone: "Nenhum Número de Telefone Definido",
 
                             isOwner: false,
                             isAdmin: false,
@@ -433,6 +617,7 @@ export default function UserTab() {
         }
     };
 
+    // Login com Email e Senha
     const signUp = async () => {
         const auth = getAuth();
         try {
@@ -456,20 +641,20 @@ export default function UserTab() {
                         console.log("User not found, creating a new user document in the database");
                         let new_user: User_Local = {
                             id: userCredential.user.uid,
-                            name: userCredential.user.displayName ? userCredential.user.displayName : "No name",
-                            email: userCredential.user.email ? userCredential.user.email : "No email",
-                            avatar_url: userCredential.user.photoURL ? userCredential.user.photoURL : "No avatar URL",
+                            name: userCredential.user.displayName ? userCredential.user.displayName : "Nenhum Nome Definido",
+                            email: userCredential.user.email ? userCredential.user.email : "Nenhum Email Definido",
+                            avatar_url: userCredential.user.photoURL ? userCredential.user.photoURL : "Nenhuma URL de Avatar Definida",
 
                             address: {
-                                street: "No street",
-                                number: "No number",
-                                complement: "No complement",
-                                city: "No city",
-                                state: "No state",
-                                zip: "No zip code",
+                                street: "Nenhuma Rua Definida",
+                                number: "Nenhum Numero Definido",
+                                complement: "Nenhum Complemento Definido",
+                                city: "Nenhuma Cidade Definida",
+                                state: "Nenhum Estado Definido",
+                                zip: "Nenhum Código Postal Definido",
                             },
 
-                            telephone: "No telephone number",
+                            telephone: "Nenhum Telefone Definido",
 
                             isOwner: false,
                             isAdmin: false,
@@ -528,9 +713,8 @@ export default function UserTab() {
 
             if (response.data) {
                 setLocalUser(response.data as User_Local);
+                setEditedLocalUser(response.data as User_Local);
                 console.log("Local User: ", response.data);
-                setAddress(response.data.address);
-                setEditedAddress(response.data.address);
 
                 if (response.data.isAdmin) {
                     setIsAdmin(true);
@@ -642,45 +826,35 @@ export default function UserTab() {
                                             </div>
 
                                             <div className="User_Tab_Card_Info_Items_List">
-                                                <div className="User_Info_Item_Container">
-                                                    <div className="User_Info_Item">
-                                                        <p className="User_Info_Item_Label">Nome</p>
-                                                        <p className="User_Info_Item_Detail User_Name">{localUser?.name || "Nenhum Nome"}</p>
-                                                    </div>
-                                                    <div className="User_Info_Item_Edit_Btn">
-                                                        <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
-                                                            edit
-                                                        </span>
-                                                        <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                                                    </div>
-                                                </div>
+                                                <User_Name_Info_Container
+                                                    key="Nome"
+                                                    label="Nome"
+                                                    placeholder="Novo Nome"
+                                                    propertie="name"
+                                                    localUser={localUser}
+                                                    editedLocalUser={editedLocalUser}
+                                                    handleLocalUserChange={handleLocalUserChange}
+                                                />
 
-                                                <div className="User_Info_Item_Container">
-                                                    <div className="User_Info_Item">
-                                                        <p className="User_Info_Item_Label">Email</p>
-                                                        <p className="User_Info_Item_Detail User_Email">{localUser?.email}</p>
-                                                    </div>
-                                                    <div className="User_Info_Item_Edit_Btn">
-                                                        <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
-                                                            edit
-                                                        </span>
-                                                        <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                                                    </div>
-                                                </div>
+                                                <User_Email_Info_Container
+                                                    key="Email"
+                                                    label="Email"
+                                                    placeholder="Novo Email"
+                                                    propertie="email"
+                                                    localUser={localUser}
+                                                    editedLocalUser={editedLocalUser}
+                                                    handleLocalUserChange={handleLocalUserChange}
+                                                />
 
-                                                <div className="User_Info_Item_Container">
-                                                    <div className="User_Info_Item">
-                                                        <p className="User_Info_Item_Label">Telefone</p>
-                                                        <p className="User_Info_Item_Detail User_ID">{localUser?.telephone}</p>
-                                                    </div>
-
-                                                    <div className="User_Info_Item_Edit_Btn">
-                                                        <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
-                                                            edit
-                                                        </span>
-                                                        <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                                                    </div>
-                                                </div>
+                                                <User_Telephone_Info_Container
+                                                    key="Telefone"
+                                                    label="Telefone"
+                                                    placeholder="Novo Telefone"
+                                                    propertie="telephone"
+                                                    localUser={localUser}
+                                                    editedLocalUser={editedLocalUser}
+                                                    handleLocalUserChange={handleLocalUserChange}
+                                                />
                                             </div>
                                         </div>
 
@@ -697,85 +871,73 @@ export default function UserTab() {
                                     <div className="User_Tab_Card">
                                         <h1 className="User_Tab_Card_Title">Informações de Entrega</h1>
                                         <div className="User_Tab_Card_Info_Items_List">
-                                            <User_Info_Container
+                                            <User_Address_Info_Container
                                                 key={"Rua"}
                                                 label="Rua"
                                                 placeholder="Nova Rua"
-                                                address_prop="street"
-                                                isEditing={isEditing}
-                                                setIsEditing={setIsEditing}
-                                                address={address}
-                                                editedAddress={editedAddress}
-                                                handleAddressChange={handleAddressChange}
+                                                propertie="street"
+                                                localUser={localUser}
+                                                editedLocalUser={editedLocalUser}
+                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
                                             />
 
-                                            <User_Info_Container
+                                            <User_Address_Info_Container
                                                 key={"Numero"}
                                                 label="Número"
                                                 placeholder="Novo Número"
-                                                address_prop="number"
-                                                isEditing={isEditing}
-                                                setIsEditing={setIsEditing}
-                                                address={address}
-                                                editedAddress={editedAddress}
-                                                handleAddressChange={handleAddressChange}
+                                                propertie="number"
+                                                localUser={localUser}
+                                                editedLocalUser={editedLocalUser}
+                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
                                             />
 
-                                            <User_Info_Container
+                                            <User_Address_Info_Container
                                                 key={"Complemento"}
                                                 label="Complemento"
                                                 placeholder="Novo Complemento"
-                                                address_prop="complement"
-                                                isEditing={isEditing}
-                                                setIsEditing={setIsEditing}
-                                                address={address}
-                                                editedAddress={editedAddress}
-                                                handleAddressChange={handleAddressChange}
+                                                propertie="complement"
+                                                localUser={localUser}
+                                                editedLocalUser={editedLocalUser}
+                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
                                             />
 
-                                            <User_Info_Container
+                                            <User_Address_Info_Container
                                                 key={"Cidade"}
                                                 label="Cidade"
                                                 placeholder="Nova Cidade"
-                                                address_prop="city"
-                                                isEditing={isEditing}
-                                                setIsEditing={setIsEditing}
-                                                address={address}
-                                                editedAddress={editedAddress}
-                                                handleAddressChange={handleAddressChange}
+                                                propertie="city"
+                                                localUser={localUser}
+                                                editedLocalUser={editedLocalUser}
+                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
                                             />
 
-                                            <User_Info_Container
+                                            <User_Address_Info_Container
                                                 key={"Estado"}
                                                 label="Estado"
                                                 placeholder="Novo Estado"
-                                                address_prop="state"
-                                                isEditing={isEditing}
-                                                setIsEditing={setIsEditing}
-                                                address={address}
-                                                editedAddress={editedAddress}
-                                                handleAddressChange={handleAddressChange}
+                                                propertie="state"
+                                                localUser={localUser}
+                                                editedLocalUser={editedLocalUser}
+                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
                                             />
 
-                                            <User_Info_Container
+                                            <User_Address_Info_Container
                                                 key={"ZIP"}
                                                 label="Código Postal"
                                                 placeholder="Novo Código Postal"
-                                                address_prop="zip"
-                                                isEditing={isEditing}
-                                                setIsEditing={setIsEditing}
-                                                address={address}
-                                                editedAddress={editedAddress}
-                                                handleAddressChange={handleAddressChange}
+                                                propertie="zip"
+                                                localUser={localUser}
+                                                editedLocalUser={editedLocalUser}
+                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
                                             />
 
-                                            {isSomeAddressEdited && (
+                                            {isSomeLocalUserInfoEdited && (
                                                 <div className="User_Info_Edit_Control">
-                                                    <button className="User_Info_Edit_Control_Btn" onClick={discardChanges}>
+                                                    <button className="User_Info_Edit_Control_Btn" onClick={discardLocalUserChanges}>
                                                         <span className="material-icons User_Info_Edit_Control_Btn_Icon">delete_forever</span>
                                                         <p className="User_Info_Edit_Control_Btn_Text">Descartar Alterações</p>
                                                     </button>
-                                                    <button className="User_Info_Edit_Control_Btn" onClick={updateAddress}>
+                                                    <button className="User_Info_Edit_Control_Btn" onClick={updateLocalUser}>
                                                         <span className="material-icons User_Info_Edit_Control_Btn_Icon">update</span>
                                                         <p className="User_Info_Edit_Control_Btn_Text">Atualizar Informações</p>
                                                     </button>
@@ -786,7 +948,7 @@ export default function UserTab() {
 
                                     {/* Card de Informações Sobre os Pedidos */}
                                     <div className="User_Tab_Card">
-                                        <h1 className="User_Tab_Card_Title">Pedidos</h1>
+                                        <h1 className="User_Tab_Card_Title">Pedidos Realizados</h1>
                                         <div className="User_Order_List">
                                             {/* Lista de Pedidos do Usuário */}
                                             {displayedOrders.map((order, index) => {
@@ -834,33 +996,77 @@ export default function UserTab() {
                                     </button>
                                 </>
                             ) : (
-                                <div className="User_Login_Container">
-                                    <button onClick={signIn} className="User_Google_Login_Btn">
-                                        Faça Login com Google <span className="material-icons">login</span>
-                                    </button>
-                                    <div className="User_Email_Login">
-                                        <input
-                                            className="User_Login_Input"
-                                            type="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="Email"
-                                        />
-                                        <input
-                                            className="User_Login_Input Login_Password"
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            placeholder="Senha"
-                                        />
-                                        <button className="User_Login_Btn Register_Btn" onClick={signUp}>
-                                            Registre uma conta com este Email <span className="material-icons">person_add_alt</span>
-                                        </button>
-                                        <button className="User_Login_Btn" onClick={login}>
-                                            Login com Email <span className="material-icons">login</span>
-                                        </button>
-                                    </div>
-                                </div>
+                                <>
+                                    {!loginWithEmailMode && (
+                                        <div className="User_Login_Container">
+                                            <button onClick={signIn} className="User_Google_Login_Btn">
+                                                <p className="User_Google_Login_Btn_Text">Faça login ou crie uma conta com o Google</p>
+                                                <span className="material-icons User_Google_Login_Btn_Icon">login</span>
+                                            </button>
+
+                                            <div className="User_Login_Container_Separator">
+                                                <div className="User_Login_Container_Separator_Line"></div>
+                                                <p className="User_Login_Container_Separator_Text">ou</p>
+                                                <div className="User_Login_Container_Separator_Line"></div>
+                                            </div>
+
+                                            <button
+                                                className="User_Google_Login_Btn"
+                                                onClick={() => {
+                                                    setLoginWithEmailMode(true);
+                                                }}
+                                            >
+                                                <p className="User_Google_Login_Btn_Text">Faça login ou crie uma conta com apenas um email</p>
+                                                <span className="material-icons User_Google_Login_Btn_Icon">login</span>
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {loginWithEmailMode && (
+                                        <div className="User_Login_Container Email_Login_Container">
+                                            <div className="User_Login_Input_Container">
+                                                <input
+                                                    className="User_Login_Input"
+                                                    type="email"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                    placeholder="Email"
+                                                />
+                                                <span className="material-icons User_Login_Input_Icon">email</span>
+                                            </div>
+
+                                            <div className="User_Login_Input_Container">
+                                                <input
+                                                    className="User_Login_Input Login_Password"
+                                                    type="password"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    placeholder="Senha"
+                                                />
+                                                <span className="material-icons User_Login_Input_Icon">lock</span>
+                                            </div>
+
+                                            <button className="User_Login_Btn" onClick={login}>
+                                                <p className="User_Login_Btn_Text">Login com este Email </p>
+                                                <span className="material-icons User_Login_Btn_Icon">login</span>
+                                            </button>
+                                            <button className="User_Login_Btn Register_Btn" onClick={signUp}>
+                                                <p className="User_Login_Btn_Text">Registre uma conta com este Email</p>{" "}
+                                                <span className="material-icons User_Login_Btn_Icon">person_add_alt</span>
+                                            </button>
+
+                                            <button
+                                                className="User_Login_Btn"
+                                                onClick={() => {
+                                                    setLoginWithEmailMode(false);
+                                                }}
+                                            >
+                                                <p className="User_Login_Btn_Text">voltar</p>{" "}
+                                                <span className="material-icons User_Login_Btn_Icon">arrow_back</span>
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
 
@@ -876,6 +1082,67 @@ export default function UserTab() {
         </>
     );
 }
+
+/* Estados para a atualização de dados do endereço do usuário
+    
+    const [address, setAddress] = useState<Address>({
+        city: "",
+        street: "",
+        number: "",
+        complement: "",
+        state: "",
+        zip: "",
+    });
+    const [editedAddress, setEditedAddress] = useState<Address>(address);
+    const [isEditing, setIsEditing] = useState({
+        city: false,
+        street: false,
+        number: false,
+        complement: false,
+        state: false,
+        zip: false,
+    });
+    const isSomeAddressEdited = Object.entries(editedAddress).some(([key, value]) => address[key] !== value);
+
+    const handleAddressChange = (field: string, value: string) => {
+        setEditedAddress({ ...editedAddress, [field]: value });
+    };
+
+    const updateAddress = async () => {
+        if (!user) {
+            console.log("User is not logged in, operation cannot proceed.");
+            return;
+        }
+
+        // Save the new address to Firestore here
+        const db = getFirestore();
+        const projectUID = FIREBASE_PROJECT_ID; // Replace with your project's UID
+        const userDocRef = doc(db, `projects/${projectUID}/users`, user.uid);
+
+        await setDoc(
+            userDocRef,
+            {
+                address: editedAddress,
+            },
+            { merge: true }
+        );
+
+        // Then set the new address and exit edit mode
+        setAddress(editedAddress);
+    };
+
+    const discardChanges = () => {
+        setIsEditing({
+            city: false,
+            street: false,
+            number: false,
+            complement: false,
+            state: false,
+            zip: false,
+        });
+        setEditedAddress(address);
+    };
+*/
 
 /* User_Info_Item_Container Original
 

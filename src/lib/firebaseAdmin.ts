@@ -33,5 +33,6 @@ if (!admin.apps.length) {
 // Get Auth and Firestore instances
 const auth = admin.auth();
 const firestore = admin.firestore();
+const storage = admin.storage();
 
-export { auth, firestore };
+export { auth, firestore, storage };

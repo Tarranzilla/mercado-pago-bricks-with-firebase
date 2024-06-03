@@ -12,8 +12,9 @@ const WalletMercadoPago = dynamic(() => import("@/components/WalletMercadoPago")
 });
 
 import UserTab from "@/components/User_Tab";
-import Product_Creator from "@/components/Product_Creator";
-import Product_List from "@/components/Product_List";
+import Admin_Product_Creator from "@/components/Admin_Product_Creator";
+import Admin_Product_List from "@/components/Admin_Product_List";
+import Client_Product_List from "@/components/Client_Product_List";
 
 export default function Home() {
     return (
@@ -27,8 +28,9 @@ export default function Home() {
             <main className="">
                 <h1 className="Website_Title">Mercado Pago e Firebase com NEXT</h1>
                 {/* <PaymentMercadoPago /> */}
-                <Product_Creator />
-                <Product_List />
+                <Admin_Product_Creator />
+                <Admin_Product_List />
+                <Client_Product_List />
                 <UserTab />
                 <WalletMercadoPago />
             </main>

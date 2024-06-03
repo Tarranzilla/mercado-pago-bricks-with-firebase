@@ -879,7 +879,7 @@ export const Product_FullLink_Info_Container: React.FC<Product_String_Info_Conta
     );
 };
 
-const Product_Creator = () => {
+const Admin_Product_Creator = () => {
     const [product, setProduct] = useState<Product>(product_template);
     const [editedProduct, setEditedProduct] = useState<Product>(product_template);
 
@@ -903,7 +903,7 @@ const Product_Creator = () => {
         <div className="Product_Creator">
             <div className="UserTab_Content_Wrapper Product_Creator_Content_Wrapper" ref={scroll_ref}>
                 <div className="User_Tab_Card Product_Creator_Card">
-                    <h1 className="User_Tab_Card_Title Product_Creator_Card_Title">Criador de Produtos</h1>
+                    <h1 className="User_Tab_Card_Title Product_Creator_Card_Title">Criador de Produtos | Administrador</h1>
 
                     {product ? (
                         <div className="User_Tab_Card_Info_Items_List">
@@ -1043,4 +1043,4 @@ const Product_Creator = () => {
     );
 };
 
-export default Product_Creator;
+export default Admin_Product_Creator;

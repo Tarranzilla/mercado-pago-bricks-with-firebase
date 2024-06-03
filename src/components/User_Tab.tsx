@@ -804,7 +804,10 @@ export default function UserTab() {
                 {isUserTabOpen && (
                     <m.div initial={{ x: -1000 }} animate={{ x: 0 }} exit={{ x: -1000 }} transition={{ duration: 0.5 }} className="User_Tab">
                         {/* Wrapper do Conteúdo da Aba do Usuário */}
-                        <div className="UserTab_Content_Wrapper" ref={scroll_ref}>
+                        <div
+                            className={isSomeLocalUserInfoEdited ? "UserTab_Content_Wrapper Extra_Bottom_Padding" : "UserTab_Content_Wrapper"}
+                            ref={scroll_ref}
+                        >
                             {user ? (
                                 <>
                                     {/* Card de Informações Gerais */}
@@ -930,19 +933,6 @@ export default function UserTab() {
                                                 editedLocalUser={editedLocalUser}
                                                 handlelocalUserAddressChange={handleLocalUserAddressChange}
                                             />
-
-                                            {isSomeLocalUserInfoEdited && (
-                                                <div className="User_Info_Edit_Control">
-                                                    <button className="User_Info_Edit_Control_Btn" onClick={discardLocalUserChanges}>
-                                                        <span className="material-icons User_Info_Edit_Control_Btn_Icon">delete_forever</span>
-                                                        <p className="User_Info_Edit_Control_Btn_Text">Descartar Alterações</p>
-                                                    </button>
-                                                    <button className="User_Info_Edit_Control_Btn" onClick={updateLocalUser}>
-                                                        <span className="material-icons User_Info_Edit_Control_Btn_Icon">update</span>
-                                                        <p className="User_Info_Edit_Control_Btn_Text">Atualizar Informações</p>
-                                                    </button>
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
 
@@ -1069,6 +1059,19 @@ export default function UserTab() {
                                 </>
                             )}
                         </div>
+
+                        {isSomeLocalUserInfoEdited && (
+                            <div className="User_Info_Edit_Control_Overlay">
+                                <button className="User_Info_Edit_Control_Btn" onClick={discardLocalUserChanges}>
+                                    <span className="material-icons User_Info_Edit_Control_Btn_Icon">delete_forever</span>
+                                    <p className="User_Info_Edit_Control_Btn_Text">Descartar Alterações</p>
+                                </button>
+                                <button className="User_Info_Edit_Control_Btn" onClick={updateLocalUser}>
+                                    <span className="material-icons User_Info_Edit_Control_Btn_Icon">update</span>
+                                    <p className="User_Info_Edit_Control_Btn_Text">Atualizar Informações</p>
+                                </button>
+                            </div>
+                        )}
 
                         {/* Barra de Progresso de Scroll */}
                         <div className="Progress_Bar_Container">

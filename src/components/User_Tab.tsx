@@ -187,6 +187,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
                                 transition={{ duration: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }}
                                 className="User_Order_Product_List"
                             >
+                                <h4>Produtos</h4>
                                 {order.order_items.map((order_item, index) => {
                                     return (
                                         <div key={index} className="User_Order_Product">
@@ -205,7 +206,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
                                 transition={{ duration: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }}
                                 className="User_Order_Shipping_Option"
                             >
-                                <h4 className="User_Order_Shipping_Option_Title">Método de Recebimento:</h4>
+                                <h4 className="User_Order_Shipping_Option_Title">Método de Recebimento</h4>
                                 <div className="User_Order_Shipping_Option_Type">
                                     {order.shipping_option === "Entrega" && <span className="material-icons">local_shipping</span>}
 
@@ -896,15 +897,31 @@ export default function UserTab() {
                                                 />
                                             </div>
                                         </div>
+                                    </div>
 
-                                        {isAdmin && (
-                                            <div className="User_Info_Item Control_Panel_Link">
-                                                <Link href="/control-panel">
-                                                    <h3>Abrir Painel de Controle</h3> <span className="material-icons">tune</span>
+                                    {/* Card de Informações de Administrador */}
+                                    {isAdmin && (
+                                        <div className="User_Tab_Card">
+                                            <h1 className="User_Tab_Card_Title">Administração</h1>
+
+                                            <div className="Admin_Actions_List">
+                                                <Link className="Control_Panel_Link_Btn" href="/admin/control-panel">
+                                                    <p className="Control_Panel_Link_Btn_Text">Painel de Gestão</p>
+                                                    <span className="material-icons">tune</span>
+                                                </Link>
+
+                                                <Link className="Control_Panel_Link_Btn" href="/admin/product-editor">
+                                                    <p className="Control_Panel_Link_Btn_Text">Editor de Produtos</p>
+                                                    <span className="material-icons">sell</span>
+                                                </Link>
+
+                                                <Link className="Control_Panel_Link_Btn" href="/admin/order-control">
+                                                    <p className="Control_Panel_Link_Btn_Text">Controle de Pedidos</p>
+                                                    <span className="material-icons">list_alt</span>
                                                 </Link>
                                             </div>
-                                        )}
-                                    </div>
+                                        </div>
+                                    )}
 
                                     {/* Card de Informações de Entrega */}
                                     <div className="User_Tab_Card">

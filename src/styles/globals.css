@@ -244,6 +244,22 @@ main {
     width: 100%;
 }
 
+.Order_SeeMore_Btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: lightblue;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+    color: black;
+}
+
 .User_Order_List {
     display: flex;
     flex-direction: column;
@@ -293,9 +309,6 @@ main {
     padding: 0.75rem 1.25rem;
     border-radius: 1rem;
     width: 100%;
-}
-
-.Order_Item_Text_Header_Item.Bigger {
 }
 
 .User_Order_Status {
@@ -358,12 +371,72 @@ main {
     transform: rotate(180deg);
 }
 
-.User_Order_Product {
+.User_Order_Extra_Info {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+
+    border-radius: 1rem;
+    background-color: lightgray;
+    margin-top: 1rem;
 }
 
-.Order_SeeMore_Btn {
+.User_Order_Product_List {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    margin: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.User_Order_Product {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 1px solid gray;
+    padding-bottom: 0.5rem;
+    gap: 0.5rem;
+}
+
+.User_Order_Product_Qtty {
+    margin-left: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.User_Order_Shipping_Option_Type,
+.User_Order_Product_Price {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    background-color: gray;
+    min-width: 7rem;
+    text-align: center;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.User_Order_Shipping_Option {
+    margin: 1rem;
+    margin-top: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.Admin_Actions_List {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.Control_Panel_Link_Btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -377,6 +450,12 @@ main {
 
     text-decoration: none;
     color: black;
+}
+
+.Control_Panel_Link_Btn_Text {
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 0.05rem;
 }
 
 /* Aba de Login */

@@ -239,10 +239,20 @@ main {
 
 .User_No_Orders {
     display: flex;
-    gap: 0.25rem;
+    flex-direction: column;
+    gap: 0.75rem;
     align-items: center;
     justify-content: center;
     width: 100%;
+}
+
+.User_No_Orders > span {
+    font-size: 3rem;
+}
+
+.User_No_Orders_Text {
+    max-width: 35ch;
+    text-align: center;
 }
 
 .Order_SeeMore_Btn {

@@ -100,8 +100,8 @@ const Admin_Product_List = () => {
                     <div className="User_Tab_Card Product_List_Card">
                         <h1 className="User_Tab_Card_Title Product_List_Title">Editor de Produtos</h1>
                         <div className="User_No_Orders">
-                            <p className="User_No_Orders_Text">Você não tem permissão para acessar esta funcionalidade</p>
                             <span className="material-icons">dangerous</span>
+                            <p className="User_No_Orders_Text">Você não tem permissão para acessar esta funcionalidade.</p>
                         </div>
                     </div>
                 </div>

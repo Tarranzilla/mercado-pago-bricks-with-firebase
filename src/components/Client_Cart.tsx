@@ -99,8 +99,8 @@ const Client_Cart = () => {
 
                         {cartItems.length < 1 && (
                             <div className="User_No_Orders">
-                                <p className="User_No_Orders_Text">Nenhum item adicionado ao carrinho</p>
                                 <span className="material-icons">remove_shopping_cart</span>
+                                <p className="User_No_Orders_Text">Nenhum item adicionado ao carrinho.</p>
                             </div>
                         )}
                     </div>

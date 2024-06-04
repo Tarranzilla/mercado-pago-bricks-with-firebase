@@ -47,7 +47,7 @@ const Client_Cart = () => {
                             cartItems.map((cart_item, index) => {
                                 return (
                                     <div className="Cart_Item Product_List_Card" key={index}>
-                                        <div className="Product_List_Card_Image_Container">
+                                        <div className="Cart_Item_Image_Container">
                                             {cart_item.product.images && cart_item.product.images.length > 0 && (
                                                 <img
                                                     className="Product_List_Card_Image"
@@ -58,12 +58,11 @@ const Client_Cart = () => {
                                                 />
                                             )}
                                         </div>
-                                        <div className="Product_List_Card_Info">
+                                        <div className="Cart_Item_Info">
                                             <div className="Product_List_Card_Info_Header">
                                                 <h2>{cart_item.product.title}</h2>
                                                 <p className="Product_List_Card_Price">R$ {cart_item.product.price},00</p>
                                             </div>
-                                            <p>{cart_item.product.description}</p>
                                             <div className="Cart_Item_Quantity_Selector">
                                                 <button
                                                     className="Cart_Item_Button"
@@ -98,7 +97,12 @@ const Client_Cart = () => {
                                 );
                             })}
 
-                        {cartItems.length < 1 && <p>Nenhum Item Adicionado ao Carrinho!</p>}
+                        {cartItems.length < 1 && (
+                            <div className="User_No_Orders">
+                                <p className="User_No_Orders_Text">Nenhum item adicionado ao carrinho</p>
+                                <span className="material-icons">remove_shopping_cart</span>
+                            </div>
+                        )}
                     </div>
 
                     <div className="Cart_Footer">

@@ -4,7 +4,7 @@ export type Order = {
     order_preference_id: string;
     order_external_reference: string;
     order_items: Cart_Item[];
-    order_date: any;
+    order_date: Date;
     order_type: string;
 
     shipping_option: string;

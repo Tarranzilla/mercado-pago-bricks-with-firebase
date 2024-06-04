@@ -550,7 +550,7 @@ export default function UserTab() {
 
     // Estado para ver os pedidos do usuário
     const [orderList, setOrderList] = useState<Order[]>([]);
-    const sortedOrders = orderList.sort((a, b) => b.order_date.toMillis() - a.order_date.toMillis());
+    const sortedOrders = orderList.sort((a, b) => new Date(b.order_date).getTime() - new Date(a.order_date).getTime());
     const displayedOrders = seeMore ? sortedOrders : sortedOrders.slice(0, 3);
     const noOrders = orderList.length < 1;
 
@@ -602,6 +602,19 @@ export default function UserTab() {
 
                         await axios.post(`${NEXT_PUBLIC_PATH_API_CREATE_USER}`, new_user);
                         console.log("New user document created successfully");
+                    }
+
+                    if (response.data) {
+                        setCurrentUserAction(response.data as User_Local);
+                        setLocalUser(response.data as User_Local);
+                        setEditedLocalUser(response.data as User_Local);
+                        console.log("Local User: ", response.data);
+
+                        if (response.data.isAdmin) {
+                            setIsAdmin(true);
+                        } else {
+                            setIsAdmin(false);
+                        }
                     }
                 } catch (error) {
                     console.log("Error fetching user data:", error);
@@ -749,6 +762,7 @@ export default function UserTab() {
     // Função para buscar todos os pedidos para o usuário - O usuário deve ter uma lista de referências externas de pedidos e então buscamos no banco de dados
     const fetchOrdersForUser = async (): Promise<Order[] | undefined> => {
         const user_orders = localUser.orders;
+        console.log(localUser);
         console.log("User Orders:", user_orders);
 
         if (user_orders.length < 1) {
@@ -761,8 +775,8 @@ export default function UserTab() {
         user_orders.forEach(async (order_id) => {
             const order = await fetchOrderDoc(order_id);
             if (order) {
-                orders.push(order);
-                setOrderList([...orderList, order]);
+                console.log(order);
+                setOrderList((prevOrderList) => [...prevOrderList, order]);
             }
         });
 
@@ -788,7 +802,7 @@ export default function UserTab() {
     }, []);
 
     useEffect(() => {
-        if (user && userTabNeedsUpdate === true) {
+        if (user) {
             console.log("Fetching New Orders for the User:", user.uid);
             fetchOrdersForUser();
             userTabNeedsNoUpdateAction();
@@ -945,8 +959,8 @@ export default function UserTab() {
                                             {/* Mensagem de Carrinho Vazio */}
                                             {noOrders && (
                                                 <div className="User_No_Orders">
-                                                    <span className="material-icons User_No_Orders_Icon">receipt_long</span>{" "}
                                                     <p className="User_No_Orders_Text">Você ainda não fez nenhum pedido</p>
+                                                    <span className="material-icons User_No_Orders_Icon">receipt_long</span>
                                                 </div>
                                             )}
 

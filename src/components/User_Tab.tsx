@@ -158,7 +158,6 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
                     href={generate_whatsapp_url_for_more_order_info(order.order_external_reference, businessTelephone)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="User_Order_Status User_Order_Status_Call_Btn"
                 >
                     <span className="material-icons">support_agent</span> Solicitar Atendimento
                 </a>

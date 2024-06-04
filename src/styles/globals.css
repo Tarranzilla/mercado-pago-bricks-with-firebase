@@ -37,6 +37,7 @@ main {
     text-align: center;
 }
 
+.Checkout,
 .Cart,
 .Product_Creator,
 .Product_List,
@@ -398,6 +399,11 @@ main {
     gap: 0.5rem;
 }
 
+.User_Order_Product:first-of-type {
+    border-top: 1px solid gray;
+    padding-top: 0.5rem;
+}
+
 .User_Order_Product_Qtty {
     margin-left: auto;
     text-transform: uppercase;
@@ -673,6 +679,155 @@ main {
     cursor: pointer;
 
     width: 100%;
+}
+
+/* Checkout */
+
+.User_Shipping_Total,
+.User_Order_Total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem;
+
+    border-bottom: 1px solid gray;
+    padding-bottom: 1rem;
+}
+
+.User_Shipping_Total {
+    margin-top: 0;
+    border-top: 1px solid gray;
+    padding-top: 1rem;
+    margin-inline: 0;
+}
+
+.User_Order_Total_Value {
+    background-color: lightgray;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+}
+
+.Checkout_Receive_Options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem;
+}
+
+.Receive_Option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    min-height: 4.5rem;
+
+    background-color: rgba(173, 216, 230, 0.5);
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+
+    cursor: pointer;
+
+    transition: background-color 0.25s;
+}
+
+.Receive_Option.Active {
+    background-color: rgba(173, 216, 230, 1);
+}
+
+.Recieve_Option_Map_Link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    background-color: #009ee3;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 1rem;
+    cursor: pointer;
+
+    text-decoration: none;
+    color: black;
+    margin-left: 0.5rem;
+
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.Recieve_Option_Map_Link > span {
+    font-size: 1.3rem;
+}
+
+.Receive_Option > input {
+    margin-left: auto;
+    transform: scale(1.5);
+}
+
+.User_Order_Shipping_Address {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    border: 1px solid gray;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.User_Order_Shipping_Address_Header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.User_Order_Shipping_Address_Edit_Btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    background-color: lightblue;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+
+.User_Order_Shipping_Address_Edit_Btn > span {
+    font-size: 1.1rem;
+}
+
+.User_Order_Shipping_Info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    border-top: 1px solid gray;
+    padding-top: 0.5rem;
+}
+
+.User_Order_Shipping_Info > p {
+    font-size: 0.85rem;
+    line-height: 1.1rem;
+    text-align: justify;
+}
+
+.Recieve_Option_Observation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+#receive_option_observation_text_area {
+    padding: 1rem;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+    width: 100% !important;
+    min-height: 9rem;
+    max-height: 9rem;
 }
 
 /* Barra de Progresso */

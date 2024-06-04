@@ -25,6 +25,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 // import type { CheckoutOrder } from "@/store/slices/cart_slice";
 import { setUserTabNeedsUpdate } from "@/store/slices/interface_slice";
+import { setCurrentUser } from "@/store/slices/user_slice";
 
 // import { Order } from "@/types/Order";
 
@@ -66,15 +67,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
                 <h3 className="User_Info_Label">Pedido Nº</h3>
                 <h3 className="User_Order_Number">#{order.order_external_reference}</h3>
 
-                <p className="User_Info_Detail User_Order_Date">
-                    {new Intl.DateTimeFormat("pt-BR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                    }).format(order.order_date.toDate())}
-                </p>
+                <p className="User_Info_Detail User_Order_Date">{order.order_date.toString()}</p>
 
                 <div className="User_Order_Price">
                     <h4>Valor Total: </h4>
@@ -202,14 +195,6 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
         </div>
     );
 };
-
-/*  À FAZER
-
-    Criar contexto do Carrinho
-    Descobrir o que era o Checkout Order e Como se Relaciona com Order
-    Criar contexto de interface e inserir o user tab needs update nela (?)
-
-*/
 
 export type User_Address_Info_Container_Props = {
     label: string;
@@ -483,6 +468,10 @@ export default function UserTab() {
         dispatch(setUserTabNeedsUpdate(false));
     };
 
+    const setCurrentUserAction = (localUser: User_Local) => {
+        dispatch(setCurrentUser(localUser));
+    };
+
     // Estados do campo de login
     const [loginWithEmailMode, setLoginWithEmailMode] = useState(false);
     const [email, setEmail] = useState("");
@@ -563,7 +552,7 @@ export default function UserTab() {
     const [orderList, setOrderList] = useState<Order[]>([]);
     const sortedOrders = orderList.sort((a, b) => b.order_date.toMillis() - a.order_date.toMillis());
     const displayedOrders = seeMore ? sortedOrders : sortedOrders.slice(0, 3);
-    const noOrders = orderList.length === 0;
+    const noOrders = orderList.length < 1;
 
     // Funções de Autenticação
     // Login com Google
@@ -718,6 +707,7 @@ export default function UserTab() {
             }
 
             if (response.data) {
+                setCurrentUserAction(response.data as User_Local);
                 setLocalUser(response.data as User_Local);
                 setEditedLocalUser(response.data as User_Local);
                 console.log("Local User: ", response.data);
@@ -758,9 +748,10 @@ export default function UserTab() {
 
     // Função para buscar todos os pedidos para o usuário - O usuário deve ter uma lista de referências externas de pedidos e então buscamos no banco de dados
     const fetchOrdersForUser = async (): Promise<Order[] | undefined> => {
-        const user_orders = localUser?.orders;
+        const user_orders = localUser.orders;
+        console.log("User Orders:", user_orders);
 
-        if (!user_orders) {
+        if (user_orders.length < 1) {
             console.log("Usuário nao possui pedidos.");
             return [];
         }
@@ -802,7 +793,7 @@ export default function UserTab() {
             fetchOrdersForUser();
             userTabNeedsNoUpdateAction();
         }
-    }, [user, userTabNeedsUpdate]);
+    }, [user, localUser, userTabNeedsUpdate]);
 
     return (
         <>

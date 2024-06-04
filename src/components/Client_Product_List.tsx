@@ -4,7 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import { motion as m, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import Product from "@/types/Product";
 
-import productList from "@/data/products_list";
+// Redux para gerenciamento de contexto
+import { useSelector, useDispatch } from "react-redux";
+
+import { addCartItem } from "@/store/slices/cart_slice";
+
+// import productList from "@/data/products_list";
 
 import axios from "axios";
 
@@ -25,7 +30,12 @@ if (!NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS) {
 }
 
 const Client_Product_List = () => {
+    const dispatch = useDispatch();
     const [products, setProducts] = useState<Product[]>([]);
+
+    const addToCartAction = (product: Product) => {
+        dispatch(addCartItem({ product: product }));
+    };
 
     // Referência para o Scroll com Framer Motion
     const scroll_ref = useRef(null);
@@ -75,7 +85,12 @@ const Client_Product_List = () => {
                                         <p className="Product_List_Card_Subtitle">{product.subtitle}</p>
 
                                         <div className="Product_List_Card_Info_Footer">
-                                            <div className="Product_List_Card_Edit_Btn" onClick={() => {}}>
+                                            <div
+                                                className="Product_List_Card_Edit_Btn"
+                                                onClick={() => {
+                                                    addToCartAction(product);
+                                                }}
+                                            >
                                                 <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
                                                 <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
                                             </div>

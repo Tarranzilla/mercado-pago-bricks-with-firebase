@@ -37,6 +37,7 @@ main {
     text-align: center;
 }
 
+.Cart,
 .Product_Creator,
 .Product_List,
 .User_Tab {
@@ -73,7 +74,7 @@ main {
 .User_Tab_Card {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
     padding: 2rem;
     border: 1px solid gray;
     border-radius: 1rem;
@@ -375,6 +376,66 @@ main {
     min-width: max-content;
 }
 
+/* Carrinho */
+.Cart_List {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.Cart_Item_Quantity_Selector {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.Cart_Item_Quantity_Ammount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.Cart_Item_Button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    background-color: lightblue;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.Cart_Footer {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+    padding: 1rem;
+    border: 1px solid gray;
+    border-radius: 1rem;
+}
+
+.Cart_Footer_Total_Value {
+    min-width: max-content;
+}
+
+.Cart_Footer_Checkout_Button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    background-color: lightblue;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    width: 100%;
+}
+
 /* Barra de Progresso */
 
 #progress {
@@ -417,4 +478,10 @@ circle {
     transform-origin: 0%;
 
     position: relative;
+}
+
+/* Mercado Pago Wallet */
+
+#walletBrick_container {
+    margin-top: -1rem;
 }

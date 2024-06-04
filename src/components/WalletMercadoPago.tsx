@@ -2,172 +2,16 @@ import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import { IBrickStyle, IBrickCustomVariables, IBrickError, IPayerIdentification, IBrickVisual } from "@mercadopago/sdk-react/bricks/util/types/common";
 import { IWalletBrickCustomization, PreferenceOnSubmit } from "@mercadopago/sdk-react/bricks/wallet/types";
 
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store/store";
+
+import { setUserTabNeedsUpdate } from "@/store/slices/interface_slice";
+
 // Axios para requisições HTTP
 import axios, { AxiosError } from "axios";
 
 import { Cart_Item } from "@/types/Cart_Item";
 import { Order } from "@/types/Order";
-
-// Dados do carrinho de compras, deve ser obtido do contexto da aplicação futuramente
-const cartItems: Cart_Item[] = [
-    {
-        quantity: 1,
-        product: {
-            id: "1",
-            category: "Classicos",
-            type: "Barra de Chocolate",
-            variant: {
-                id: "1",
-                name: "Padrão",
-                price: 10.0,
-                description: "Barra de Chocolate ao Leite de 100g",
-            },
-
-            availableForSale: true,
-            isPromoted: true,
-            showInStore: true,
-
-            stockQtty: 100,
-
-            title: "Tropical Rio",
-            subtitle: "Barra de Chocolate ao Leite de 100g",
-            description: ["Chocolate ao leite cremoso e saboroso", "100g de puro prazer"],
-            price: 50,
-            weight: "100g",
-
-            ingredients: [
-                {
-                    id: "1",
-                    name: "Leite",
-                    description: ["Leite integral", "Leite em pó"],
-                },
-                {
-                    id: "2",
-                    name: "Açúcar",
-                    description: ["Açúcar refinado", "Açúcar mascavo"],
-                },
-            ],
-            images: [
-                {
-                    src: "https://www.example.com/image.jpg",
-                    alt: "Barra de Chocolate Tropical Rio",
-                    width: 800,
-                    height: 600,
-                },
-            ],
-            url_page_link: "tropical-rio",
-            url_full: "https://www.example.com/product/1/full",
-        },
-    },
-    {
-        quantity: 2,
-        product: {
-            id: "1",
-            category: "Classicos",
-            type: "Barra de Chocolate",
-            variant: {
-                id: "1",
-                name: "Padrão",
-                price: 10.0,
-                description: "Barra de Chocolate ao Leite de 100g",
-            },
-
-            availableForSale: true,
-            isPromoted: true,
-            showInStore: true,
-
-            stockQtty: 100,
-
-            title: "Tropical Rio",
-            subtitle: "Barra de Chocolate ao Leite de 100g",
-            description: ["Chocolate ao leite cremoso e saboroso", "100g de puro prazer"],
-            price: 50,
-            weight: "100g",
-
-            ingredients: [
-                {
-                    id: "1",
-                    name: "Leite",
-                    description: ["Leite integral", "Leite em pó"],
-                },
-                {
-                    id: "2",
-                    name: "Açúcar",
-                    description: ["Açúcar refinado", "Açúcar mascavo"],
-                },
-            ],
-            images: [
-                {
-                    src: "https://www.example.com/image.jpg",
-                    alt: "Barra de Chocolate Tropical Rio",
-                    width: 800,
-                    height: 600,
-                },
-            ],
-            url_page_link: "tropical-rio",
-            url_full: "https://www.example.com/product/1/full",
-        },
-    },
-    {
-        quantity: 3,
-        product: {
-            id: "1",
-            category: "Classicos",
-            type: "Barra de Chocolate",
-            variant: {
-                id: "1",
-                name: "Padrão",
-                price: 10.0,
-                description: "Barra de Chocolate ao Leite de 100g",
-            },
-
-            availableForSale: true,
-            isPromoted: true,
-            showInStore: true,
-
-            stockQtty: 100,
-
-            title: "Tropical Rio",
-            subtitle: "Barra de Chocolate ao Leite de 100g",
-            description: ["Chocolate ao leite cremoso e saboroso", "100g de puro prazer"],
-            price: 50,
-            weight: "100g",
-
-            ingredients: [
-                {
-                    id: "1",
-                    name: "Leite",
-                    description: ["Leite integral", "Leite em pó"],
-                },
-                {
-                    id: "2",
-                    name: "Açúcar",
-                    description: ["Açúcar refinado", "Açúcar mascavo"],
-                },
-            ],
-            images: [
-                {
-                    src: "https://www.example.com/image.jpg",
-                    alt: "Barra de Chocolate Tropical Rio",
-                    width: 800,
-                    height: 600,
-                },
-            ],
-            url_page_link: "tropical-rio",
-            url_full: "https://www.example.com/product/1/full",
-        },
-    },
-];
-const cartTotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
-
-// Dados do cliente, deve ser obtido do contexto da aplicação futuramente
-const customer = {
-    ref: "123456",
-    type: "registered",
-    name: "John Doe",
-    adress: "123 Main Street",
-    phone: "+1123456789",
-};
 
 //Dados do Pedido, deve ser obtido do contexto da aplicação futuramente
 const checkoutData = {
@@ -192,7 +36,10 @@ const createOrderAPI = process.env.NEXT_PUBLIC_PATH_API_CREATE_ORDER;
 //Caminho para API de Atualizar Pedido
 const updateOrderAPI = process.env.NEXT_PUBLIC_PATH_API_UPDATE_ORDER;
 
-if (!createPreferenceAPI || !createOrderAPI || !updateOrderAPI) {
+//Caminho para API de Atualizar Usuário
+const updateUserAPI = process.env.NEXT_PUBLIC_PATH_API_UPDATE_USER;
+
+if (!createPreferenceAPI || !createOrderAPI || !updateOrderAPI || !updateUserAPI) {
     throw new Error("The API paths are not defined");
 }
 
@@ -201,8 +48,19 @@ if (mercadoPagoKey) {
 }
 
 const WalletMercadoPago = () => {
+    const dispatch = useDispatch();
+
+    const userTabNeedsUpdateAction = () => {
+        dispatch(setUserTabNeedsUpdate(true));
+    };
+
     let customization: IWalletBrickCustomization;
     customization = { texts: { action: "buy", valueProp: "smart_option" } };
+
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems as Cart_Item[]);
+    const cartTotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
+
+    const customer = useSelector((state: RootState) => state.user.currentUser);
 
     const onSubmit = async () => {
         // console.log("Wallet Brick Payment Submitted!");
@@ -247,11 +105,11 @@ const WalletMercadoPago = () => {
                         observation: checkoutData.observation,
                         total: cartTotal,
 
-                        customer_ref: customer.ref,
-                        customer_type: customer.type,
+                        customer_ref: customer.id,
+                        customer_type: "no-type",
                         customer_name: customer.name,
-                        customer_adress: customer.adress,
-                        customer_phone: customer.phone,
+                        customer_adress: `${customer.address.street}, ${customer.address.number}, ${customer.address.complement}, ${customer.address.city}, ${customer.address.state}, ${customer.address.zip}`,
+                        customer_phone: customer.telephone,
 
                         status: {
                             confirmed_by_admin: false,
@@ -282,7 +140,30 @@ const WalletMercadoPago = () => {
                         .then((data) => {
                             const order = JSON.parse(data);
                             console.log("Order Created =>", order.order_data);
-                            resolve(order.order_data.order_preference_id);
+
+                            const updatedCustomer = {
+                                ...customer,
+                                orders: [...customer.orders, order.order_data.order_external_reference],
+                            };
+
+                            fetch(updateUserAPI, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(updatedCustomer),
+                            }).then((response) => {
+                                if (!response.ok) {
+                                    throw new Error(`User Update Failed! HTTP Error: ${response.status}`);
+                                }
+
+                                console.log("User Updated =>", updatedCustomer);
+                                console.log("Order Created =>", order.order_data.order_preference_id);
+                                setTimeout(() => {
+                                    userTabNeedsUpdateAction();
+                                }, 2000);
+                                resolve(order.order_data.order_preference_id);
+                            });
                         })
                         .catch((error) => {
                             console.log("Order Error =>", error);

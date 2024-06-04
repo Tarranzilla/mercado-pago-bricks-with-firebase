@@ -15,6 +15,8 @@ import UserTab from "@/components/User_Tab";
 import Admin_Product_Creator from "@/components/Admin_Product_Creator";
 import Admin_Product_List from "@/components/Admin_Product_List";
 import Client_Product_List from "@/components/Client_Product_List";
+import Client_Cart from "@/components/Client_Cart";
+import Client_Checkout from "@/components/Client_Checkout";
 
 export default function Home() {
     return (
@@ -28,10 +30,11 @@ export default function Home() {
             <main className="">
                 <h1 className="Website_Title">Mercado Pago e Firebase com NEXT</h1>
                 {/* <PaymentMercadoPago /> */}
-                <Admin_Product_Creator />
+                <UserTab />
                 <Admin_Product_List />
                 <Client_Product_List />
-                <UserTab />
+                <Client_Cart />
+                <Client_Checkout />
                 <WalletMercadoPago />
             </main>
         </>

@@ -78,8 +78,6 @@ const Client_Checkout = () => {
                                 <p className="User_No_Orders_Text">
                                     Você precisa estar conectado na sua conta para fazer um pedido e finalizar a compra.
                                 </p>
-
-                                <button>Conectar-se</button>
                             </div>
                         </div>
                     ) : (

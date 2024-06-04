@@ -541,6 +541,8 @@ main {
 .Cart_Item {
     display: flex;
     gap: 1rem;
+    border-bottom: 1px solid gray;
+    padding-bottom: 1rem;
 }
 
 .Product_List_Card_Image_Container {
@@ -635,7 +637,9 @@ main {
 .Cart_List {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
+    margin-inline: 1rem;
+    margin-top: 1rem;
 }
 
 .Cart_Item_Quantity_Selector {
@@ -664,8 +668,15 @@ main {
     cursor: pointer;
 }
 
+.Cart_Item_Button_Increment,
+.Cart_Item_Button_Decrement {
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
 .Cart_Footer {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     margin-top: auto;
     padding: 1rem;
@@ -673,8 +684,42 @@ main {
     border-radius: 1rem;
 }
 
+.Cart_Footer_Total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid gray;
+    padding-bottom: 1rem;
+}
+
 .Cart_Footer_Total_Value {
     min-width: max-content;
+    background-color: lightgray;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+}
+
+.Cart_Footer_Warning {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: lightblue;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+
+.Cart_Footer_Buttons_Container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .Cart_Footer_Checkout_Button {
@@ -684,11 +729,16 @@ main {
 
     background-color: lightblue;
     border: none;
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.5rem;
     border-radius: 0.5rem;
     cursor: pointer;
 
     width: 100%;
+}
+
+.Cart_Footer_Checkout_Button.Disabled {
+    background-color: lightgray;
+    cursor: not-allowed;
 }
 
 /* Checkout */

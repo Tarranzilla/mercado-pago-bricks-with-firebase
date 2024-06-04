@@ -6,6 +6,7 @@ import { RootState } from "@/store/store";
 import { addCartItem, removeCartItem, decrementCartItem } from "@/store/slices/cart_slice";
 
 import Product from "@/types/Product";
+import { User } from "@/types/User";
 import { Cart_Item } from "@/types/Cart_Item";
 
 // Framer motion para animações
@@ -14,6 +15,7 @@ import { motion as m, AnimatePresence, useScroll, useSpring } from "framer-motio
 const Client_Cart = () => {
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems as Cart_Item[]);
+    const customer = useSelector((state: RootState) => state.user.currentUser as User);
 
     const addCartItemAction = (product: Product) => {
         dispatch(addCartItem({ product: product }));
@@ -73,7 +75,7 @@ const Client_Cart = () => {
                                                     <p className="User_Info_Item_Edit_Btn_Text">Remover</p>
                                                 </button>
                                                 <button
-                                                    className="Cart_Item_Button"
+                                                    className="Cart_Item_Button Cart_Item_Button_Decrement"
                                                     onClick={() => {
                                                         decrementCartItemAction(cart_item.product);
                                                     }}
@@ -84,7 +86,7 @@ const Client_Cart = () => {
                                                 <h3 className="Cart_Item_Quantity_Ammount">{cart_item.quantity}</h3>
 
                                                 <button
-                                                    className="Cart_Item_Button"
+                                                    className="Cart_Item_Button Cart_Item_Button_Increment"
                                                     onClick={() => {
                                                         addCartItemAction(cart_item.product);
                                                     }}
@@ -107,15 +109,27 @@ const Client_Cart = () => {
 
                     <div className="Cart_Footer">
                         <div className="Cart_Footer_Total">
-                            <h2 className="Cart_Footer_Total_Title">Total</h2>
+                            <h2 className="Cart_Footer_Total_Title">Valor Total dos Produtos</h2>
                             <p className="Cart_Footer_Total_Value">
                                 R$ {cartItems.length > 0 ? cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0) : "0"}
                                 ,00
                             </p>
                         </div>
-                        <button className="Cart_Footer_Checkout_Button">
-                            <p className="User_Info_Item_Edit_Btn_Text">Finalizar Compra</p>
-                        </button>
+
+                        <div className="Cart_Footer_Buttons_Container">
+                            {customer.name === "Usuário Anônimo" && (
+                                <button className="Cart_Footer_Warning">
+                                    <span className="material-icons">badge</span>Crie uma conta ou conecte-se para finalizar a compra
+                                </button>
+                            )}
+                            <button
+                                className={
+                                    customer.name === "Usuário Anônimo" ? "Cart_Footer_Checkout_Button Disabled" : "Cart_Footer_Checkout_Button"
+                                }
+                            >
+                                <p className="User_Info_Item_Edit_Btn_Text">Finalizar Compra</p>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

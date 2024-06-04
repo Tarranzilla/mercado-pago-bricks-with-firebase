@@ -505,7 +505,7 @@ export default function UserTab() {
 
     const temp_local_user: User_Local = {
         id: "123456789",
-        name: "Test User",
+        name: "Usuário Anônimo",
         email: "example@example.com",
         avatar_url: "https://example.com/avatar.jpg",
         isOwner: false,
@@ -816,6 +816,10 @@ export default function UserTab() {
     useEffect(() => {
         const auth = getAuth();
         const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("User is not logged in");
+                setCurrentUserAction(temp_local_user);
+            }
             setUser(user);
             if (user) {
                 fetchUserDoc(user.uid);

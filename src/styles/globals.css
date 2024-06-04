@@ -244,6 +244,141 @@ main {
     width: 100%;
 }
 
+.User_Order_List {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.User_Order_Item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    padding: 1rem;
+    border-radius: 1rem;
+
+    border: 1px solid gray;
+}
+
+.Order_Item_Text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.Order_Item_Text_Headers_Container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.Order_Item_Text_Header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    min-width: max-content;
+}
+
+.Order_Item_Text_Header_Item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+
+    background-color: lightgray;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 1rem;
+    width: 100%;
+}
+
+.Order_Item_Text_Header_Item.Bigger {
+}
+
+.User_Order_Status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: lightgray;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.User_Order_Status_Call_Btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: lightblue;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+    color: black;
+}
+
+.Order_Expand_Btn {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    background-color: lightblue;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.Order_Expand_Btn_Icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+
+    text-decoration: none;
+    color: black;
+
+    transition: transform 0.25s;
+}
+
+.Order_Expand_Btn_Icon.Active {
+    transform: rotate(180deg);
+}
+
+.User_Order_Product {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Order_SeeMore_Btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: lightblue;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+    color: black;
+}
+
 /* Aba de Login */
 
 .User_Login_Container_Separator {

@@ -64,18 +64,43 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
     return (
         <div className="User_Order_Item" key={index}>
             <div className="Order_Item_Text">
-                <h3 className="User_Info_Label">Pedido Nº</h3>
-                <h3 className="User_Order_Number">#{order.order_external_reference}</h3>
+                <div className="Order_Item_Text_Headers_Container">
+                    <div className="Order_Item_Text_Header">
+                        <div className="Order_Item_Text_Header_Item">
+                            <h4 className="User_Info_Label">Pedido Nº</h4>
+                            <p className="User_Order_Number">#001</p>
+                        </div>
 
-                <p className="User_Info_Detail User_Order_Date">{order.order_date.toString()}</p>
+                        <div className="Order_Item_Text_Header_Item">
+                            <h4>Código Identificador</h4>
+                            <p>{order.order_external_reference}</p>
+                        </div>
+                    </div>
 
-                <div className="User_Order_Price">
-                    <h4>Valor Total: </h4>
-                    <p>
-                        R$
-                        {order.order_items.reduce((total, order_item) => total + order_item.product.price * order_item.quantity, 0)}
-                        ,00
-                    </p>
+                    <div className="Order_Item_Text_Header">
+                        <div className="User_Order_Date Order_Item_Text_Header_Item Bigger">
+                            <h4>Data do Pedido</h4>
+                            <p className="User_Info_Detail User_Order_Date">
+                                {new Date(order.order_date).toLocaleString("pt-BR", {
+                                    timeZone: "America/Sao_Paulo",
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })}
+                            </p>
+                        </div>
+
+                        <div className="User_Order_Price Order_Item_Text_Header_Item Bigger">
+                            <h4>Valor Total: </h4>
+                            <p>
+                                R$
+                                {order.order_items.reduce((total, order_item) => total + order_item.product.price * order_item.quantity, 0)}
+                                ,00
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <p className="User_Order_Status">
@@ -129,6 +154,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
                 </p>
 
                 <a
+                    className="User_Order_Status_Call_Btn"
                     href={generate_whatsapp_url_for_more_order_info(order.order_external_reference, businessTelephone)}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -138,12 +164,12 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
                 </a>
             </div>
 
-            <span
-                className={isExpanded ? "material-icons Order_Expand_Btn Active" : "material-icons Order_Expand_Btn"}
-                onClick={() => setIsExpanded(!isExpanded)}
-            >
-                expand_more
-            </span>
+            <div className="Order_Expand_Btn" onClick={() => setIsExpanded(!isExpanded)}>
+                <p className="Order_Expand_Btn_Text">Ver Detalhes do Pedido</p>
+                <span className={isExpanded ? "material-icons Order_Expand_Btn_Icon Active" : "material-icons Order_Expand_Btn_Icon"}>
+                    expand_more
+                </span>
+            </div>
 
             <AnimatePresence>
                 {isExpanded && (
@@ -966,26 +992,24 @@ export default function UserTab() {
 
                                             {/* Botão para ver mais do que os 3 pedidos mais recentes */}
                                             {!noOrders && orderList.length > 3 && (
-                                                <div className="User_Order_SeeMore">
-                                                    <button
-                                                        className="Order_SeeMore_Btn"
-                                                        onClick={() => {
-                                                            setSeeMore(!seeMore);
-                                                        }}
-                                                    >
-                                                        {(seeMore && (
+                                                <button
+                                                    className="Order_SeeMore_Btn"
+                                                    onClick={() => {
+                                                        setSeeMore(!seeMore);
+                                                    }}
+                                                >
+                                                    {(seeMore && (
+                                                        <>
+                                                            Ver apenas pedidos recentes
+                                                            <span className="material-icons">expand_less</span>
+                                                        </>
+                                                    )) ||
+                                                        (!seeMore && (
                                                             <>
-                                                                Ver apenas pedidos recentes
-                                                                <span className="material-icons">expand_less</span>
+                                                                Ver todos os pedidos <span className="material-icons">more_horiz</span>
                                                             </>
-                                                        )) ||
-                                                            (!seeMore && (
-                                                                <>
-                                                                    Ver todos os pedidos <span className="material-icons">more_horiz</span>
-                                                                </>
-                                                            ))}
-                                                    </button>
-                                                </div>
+                                                        ))}
+                                                </button>
                                             )}
                                         </div>
                                     </div>

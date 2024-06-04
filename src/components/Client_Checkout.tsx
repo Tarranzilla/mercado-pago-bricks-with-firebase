@@ -12,6 +12,8 @@ const Client_Checkout = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const customer = useSelector((state: RootState) => state.user.currentUser);
 
+    const emptyCart = cartItems.length < 1;
+
     const [receiveOption, setReceiveOption] = useState<"Retirada" | "Entrega">("Retirada");
     const shipping_cost = receiveOption === "Retirada" ? 0 : 15;
     const [receiveObservation, setReceiveObservation] = useState<string>("");
@@ -84,26 +86,35 @@ const Client_Checkout = () => {
                         <>
                             <div className="User_Tab_Card Checkout_Card">
                                 <h1 className="User_Tab_Card_Title Checkout_Card_Title">Itens do Pedido</h1>
-                                <div className="Checkout_Product_List">
-                                    <div className="User_Order_Product_List">
-                                        <h4>Produtos</h4>
-                                        {cartItems.map((cart_item, index) => {
-                                            return (
-                                                <div key={index} className="User_Order_Product">
-                                                    <p className="User_Order_Product_Title">{cart_item.product.title}</p>
-                                                    <p className="User_Order_Product_Qtty">{cart_item.quantity}x</p>
-                                                    <p className="User_Order_Product_Price">R$ {cart_item.product.price},00</p>
-                                                </div>
-                                            );
-                                        })}
+
+                                {emptyCart ? (
+                                    <div className="User_No_Orders">
+                                        <span className="material-icons">list_alt</span>
+                                        <p className="User_No_Orders_Text">Nenhum item adicionado ao pedido.</p>
                                     </div>
-                                    <div className="User_Order_Total">
-                                        <h4>Valor do Produtos</h4>
-                                        <p className="User_Order_Total_Value">
-                                            R$ {cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)},00
-                                        </p>
-                                    </div>
-                                </div>
+                                ) : (
+                                    <>
+                                        <div className="User_Order_Product_List">
+                                            <h4>Produtos</h4>
+                                            {cartItems.map((cart_item, index) => {
+                                                return (
+                                                    <div key={index} className="User_Order_Product">
+                                                        <p className="User_Order_Product_Title">{cart_item.product.title}</p>
+                                                        <p className="User_Order_Product_Qtty">{cart_item.quantity}x</p>
+                                                        <p className="User_Order_Product_Price">R$ {cart_item.product.price},00</p>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <div className="User_Order_Total">
+                                            <h4>Valor do Produtos</h4>
+                                            <p className="User_Order_Total_Value">
+                                                R$ {cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)},00
+                                            </p>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
                             <div className="User_Tab_Card Checkout_Card">
@@ -199,16 +210,29 @@ const Client_Checkout = () => {
                                             R$ {cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)},00
                                         </p>
                                     </div>
-                                    <div className="User_Order_Total User_Shipping_Total">
+                                    <div className="User_Order_Total">
                                         <h4>Valor da Entrega</h4>
                                         <p className="User_Order_Total_Value">R$ {shipping_cost},00</p>
                                     </div>
-                                    <div className="User_Order_Total User_Final_Total">
+                                    <div className="User_Order_Total">
                                         <h4>Valor Total</h4>
                                         <p className="User_Order_Total_Value">
                                             R$ {cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0) + shipping_cost},00
                                         </p>
                                     </div>
+
+                                    <button
+                                        className={
+                                            emptyCart
+                                                ? "Cart_Footer_Checkout_Button User_Order_Total_Btn Disabled"
+                                                : " Cart_Footer_Checkout_Button User_Order_Total_Btn"
+                                        }
+                                        onClick={() => {
+                                            console.log(tempOrder);
+                                        }}
+                                    >
+                                        {emptyCart ? "Para prosseguir ao pagamento adicione itens ao pedido" : "Prosseguir ao Pagamento"}
+                                    </button>
                                 </div>
                             </div>
                         </>

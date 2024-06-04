@@ -17,6 +17,9 @@ const Client_Cart = () => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems as Cart_Item[]);
     const customer = useSelector((state: RootState) => state.user.currentUser as User);
 
+    const anonymousCustomer = customer === null || customer.name === "Usuário Anônimo";
+    const cartEmpty = cartItems.length < 1;
+
     const addCartItemAction = (product: Product) => {
         dispatch(addCartItem({ product: product }));
     };
@@ -117,17 +120,17 @@ const Client_Cart = () => {
                         </div>
 
                         <div className="Cart_Footer_Buttons_Container">
-                            {customer.name === "Usuário Anônimo" && (
+                            {anonymousCustomer && (
                                 <button className="Cart_Footer_Warning">
                                     <span className="material-icons">badge</span>Crie uma conta ou conecte-se para finalizar a compra
                                 </button>
                             )}
                             <button
-                                className={
-                                    customer.name === "Usuário Anônimo" ? "Cart_Footer_Checkout_Button Disabled" : "Cart_Footer_Checkout_Button"
-                                }
+                                className={anonymousCustomer || cartEmpty ? "Cart_Footer_Checkout_Button Disabled" : "Cart_Footer_Checkout_Button"}
                             >
-                                <p className="User_Info_Item_Edit_Btn_Text">Finalizar Compra</p>
+                                <p className="User_Info_Item_Edit_Btn_Text">
+                                    {cartEmpty ? "Adicione itens ao carrinho para finalizar a compra" : "Finalizar Compra"}
+                                </p>
                             </button>
                         </div>
                     </div>

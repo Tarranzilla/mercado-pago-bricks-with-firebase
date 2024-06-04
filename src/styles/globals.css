@@ -725,6 +725,7 @@ main {
 .Cart_Footer_Checkout_Button {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
 
     background-color: lightblue;
@@ -732,6 +733,8 @@ main {
     padding: 1.25rem 1.5rem;
     border-radius: 0.5rem;
     cursor: pointer;
+
+    text-transform: uppercase;
 
     width: 100%;
 }
@@ -766,6 +769,7 @@ main {
     border: none;
     padding: 0.75rem 1.25rem;
     border-radius: 0.5rem;
+    min-width: 7rem;
 }
 
 .Checkout_Receive_Options {

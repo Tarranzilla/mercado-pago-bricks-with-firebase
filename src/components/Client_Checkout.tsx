@@ -20,9 +20,6 @@ type createPreferenceResponse = {
 // Verifica se a aplicação está em produção
 const isProduction = process.env.IS_PRODUCTION === "true";
 
-// Inicializa o SDK do Mercado Pago
-const mercadoPagoKey = isProduction ? process.env.NEXT_PUBLIC_MP_PROD_PUBLIC_KEY : process.env.NEXT_PUBLIC_MP_DEV_PUBLIC_KEY;
-
 //Caminho para API de Criar Preferência
 const createPreferenceAPI = process.env.NEXT_PUBLIC_PATH_API_CREATE_PREFERENCE;
 
@@ -34,10 +31,6 @@ const updateOrderAPI = process.env.NEXT_PUBLIC_PATH_API_UPDATE_ORDER;
 
 //Caminho para API de Atualizar Usuário
 const updateUserAPI = process.env.NEXT_PUBLIC_PATH_API_UPDATE_USER;
-
-if (!mercadoPagoKey) {
-    throw new Error("Mercado Pago Public Key is not defined!");
-}
 
 if (!createPreferenceAPI || !createOrderAPI || !updateOrderAPI || !updateUserAPI) {
     throw new Error("API Paths are not defined!");
@@ -52,12 +45,12 @@ const Client_Checkout = () => {
     const [processingPayment, setProcessingPayment] = useState<boolean>(false);
 
     const customer_has_not_updated_his_address =
-        customer.address.street === "Nenhuma Rua Definida" ||
-        customer.address.number === "Nenhum Número Definido" ||
-        customer.address.complement === "Nenhum Complemento Definido" ||
-        customer.address.city === "Nenhuma Cidade Definida" ||
-        customer.address.state === "Nenhum Estado Definido" ||
-        customer.address.zip === "Nenhum Código Postal Definido";
+        customer?.address?.street === "Nenhuma Rua Definida" ||
+        customer?.address?.number === "Nenhum Número Definido" ||
+        customer?.address?.complement === "Nenhum Complemento Definido" ||
+        customer?.address?.city === "Nenhuma Cidade Definida" ||
+        customer?.address?.state === "Nenhum Estado Definido" ||
+        customer?.address?.zip === "Nenhum Código Postal Definido";
 
     const emptyCart = cartItems.length < 1;
 
@@ -81,6 +74,11 @@ const Client_Checkout = () => {
 
     const processPaymentAction = async () => {
         console.log("Botão de Pagamento Clicado!");
+
+        if (!customer) {
+            console.log("Usuário não encontrado! O Pedido não pode ser efetuado!");
+            return;
+        }
 
         if (cartItems.length === 0) {
             console.log("O Carrinho está vazio! O Pedido não pode ser efetuado!");
@@ -221,7 +219,7 @@ const Client_Checkout = () => {
                         </div>
                     ) : (
                         <>
-                            {customer.name === "Usuário Anônimo" ? (
+                            {!customer ? (
                                 <div className="User_Tab_Card Checkout_Card">
                                     <h1 className="User_Tab_Card_Title Checkout_Card_Title">Finalizar Compra</h1>
 

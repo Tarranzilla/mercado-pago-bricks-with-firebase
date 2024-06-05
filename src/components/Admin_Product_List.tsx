@@ -50,7 +50,7 @@ const Admin_Product_List = () => {
 
     return (
         <div className="Product_List">
-            {local_user.isAdmin ? (
+            {local_user && local_user.isAdmin ? (
                 <div className="UserTab_Content_Wrapper Product_List_Content_Wrapper" ref={scroll_ref}>
                     <div className="User_Tab_Card Product_List_Card">
                         <h1 className="User_Tab_Card_Title Product_List_Title">Editor de Produtos</h1>

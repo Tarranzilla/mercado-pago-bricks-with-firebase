@@ -1,14 +1,19 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
+import axios from "axios";
+
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { FirebaseStorage, getStorage } from "firebase/storage";
 import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
 import { Firestore, getFirestore, doc, setDoc, getDoc, getDocs, DocumentData, Timestamp, collection, query, where } from "firebase/firestore";
 
-import { setUserIsAdmin } from "@/store/slices/user_slice";
+import { setCurrentUser, setUserIsAdmin } from "@/store/slices/user_slice";
 import { useDispatch } from "react-redux";
 
+import { User as User_Local } from "@/types/User";
+
+// Variáveis de ambiente para o Firebase Client Side
 const FIREBASE_CLIENT_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_API_KEY;
 const FIREBASE_CLIENT_AUTH_DOMAIN = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_AUTH_DOMAIN;
 const FIREBASE_CLIENT_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_PROJECT_ID;
@@ -17,6 +22,15 @@ const FIREBASE_CLIENT_MESSAGING_SENDER_ID = process.env.NEXT_PUBLIC_FIREBASE_CLI
 const FIREBASE_CLIENT_APP_ID = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_APP_ID;
 const FIREBASE_CLIENT_MEASUREMENT_ID = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_MEASUREMENT_ID;
 
+// Variáveis de ambiente para o Firebase Server Side
+const FIREBASE_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_SPECIAL_PROJECT_ID;
+
+const NEXT_PUBLIC_PATH_API_GET_USER = process.env.NEXT_PUBLIC_PATH_API_GET_USER;
+const NEXT_PUBLIC_PATH_API_CREATE_USER = process.env.NEXT_PUBLIC_PATH_API_CREATE_USER;
+const NEXT_PUBLIC_PATH_API_UPDATE_USER = process.env.NEXT_PUBLIC_PATH_API_UPDATE_USER;
+
+const NEXT_PUBLIC_PATH_API_GET_ORDER = process.env.NEXT_PUBLIC_PATH_API_GET_ORDER;
+
 if (
     !FIREBASE_CLIENT_PROJECT_ID ||
     !FIREBASE_CLIENT_API_KEY ||
@@ -24,12 +38,17 @@ if (
     !FIREBASE_CLIENT_STORAGE_BUCKET ||
     !FIREBASE_CLIENT_MESSAGING_SENDER_ID ||
     !FIREBASE_CLIENT_APP_ID ||
-    !FIREBASE_CLIENT_MEASUREMENT_ID
+    !FIREBASE_CLIENT_MEASUREMENT_ID ||
+    !FIREBASE_PROJECT_ID ||
+    !NEXT_PUBLIC_PATH_API_GET_USER ||
+    !NEXT_PUBLIC_PATH_API_CREATE_USER ||
+    !NEXT_PUBLIC_PATH_API_UPDATE_USER ||
+    !NEXT_PUBLIC_PATH_API_GET_ORDER
 ) {
-    throw new Error("One or more of the FIREBASE_CLIENT_ environment variables are not defined");
+    throw new Error("One or more of the API PATHS environment variables are not defined");
 }
 
-// Minha configuração do Firebase
+// Minha configuração do Firebase para o cliente
 const firebaseConfig = {
     apiKey: FIREBASE_CLIENT_API_KEY,
     authDomain: FIREBASE_CLIENT_AUTH_DOMAIN,
@@ -63,8 +82,8 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
 
     const [firebaseInitialized, setFirebaseInitialized] = useState(false);
 
-    // Função para buscar o documento do usuário no Firestore
-    const fetchUserDoc = async (uid: string) => {
+    // Função para buscar o documento do usuário no Firestore pelo Client Side
+    const fetchUserDocClientSide = async (uid: string) => {
         if (!firestore) {
             console.log("Firestore is not initialized");
             return;
@@ -90,6 +109,41 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
         }
     };
 
+    // Função para buscar o documento do usuário no Firestore pelo Server Side e atualizar o estado do Redux
+    const fetchUserDocServerSide = async (uid: string) => {
+        try {
+            // Fetch user data from get_user API
+            const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_USER}`, { params: { id: uid } });
+            console.log("User data from API:", response.data);
+
+            if (response.status === 400) {
+                console.error("Missing required fields, cannot fetch user data");
+            }
+
+            if (response.data.message === "user-not-found") {
+                console.log("User not found");
+            }
+
+            if (response.data) {
+                setCurrentUserAction(response.data as User_Local);
+
+                if (response.data.isAdmin) {
+                    setUserIsAdminAction(true);
+                } else {
+                    setUserIsAdminAction(false);
+                }
+            }
+        } catch (error) {
+            console.log("Error fetching user data:", error);
+        }
+    };
+
+    // Função para atualizar o estado do Redux com os dados do usuário
+    const setCurrentUserAction = (user: User_Local) => {
+        dispatch(setCurrentUser(user));
+    };
+
+    // Função para atualizar o estado do Redux com as permissões de administrador do usuário
     const setUserIsAdminAction = (isAdmin: boolean) => {
         dispatch(setUserIsAdmin(isAdmin));
     };
@@ -105,12 +159,12 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
         setFirestore(firestore);
         setStorage(storage);
 
-        onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             console.log("Auth state change detected:");
             if (user) {
                 // User is signed in
                 console.log("User is signed in: ", user);
-                fetchUserDoc(user.uid);
+                fetchUserDocServerSide(user.uid);
             } else {
                 // User is signed out
                 console.log("User is not signed in");
@@ -118,7 +172,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
             }
         });
 
-        /*
+        /*  Logs para verificar se o Firebase foi inicializado corretamente
             console.log("Firebase App =>", app);
             console.log("Firebase Analytics =>", analytics);
             console.log("Firebase Firestore =>", firestore);
@@ -127,6 +181,9 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
         */
 
         setFirebaseInitialized(true);
+
+        // Return the unsubscribe function to clean up on unmount
+        return unsubscribe;
     }, []);
 
     if (!firebaseInitialized) {

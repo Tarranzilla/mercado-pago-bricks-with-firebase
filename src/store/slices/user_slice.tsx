@@ -2,10 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@/types/User";
 
 type UserState = {
-    currentUser: User;
+    currentUser: User | null;
     isAdmin: boolean;
 };
 
+// Usuário padrão para visitantes não autenticados, creio que deva ser null em vez dele.
 const defaultCurrentUser: User = {
     id: "no-id",
     name: "Usuário Anônimo",
@@ -28,11 +29,11 @@ const defaultCurrentUser: User = {
 };
 
 const initialState: UserState = {
-    currentUser: defaultCurrentUser,
+    currentUser: null,
     isAdmin: false,
 };
 
-type SetCurrentUserAction = PayloadAction<User>;
+type SetCurrentUserAction = PayloadAction<User | null>;
 type UpdateOrdersAction = PayloadAction<boolean>;
 
 const userSlice = createSlice({

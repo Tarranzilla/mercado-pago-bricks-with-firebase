@@ -897,8 +897,6 @@ const Admin_Product_Creator = () => {
         restDelta: 0.001,
     });
 
-    useEffect(() => {}, []);
-
     return (
         <div className="Product_Creator">
             <div className="UserTab_Content_Wrapper Product_Creator_Content_Wrapper" ref={scroll_ref}>

@@ -23,11 +23,13 @@ import { useFirebase } from "@/components/Firebase_Context";
 // Gerenciamento de Estado com Redux
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
-// import type { CheckoutOrder } from "@/store/slices/cart_slice";
 import { setUserTabNeedsUpdate } from "@/store/slices/interface_slice";
 import { setCurrentUser } from "@/store/slices/user_slice";
 
-// import { Order } from "@/types/Order";
+// Tipos de Dados
+import { Order } from "@/types/Order";
+import { Address } from "@/types/Address";
+import { User as User_Local } from "@/types/User";
 
 // Variáveis de Ambiente
 const FIREBASE_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_SPECIAL_PROJECT_ID;
@@ -45,11 +47,6 @@ const businessTelephone = process.env.NEXT_PUBLIC_BUSINESS_MAIN_TELEPHONE;
 if (!businessTelephone) {
     throw new Error("BUSINESS_MAIN_TELEPHONE environment variable is not defined");
 }
-
-// Tipos de Dados
-import { Order } from "@/types/Order";
-import { Address } from "@/types/Address";
-import { User as User_Local } from "@/types/User";
 
 // Propriedades do Componente de Pedido
 export type OrderItemProps = {
@@ -483,26 +480,17 @@ export default function UserTab() {
         restDelta: 0.001,
     });
 
+    // Checar se o Firebase foi inicializado
     if (!firebase) {
         throw new Error("Firebase context is not available");
     }
 
+    // Seletores do contexto Redux
+    const customer = useSelector((state: RootState) => state.user.currentUser);
     const isUserTabOpen = useSelector((state: RootState) => state.interface.isUserTabOpen);
     const userTabNeedsUpdate = useSelector((state: RootState) => state.interface.userTabNeedsUpdate);
 
-    const userTabNeedsNoUpdateAction = () => {
-        dispatch(setUserTabNeedsUpdate(false));
-    };
-
-    const setCurrentUserAction = (localUser: User_Local) => {
-        dispatch(setCurrentUser(localUser));
-    };
-
-    // Estados do campo de login
-    const [loginWithEmailMode, setLoginWithEmailMode] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
+    // Dados de usuário temporarios, devo usar null ao invés disto.
     const temp_local_user: User_Local = {
         id: "123456789",
         name: "Usuário Anônimo",
@@ -525,59 +513,82 @@ export default function UserTab() {
     };
 
     // Estados do usuário, user é o usuário padrão do Google e localUser é o usuário do nosso banco de dados
-    const [user, setUser] = useState<User | null>(null);
-    const [localUser, setLocalUser] = useState<User_Local>(temp_local_user);
-    const [editedLocalUser, setEditedLocalUser] = useState<User_Local>(temp_local_user);
-    const [isAdmin, setIsAdmin] = useState(false);
+    // const [user, setUser] = useState<User | null>(null);
+    // const [localUser, setLocalUser] = useState<User_Local>(temp_local_user);
+    const [editedLocalUser, setEditedLocalUser] = useState<User_Local | null>(null);
 
     const customer_has_not_updated_his_address =
-        localUser.address.street === "Nenhuma Rua Definida" ||
-        localUser.address.number === "Nenhum Número Definido" ||
-        localUser.address.complement === "Nenhum Complemento Definido" ||
-        localUser.address.city === "Nenhuma Cidade Definida" ||
-        localUser.address.state === "Nenhum Estado Definido" ||
-        localUser.address.zip === "Nenhum Código Postal Definido";
+        customer?.address?.street === "Nenhuma Rua Definida" ||
+        customer?.address?.number === "Nenhum Número Definido" ||
+        customer?.address?.complement === "Nenhum Complemento Definido" ||
+        customer?.address?.city === "Nenhuma Cidade Definida" ||
+        customer?.address?.state === "Nenhum Estado Definido" ||
+        customer?.address?.zip === "Nenhum Código Postal Definido";
+
+    const setCurrentUserAction = (localUser: User_Local | null) => {
+        dispatch(setCurrentUser(localUser));
+    };
+
+    const setUserTabNeedsUpdateAction = (value: boolean) => {
+        dispatch(setUserTabNeedsUpdate(value));
+    };
+
+    const userTabNeedsNoUpdateAction = () => {
+        dispatch(setUserTabNeedsUpdate(false));
+    };
+
+    // Estados do campo de login
+    const [loginWithEmailMode, setLoginWithEmailMode] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     // Funções para a atualização de dados do usuário
-    const handleLocalUserChange = (field: keyof User_Local, value: string | boolean | Address | string[]) => {
-        setEditedLocalUser((prevState) => ({ ...prevState, [field]: value }));
+    const handleEditedLocalUserChange = (field: keyof User_Local, value: string | boolean | Address | string[]) => {
+        if (editedLocalUser) {
+            setEditedLocalUser((prevState) => {
+                if (prevState) {
+                    return { ...prevState, [field]: value };
+                } else {
+                    return null;
+                }
+            });
+        }
     };
 
-    const handleLocalUserAddressChange = (field: keyof Address, value: string) => {
-        setEditedLocalUser((prevState) => ({ ...prevState, address: { ...prevState.address, [field]: value } }));
+    const handleEditedLocalUserAddressChange = (field: keyof Address, value: string) => {
+        setEditedLocalUser((prevState) => {
+            if (prevState) {
+                return { ...prevState, address: { ...prevState.address, [field]: value } };
+            } else {
+                return null;
+            }
+        });
     };
 
-    const updateLocalUser = async () => {
-        if (!user) {
-            console.log("User is not logged in, operation cannot proceed.");
+    const discardLocalUserChanges = () => {
+        if (customer) {
+            setEditedLocalUser(customer);
+        }
+    };
+
+    const updateUser = async () => {
+        if (!editedLocalUser) {
+            console.error("No edited user data to update");
             return;
         }
 
         try {
-            // Enviar o usuário editado para a API
-            const response = await axios.post(`${NEXT_PUBLIC_PATH_API_UPDATE_USER}`, editedLocalUser);
-            // console.log("User data from API:", response.data);
-
-            // Se a resposta for 400, significa que faltam campos obrigatórios
-            if (response.status === 400) {
-                console.error("Missing required fields, cannot fetch user data");
-            }
-
-            // Se a resposta for 200, significa que o usuário foi atualizado com sucesso
-            if (response.status === 200) {
-                console.log("User data updated successfully");
-                setLocalUser(editedLocalUser);
-            }
+            await axios.post(`${NEXT_PUBLIC_PATH_API_UPDATE_USER}`, editedLocalUser);
+            setCurrentUserAction(editedLocalUser);
+            setUserTabNeedsUpdateAction(true);
+            console.log("User updated successfully");
         } catch (error) {
-            console.log("Error fetching user data:", error);
+            console.error("Error updating user:", error);
         }
     };
 
-    const discardLocalUserChanges = () => {
-        setEditedLocalUser(localUser);
-    };
-
-    const isSomeLocalUserInfoEdited = Object.entries(editedLocalUser).some(([key, value]) => localUser[key] !== value);
+    // Comparador de objetos que os transforma em strings para ver se há diferenças
+    const isSomeLocalUserInfoEdited = customer && editedLocalUser && JSON.stringify(customer) !== JSON.stringify(editedLocalUser);
 
     // Estado para ver mais do que 3 pedidos
     const [seeMore, setSeeMore] = useState(false);
@@ -590,7 +601,7 @@ export default function UserTab() {
 
     // Funções de Autenticação
     // Login com Google
-    const signIn = async () => {
+    const signInWithGoogle = async () => {
         const auth = getAuth();
         const provider = new GoogleAuthProvider();
         try {
@@ -637,19 +648,6 @@ export default function UserTab() {
                         await axios.post(`${NEXT_PUBLIC_PATH_API_CREATE_USER}`, new_user);
                         console.log("New user document created successfully");
                     }
-
-                    if (response.data) {
-                        setCurrentUserAction(response.data as User_Local);
-                        setLocalUser(response.data as User_Local);
-                        setEditedLocalUser(response.data as User_Local);
-                        console.log("Local User: ", response.data);
-
-                        if (response.data.isAdmin) {
-                            setIsAdmin(true);
-                        } else {
-                            setIsAdmin(false);
-                        }
-                    }
                 } catch (error) {
                     console.log("Error fetching user data:", error);
                 }
@@ -660,7 +658,7 @@ export default function UserTab() {
     };
 
     // Login com Email e Senha
-    const signUp = async () => {
+    const signinWithEmail = async () => {
         const auth = getAuth();
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -732,6 +730,7 @@ export default function UserTab() {
         const auth = getAuth();
         try {
             await signOut(auth);
+            setCurrentUserAction(null);
             console.log("User signed out");
         } catch (error) {
             console.error("Error signing out:", error);
@@ -739,7 +738,7 @@ export default function UserTab() {
     };
 
     // Função para buscar o documento do usuário no Firestore
-    const fetchUserDoc = async (uid: string) => {
+    const fetchUserData = async (uid: string) => {
         try {
             // Fetch user data from get_user API
             const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_USER}`, { params: { id: uid } });
@@ -754,16 +753,11 @@ export default function UserTab() {
             }
 
             if (response.data) {
-                setCurrentUserAction(response.data as User_Local);
-                setLocalUser(response.data as User_Local);
                 setEditedLocalUser(response.data as User_Local);
-                console.log("Local User: ", response.data);
+                setCurrentUserAction(response.data as User_Local);
+                fetchOrdersForUser(response.data as User_Local);
 
-                if (response.data.isAdmin) {
-                    setIsAdmin(true);
-                } else {
-                    setIsAdmin(false);
-                }
+                console.log("Local User: ", response.data);
             }
         } catch (error) {
             console.log("Error fetching user data:", error);
@@ -794,9 +788,8 @@ export default function UserTab() {
     };
 
     // Função para buscar todos os pedidos para o usuário - O usuário deve ter uma lista de referências externas de pedidos e então buscamos no banco de dados
-    const fetchOrdersForUser = async (): Promise<Order[] | undefined> => {
-        const user_orders = localUser.orders;
-        console.log(localUser);
+    const fetchOrdersForUser = async (user: User_Local): Promise<Order[] | undefined> => {
+        const user_orders = user.orders;
         console.log("User Orders:", user_orders);
 
         if (user_orders.length < 1) {
@@ -804,48 +797,38 @@ export default function UserTab() {
             return [];
         }
 
-        let orders: Order[] = [];
+        try {
+            const orders: (Order | undefined)[] = await Promise.all(
+                user_orders.map(async (order_id) => {
+                    const order = await fetchOrderDoc(order_id);
+                    if (order) {
+                        console.log(order);
+                        return order;
+                    }
+                })
+            );
 
-        user_orders.forEach(async (order_id) => {
-            const order = await fetchOrderDoc(order_id);
-            if (order) {
-                console.log(order);
-                setOrderList((prevOrderList) => [...prevOrderList, order]);
-            }
-        });
+            // Filter out any undefined values
+            const validOrders: Order[] = orders.filter((order): order is Order => order !== undefined);
 
-        return orders;
+            // Set the order list with the valid orders
+            setOrderList(validOrders);
+
+            return validOrders;
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+            return undefined;
+        }
     };
 
-    // Função para tradução | Ainda nao aplicada neste projeto
-    // const t = useSimpleTranslation();
-
-    // Efeito que ocorre uma vez após o componente carregar: Um observador de estado de autenticação é criado e o usuário e seus dados são atualizados
+    // localUser era uma dependencia, mas eu a removi, talvez existam erros agora ...
     useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                console.log("User is not logged in");
-                setCurrentUserAction(temp_local_user);
-            }
-            setUser(user);
-            if (user) {
-                fetchUserDoc(user.uid);
-                fetchOrdersForUser();
-            }
-        });
-
-        // Função de limpeza que é chamada quando o componente é desmontado
-        return () => unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        if (user) {
-            console.log("Fetching New Orders for the User:", user.uid);
-            fetchOrdersForUser();
+        if (customer) {
+            console.log("Fetching Updated Data for the User:", customer.id);
+            fetchUserData(customer.id);
             userTabNeedsNoUpdateAction();
         }
-    }, [user, localUser, userTabNeedsUpdate]);
+    }, [userTabNeedsUpdate]);
 
     return (
         <>
@@ -857,17 +840,19 @@ export default function UserTab() {
                             className={isSomeLocalUserInfoEdited ? "UserTab_Content_Wrapper Extra_Bottom_Padding" : "UserTab_Content_Wrapper"}
                             ref={scroll_ref}
                         >
-                            {user ? (
+                            {customer && editedLocalUser ? (
                                 <>
                                     {/* Card de Informações Gerais */}
                                     <div className="User_Tab_Card">
                                         <h1 className="User_Tab_Card_Title">Informações Gerais</h1>
                                         <div className="User_Tab_Card_Info">
                                             <div className="User_Tab_Card_Info_Image_Container">
-                                                {user.photoURL && user.displayName && (
-                                                    <img className="User_Tab_Card_Info_Image" src={user.photoURL} alt={user.displayName} />
+                                                {customer.avatar_url && customer.name && (
+                                                    <img className="User_Tab_Card_Info_Image" src={customer.avatar_url} alt={customer.name} />
                                                 )}
-                                                {!user.photoURL && <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>}
+                                                {!customer.avatar_url && (
+                                                    <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>
+                                                )}
 
                                                 <div className="User_Tab_Card_Info_Image_Edit_Btn">
                                                     <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
@@ -883,9 +868,9 @@ export default function UserTab() {
                                                     label="Nome"
                                                     placeholder="Novo Nome"
                                                     propertie="name"
-                                                    localUser={localUser}
+                                                    localUser={customer}
                                                     editedLocalUser={editedLocalUser}
-                                                    handleLocalUserChange={handleLocalUserChange}
+                                                    handleLocalUserChange={handleEditedLocalUserChange}
                                                 />
 
                                                 <User_Email_Info_Container
@@ -893,9 +878,9 @@ export default function UserTab() {
                                                     label="Email"
                                                     placeholder="Novo Email"
                                                     propertie="email"
-                                                    localUser={localUser}
+                                                    localUser={customer}
                                                     editedLocalUser={editedLocalUser}
-                                                    handleLocalUserChange={handleLocalUserChange}
+                                                    handleLocalUserChange={handleEditedLocalUserChange}
                                                 />
 
                                                 <User_Telephone_Info_Container
@@ -903,16 +888,16 @@ export default function UserTab() {
                                                     label="Telefone"
                                                     placeholder="Novo Telefone"
                                                     propertie="telephone"
-                                                    localUser={localUser}
+                                                    localUser={customer}
                                                     editedLocalUser={editedLocalUser}
-                                                    handleLocalUserChange={handleLocalUserChange}
+                                                    handleLocalUserChange={handleEditedLocalUserChange}
                                                 />
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Card de Informações de Administrador */}
-                                    {isAdmin && (
+                                    {customer && customer.isAdmin === true && (
                                         <div className="User_Tab_Card">
                                             <h1 className="User_Tab_Card_Title">Administração</h1>
 
@@ -954,9 +939,9 @@ export default function UserTab() {
                                                 label="Rua"
                                                 placeholder="Nova Rua"
                                                 propertie="street"
-                                                localUser={localUser}
+                                                localUser={customer}
                                                 editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
+                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
                                             />
 
                                             <User_Address_Info_Container
@@ -964,9 +949,9 @@ export default function UserTab() {
                                                 label="Número"
                                                 placeholder="Novo Número"
                                                 propertie="number"
-                                                localUser={localUser}
+                                                localUser={customer}
                                                 editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
+                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
                                             />
 
                                             <User_Address_Info_Container
@@ -974,9 +959,9 @@ export default function UserTab() {
                                                 label="Complemento"
                                                 placeholder="Novo Complemento"
                                                 propertie="complement"
-                                                localUser={localUser}
+                                                localUser={customer}
                                                 editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
+                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
                                             />
 
                                             <User_Address_Info_Container
@@ -984,9 +969,9 @@ export default function UserTab() {
                                                 label="Cidade"
                                                 placeholder="Nova Cidade"
                                                 propertie="city"
-                                                localUser={localUser}
+                                                localUser={customer}
                                                 editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
+                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
                                             />
 
                                             <User_Address_Info_Container
@@ -994,9 +979,9 @@ export default function UserTab() {
                                                 label="Estado"
                                                 placeholder="Novo Estado"
                                                 propertie="state"
-                                                localUser={localUser}
+                                                localUser={customer}
                                                 editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
+                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
                                             />
 
                                             <User_Address_Info_Container
@@ -1004,9 +989,9 @@ export default function UserTab() {
                                                 label="Código Postal"
                                                 placeholder="Novo Código Postal"
                                                 propertie="zip"
-                                                localUser={localUser}
+                                                localUser={customer}
                                                 editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleLocalUserAddressChange}
+                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
                                             />
                                         </div>
                                     </div>
@@ -1062,7 +1047,7 @@ export default function UserTab() {
                                 <>
                                     {!loginWithEmailMode && (
                                         <div className="User_Login_Container">
-                                            <button onClick={signIn} className="User_Google_Login_Btn">
+                                            <button onClick={signInWithGoogle} className="User_Google_Login_Btn">
                                                 <p className="User_Google_Login_Btn_Text">Faça login ou crie uma conta com o Google</p>
                                                 <span className="material-icons User_Google_Login_Btn_Icon">login</span>
                                             </button>
@@ -1113,7 +1098,7 @@ export default function UserTab() {
                                                 <p className="User_Login_Btn_Text">Login com este Email </p>
                                                 <span className="material-icons User_Login_Btn_Icon">login</span>
                                             </button>
-                                            <button className="User_Login_Btn Register_Btn" onClick={signUp}>
+                                            <button className="User_Login_Btn Register_Btn" onClick={signinWithEmail}>
                                                 <p className="User_Login_Btn_Text">Registre uma conta com este Email</p>{" "}
                                                 <span className="material-icons User_Login_Btn_Icon">person_add_alt</span>
                                             </button>
@@ -1139,7 +1124,7 @@ export default function UserTab() {
                                     <span className="material-icons User_Info_Edit_Control_Btn_Icon">delete_forever</span>
                                     <p className="User_Info_Edit_Control_Btn_Text">Descartar Alterações</p>
                                 </button>
-                                <button className="User_Info_Edit_Control_Btn" onClick={updateLocalUser}>
+                                <button className="User_Info_Edit_Control_Btn" onClick={updateUser}>
                                     <span className="material-icons User_Info_Edit_Control_Btn_Icon">update</span>
                                     <p className="User_Info_Edit_Control_Btn_Text">Atualizar Informações</p>
                                 </button>

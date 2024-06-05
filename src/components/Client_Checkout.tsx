@@ -97,7 +97,7 @@ const Client_Checkout = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(cartItems), // A method that converts an JavaScript object or value to a JSON string.
+                body: JSON.stringify({ customer, cartItems }), // A method that converts an JavaScript object or value to a JSON string.
             })
                 .then((response) => {
                     if (!response.ok) {

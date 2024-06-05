@@ -8,6 +8,7 @@ import { ulid } from "ulid";
 import { MercadoPagoConfig, Preference } from "mercadopago";
 
 import { Cart_Item } from "@/types/Cart_Item";
+import { User } from "@/types/User";
 
 export declare type Identification = {
     type?: string;
@@ -248,7 +249,10 @@ const client = new MercadoPagoConfig({ accessToken: MP_ACCESS_TOKEN }); // Jogar
 
 export default function preferenceHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
-        let cartItems = req.body.map((item: Cart_Item) => ({
+        let { customer, cartItems }: { customer: User; cartItems: Cart_Item[] } = req.body;
+
+        let processedCartItems = cartItems.map((item: Cart_Item) => ({
+            id: item.product.id,
             title: item.product.title,
             unit_price: item.product.price,
             quantity: item.quantity,
@@ -273,13 +277,30 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
         preference
             .create({
                 body: {
-                    items: cartItems,
+                    items: processedCartItems,
                     back_urls: {
                         success: "https://farol-das-ideias.vercel.app",
                         failure: "https://farol-das-ideias.vercel.app/checkout_fail",
                         pending: "https://farol-das-ideias.vercel.app/checkout_pending",
                     },
                     external_reference: external_reference,
+                    notification_url: "https://farol-das-ideias.vercel.app/api/order/update_order",
+                    payer: {
+                        name: customer.name,
+                        surname: customer.name,
+                        email: customer.email,
+                        phone: {
+                            area_code: "41",
+                            number: "99999999",
+                        },
+                        address: {
+                            zip_code: customer.address.zip,
+                            street_name: customer.address.street,
+                            street_number: parseInt(customer.address.number.replace(/\D/g, "")),
+                        },
+                    },
+
+                    // aqui é possivel adicionar shipment, taxes, tracks, etc
                 },
                 requestOptions: {
                     idempotencyKey: external_reference,

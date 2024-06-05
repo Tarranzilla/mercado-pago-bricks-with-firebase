@@ -18,7 +18,9 @@ type createPreferenceResponse = {
 };
 
 // Verifica se a aplicação está em produção
-const isProduction = process.env.IS_PRODUCTION === "true";
+// console.log("IS_PRODUCTION ENV =>", process.env.NEXT_PUBLIC_IS_PRODUCTION);
+const isProduction = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
+// console.log("IS_PRODUCTION =>", isProduction);
 
 //Caminho para API de Criar Preferência
 const createPreferenceAPI = process.env.NEXT_PUBLIC_PATH_API_CREATE_PREFERENCE;
@@ -73,7 +75,7 @@ const Client_Checkout = () => {
     };
 
     const processPaymentAction = async () => {
-        console.log("Botão de Pagamento Clicado!");
+        // console.log("Botão de Pagamento Clicado!");
 
         if (!customer) {
             console.log("Usuário não encontrado! O Pedido não pode ser efetuado!");
@@ -105,7 +107,7 @@ const Client_Checkout = () => {
                 })
                 .then((data) => {
                     new_preference = JSON.parse(data); // A method that takes a JSON string and converts it into a JavaScript object.
-                    console.log("Preference Created =>", new_preference);
+                    // console.log("Preference Created =>", new_preference);
                     // console.log("Preference ID =>", preference.id);
                     // console.log("External Reference ID =>", preference.external_reference);
                     return new_preference;
@@ -157,7 +159,7 @@ const Client_Checkout = () => {
                         })
                         .then((data) => {
                             const order = JSON.parse(data);
-                            console.log("Order Created =>", order.order_data);
+                            // console.log("Order Created =>", order.order_data);
 
                             const updatedCustomer = {
                                 ...customer,
@@ -175,8 +177,8 @@ const Client_Checkout = () => {
                                     throw new Error(`User Update Failed! HTTP Error: ${response.status}`);
                                 }
 
-                                console.log("User Updated =>", updatedCustomer);
-                                console.log("Order Created =>", order.order_data.order_preference_id);
+                                // console.log("User Updated =>", updatedCustomer);
+                                // console.log("Order Created =>", order.order_data.order_preference_id);
                                 setTimeout(() => {
                                     userTabNeedsUpdateAction();
                                 }, 2000);
@@ -192,15 +194,31 @@ const Client_Checkout = () => {
                     console.log("Payment Error =>", error);
                     reject(error);
                 })
-                .finally(() => {
-                    setProcessingPayment(false);
-                    console.log("Payment Process Finished!");
-                    if (new_preference.full_preference.sandbox_init_point || new_preference.full_preference.init_point) {
+                .then(() => {
+                    if (new_preference.full_preference.sandbox_init_point && new_preference.full_preference.init_point) {
+                        // console.log("Sandbox Init Point => ", new_preference.full_preference.sandbox_init_point);
+                        // console.log("Production Init Point => ", new_preference.full_preference.init_point);
+                        // console.log("Is Production => ", isProduction);
+
                         const destination = isProduction
                             ? new_preference.full_preference.init_point
                             : new_preference.full_preference.sandbox_init_point;
-                        router.push(destination);
+
+                        // console.log("Selected Init Point => ", destination);
+                        return destination;
+                    } else {
+                        alert("Erro ao processar o pagamento! Tente novamente mais tarde.");
+                        throw new Error("Payment Error => Init Point not found!");
                     }
+                })
+                .then((destination) => {
+                    setTimeout(() => {
+                        router.push(destination);
+                    }, 2000);
+                })
+                .finally(() => {
+                    console.log("Payment Process Finished!");
+                    setProcessingPayment(false);
                 });
         });
     };

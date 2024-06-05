@@ -275,7 +275,7 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
                 body: {
                     items: cartItems,
                     back_urls: {
-                        success: "https://farol-das-ideias.vercel.app/checkout_success",
+                        success: "https://farol-das-ideias.vercel.app",
                         failure: "https://farol-das-ideias.vercel.app/checkout_fail",
                         pending: "https://farol-das-ideias.vercel.app/checkout_pending",
                     },

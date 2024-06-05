@@ -754,9 +754,7 @@ export default function UserTab() {
 
             if (response.data) {
                 setEditedLocalUser(response.data as User_Local);
-                setCurrentUserAction(response.data as User_Local);
                 fetchOrdersForUser(response.data as User_Local);
-
                 console.log("Local User: ", response.data);
             }
         } catch (error) {
@@ -821,14 +819,11 @@ export default function UserTab() {
         }
     };
 
-    // localUser era uma dependencia, mas eu a removi, talvez existam erros agora ...
     useEffect(() => {
         if (customer) {
-            console.log("Fetching Updated Data for the User:", customer.id);
             fetchUserData(customer.id);
-            userTabNeedsNoUpdateAction();
         }
-    }, [userTabNeedsUpdate]);
+    }, [customer]);
 
     return (
         <>

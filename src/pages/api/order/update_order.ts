@@ -51,20 +51,24 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
 
             // Criar um template com os dados recebidos na notificação
             // id:[data.id_url];request-id:[x-request-id_header];ts:[ts_header];
+            console.log("body =>", body);
+            console.log("body.type =>", body.type);
+            console.log("body.data =>", body.data);
 
-            const signatureTemplate = `id:${body.data.id};request-id:${headers["x-request-id"]};ts:${tsValue};`;
-            console.log("signatureTemplate:", signatureTemplate);
+            if (body.data && typeof headers["x-signature"] === "string") {
+                const signatureTemplate = `id:${body.data.id};request-id:${headers["x-request-id"]};ts:${tsValue};`;
+                console.log("signatureTemplate:", signatureTemplate);
 
-            if (typeof secret === "string") {
-                const generatedSignature = crypto.createHmac("sha256", secret).update(signatureTemplate).digest("hex");
+                if (typeof secret === "string") {
+                    const generatedSignature = crypto.createHmac("sha256", secret).update(signatureTemplate).digest("hex");
 
-                // Comparar a chave gerada com a chave extraída do cabeçalho
-                if (signatureValue === generatedSignature) {
-                    // A assinatura é válida, agora você pode processar os dados e salvá-los no Firebase
-                    const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID;
-                    const ordersCollectionRef = firestore.collection(`projects/${projectUID}/orders`);
+                    // Comparar a chave gerada com a chave extraída do cabeçalho
+                    if (signatureValue === generatedSignature) {
+                        // A assinatura é válida, agora você pode processar os dados e salvá-los no Firebase
+                        const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID;
+                        const ordersCollectionRef = firestore.collection(`projects/${projectUID}/orders`);
 
-                    /*
+                        /*
                     
                     Depois de dar um retorno à notificação e confirmar o seu recebimento, você obterá as informações completas do recurso 
                     notificado acessando o endpoint correspondente da API:
@@ -73,94 +77,97 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
 
                     */
 
-                    switch (body.type) {
-                        case "payment":
-                            // Handle payment notification
-                            const payment_id = body.data.id;
-                            const payment_info = body.data;
-                            const action = body.action;
-                            const action_id = body.id;
-                            const action_date = body.date_created;
-                            const vendor_id = body.user_id;
+                        switch (body.type) {
+                            case "payment":
+                                // Handle payment notification
+                                const payment_id = body.data.id;
+                                const payment_info = body.data;
+                                const action = body.action;
+                                const action_id = body.id;
+                                const action_date = body.date_created;
+                                const vendor_id = body.user_id;
 
-                            const paymentData = {
-                                payment_id: payment_id,
-                                payment_info: payment_info,
-                                action: action,
-                                action_id: action_id,
-                                action_date: action_date,
-                                vendor_id: vendor_id,
-                            };
+                                const paymentData = {
+                                    payment_id: payment_id,
+                                    payment_info: payment_info,
+                                    action: action,
+                                    action_id: action_id,
+                                    action_date: action_date,
+                                    vendor_id: vendor_id,
+                                };
 
-                            try {
-                                const fullPaymentInfo = await axios.get(`https://api.mercadopago.com/v1/payments/${payment_id}`, {
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                        Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
-                                    },
-                                });
+                                try {
+                                    const fullPaymentInfo = await axios.get(`https://api.mercadopago.com/v1/payments/${payment_id}`, {
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
+                                        },
+                                    });
 
-                                if (fullPaymentInfo.data) {
-                                    console.log(fullPaymentInfo.data);
+                                    if (fullPaymentInfo.data) {
+                                        console.log(fullPaymentInfo.data);
 
-                                    const orderData = {
-                                        mp_payment_status: paymentData,
-                                        full_mp_payment_info: fullPaymentInfo.data,
-                                    };
+                                        const orderData = {
+                                            mp_payment_status: paymentData,
+                                            full_mp_payment_info: fullPaymentInfo.data,
+                                        };
 
-                                    const orderUID = fullPaymentInfo.data.external_reference;
-                                    console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
+                                        const orderUID = fullPaymentInfo.data.external_reference;
+                                        console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
 
-                                    await ordersCollectionRef.doc(orderUID).set(orderData, { merge: true });
+                                        await ordersCollectionRef.doc(orderUID).set(orderData, { merge: true });
+                                    }
+
+                                    // Rest of your code...
+                                } catch (error) {
+                                    const axiosError = error as AxiosError; // Type assertion here
+
+                                    if (axiosError.response && axiosError.response.status === 404) {
+                                        console.error("Payment not found:", payment_id);
+                                    } else {
+                                        console.error("An error occurred:", axiosError);
+                                    }
                                 }
+                                break;
+                            case "plan":
+                                // Handle plan notification
+                                // Example: const plan = body.data;
+                                break;
+                            case "subscription":
+                                // Handle subscription notification
+                                // Example: const subscription = body.data;
+                                break;
+                            // Add more cases for other notification types as needed
+                            default:
+                                // Unknown notification type
+                                // Log or handle the error
+                                console.error("Unknown notification type:", body.type);
+                                break;
+                        }
 
-                                // Rest of your code...
-                            } catch (error) {
-                                const axiosError = error as AxiosError; // Type assertion here
-
-                                if (axiosError.response && axiosError.response.status === 404) {
-                                    console.error("Payment not found:", payment_id);
-                                } else {
-                                    console.error("An error occurred:", axiosError);
-                                }
-                            }
-                            break;
-                        case "plan":
-                            // Handle plan notification
-                            // Example: const plan = body.data;
-                            break;
-                        case "subscription":
-                            // Handle subscription notification
-                            // Example: const subscription = body.data;
-                            break;
-                        // Add more cases for other notification types as needed
-                        default:
-                            // Unknown notification type
-                            // Log or handle the error
-                            console.error("Unknown notification type:", body.type);
-                            break;
+                        // Responder ao Mercado Pago (se necessário)
+                        res.status(200).json({ success: true });
+                    } else {
+                        // A assinatura é inválida
+                        console.log("Nasty Bug, Invalid Signature");
+                        res.status(500).json({ error: `Invalid Signature | ${secret}` });
                     }
-
-                    // Responder ao Mercado Pago (se necessário)
-                    res.status(200).json({ success: true });
                 } else {
-                    // A assinatura é inválida
-                    console.log("Nasty Bug, Invalid Signature");
-                    res.status(500).json({ error: `Invalid Signature | ${secret}` });
+                    // handle the case where secret is undefined
+                    console.log("Nasty Bug, Undefined Secret");
+                    res.status(500).json({ error: "Internal Server Error - Undefined secret" });
                 }
             } else {
-                // handle the case where secret is undefined
-                console.log("Nasty Bug, Undefined Secret");
-                res.status(500).json({ error: "Internal Server Error - Undefined secret" });
+                // Método não permitido
+                res.setHeader("Allow", ["POST"]);
+                res.status(405).end(`Method ${req.method} Not Allowed`);
             }
         } else {
-            // Método não permitido
+            // handle the case where headers['x-signature'] is an array of strings
             res.setHeader("Allow", ["POST"]);
             res.status(405).end(`Method ${req.method} Not Allowed`);
         }
     } else {
-        // handle the case where headers['x-signature'] is an array of strings
-        res.setHeader("Allow", ["POST"]);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+        console.log("The body is wrong in some way");
     }
 }

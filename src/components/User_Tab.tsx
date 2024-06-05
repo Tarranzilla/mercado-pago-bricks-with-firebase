@@ -530,6 +530,14 @@ export default function UserTab() {
     const [editedLocalUser, setEditedLocalUser] = useState<User_Local>(temp_local_user);
     const [isAdmin, setIsAdmin] = useState(false);
 
+    const customer_has_not_updated_his_address =
+        localUser.address.street === "Nenhuma Rua Definida" ||
+        localUser.address.number === "Nenhum Número Definido" ||
+        localUser.address.complement === "Nenhum Complemento Definido" ||
+        localUser.address.city === "Nenhuma Cidade Definida" ||
+        localUser.address.state === "Nenhum Estado Definido" ||
+        localUser.address.zip === "Nenhum Código Postal Definido";
+
     // Funções para a atualização de dados do usuário
     const handleLocalUserChange = (field: keyof User_Local, value: string | boolean | Address | string[]) => {
         setEditedLocalUser((prevState) => ({ ...prevState, [field]: value }));
@@ -930,6 +938,16 @@ export default function UserTab() {
                                     {/* Card de Informações de Entrega */}
                                     <div className="User_Tab_Card">
                                         <h1 className="User_Tab_Card_Title">Informações de Entrega</h1>
+
+                                        {customer_has_not_updated_his_address && (
+                                            <div className="User_Card_Address_Alert">
+                                                <span className="material-icons">info</span>
+                                                <p className="User_Card_Address_Alert_Text">
+                                                    Preencha corretamente estas informações antes de efetuar um pedido.
+                                                </p>
+                                            </div>
+                                        )}
+
                                         <div className="User_Tab_Card_Info_Items_List">
                                             <User_Address_Info_Container
                                                 key={"Rua"}

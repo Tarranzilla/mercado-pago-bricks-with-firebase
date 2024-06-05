@@ -35,7 +35,6 @@ export default function Home() {
                 <Client_Product_List />
                 <Client_Cart />
                 <Client_Checkout />
-                <WalletMercadoPago />
             </main>
         </>
     );

@@ -114,6 +114,20 @@ main {
     position: relative;
 }
 
+.User_Card_Address_Alert {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    background-color: lightgreen;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    letter-spacing: 0.05rem;
+}
+
 .User_Info_Item_Container {
     display: flex;
     gap: 2rem;
@@ -798,6 +812,20 @@ main {
 
 .Receive_Option.Active {
     background-color: rgba(173, 216, 230, 1);
+}
+
+.Receive_Option.Disabled {
+    background-color: lightgray;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.Receive_Option.Disabled > input {
+    pointer-events: none;
+}
+
+.Receive_Option.LightGreen {
+    background-color: lightgreen;
 }
 
 .Recieve_Option_Map_Link {

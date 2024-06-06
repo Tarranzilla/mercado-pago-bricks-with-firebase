@@ -87,15 +87,6 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                                 const action_date = body.date_created;
                                 const vendor_id = body.user_id;
 
-                                const paymentData = {
-                                    payment_id: payment_id,
-                                    payment_info: payment_info,
-                                    action: action,
-                                    action_id: action_id,
-                                    action_date: action_date,
-                                    vendor_id: vendor_id,
-                                };
-
                                 try {
                                     const fullPaymentInfo = await axios.get(`https://api.mercadopago.com/v1/payments/${payment_id}`, {
                                         headers: {
@@ -107,13 +98,52 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                                     if (fullPaymentInfo.data) {
                                         console.log(fullPaymentInfo.data);
 
-                                        const orderData = {
-                                            mp_payment_status: paymentData,
-                                            full_mp_payment_info: fullPaymentInfo.data,
+                                        const paymentData = {
+                                            payment_id: payment_id,
+                                            payment_info: payment_info,
+                                            payment_info_full: fullPaymentInfo.data,
+                                            action: action,
+                                            action_id: action_id,
+                                            action_date: action_date,
+                                            vendor_id: vendor_id,
                                         };
 
+                                        let orderData;
+
+                                        if (fullPaymentInfo.data.status === "approved") {
+                                            orderData = {
+                                                mp_payment_status: fullPaymentInfo.data.status,
+                                                mp_payment_info: paymentData,
+                                                status: {
+                                                    confirmed_by_admin: false,
+                                                    waiting_payment: false,
+                                                    in_production: true,
+                                                    waiting_for_retrieval: false,
+                                                    retrieved: false,
+                                                    waiting_for_delivery: false,
+                                                    delivered: false,
+                                                    cancelled: false,
+                                                },
+                                            };
+                                        } else {
+                                            orderData = {
+                                                mp_payment_status: fullPaymentInfo.data.status,
+                                                mp_payment_info: paymentData,
+                                                status: {
+                                                    confirmed_by_admin: false,
+                                                    waiting_payment: true,
+                                                    in_production: false,
+                                                    waiting_for_retrieval: false,
+                                                    retrieved: false,
+                                                    waiting_for_delivery: false,
+                                                    delivered: false,
+                                                    cancelled: false,
+                                                },
+                                            };
+                                        }
+
                                         const orderUID = fullPaymentInfo.data.external_reference;
-                                        console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
+                                        // console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
 
                                         await ordersCollectionRef.doc(orderUID).set(orderData, { merge: true });
                                     }

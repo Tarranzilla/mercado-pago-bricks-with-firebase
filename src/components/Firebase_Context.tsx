@@ -8,10 +8,11 @@ import { FirebaseStorage, getStorage } from "firebase/storage";
 import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
 import { Firestore, getFirestore, doc, setDoc, getDoc, getDocs, DocumentData, Timestamp, collection, query, where } from "firebase/firestore";
 
-import { setCurrentUser, setUserIsAdmin } from "@/store/slices/user_slice";
+import { setFirebaseUser, setCurrentUser, setUserIsAdmin } from "@/store/slices/user_slice";
 import { useDispatch } from "react-redux";
 
 import { User as User_Local } from "@/types/User";
+import { User_Firebase } from "@/store/slices/user_slice";
 
 // Variáveis de ambiente para o Firebase Client Side
 const FIREBASE_CLIENT_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_API_KEY;
@@ -110,32 +111,79 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
     };
 
     // Função para buscar o documento do usuário no Firestore pelo Server Side e atualizar o estado do Redux
-    const fetchUserDocServerSide = async (uid: string) => {
+    const fetchOrCreateAndSetUserDocServerSide = async (firebase_user: User_Firebase) => {
         try {
             // Fetch user data from get_user API
-            const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_USER}`, { params: { id: uid } });
-            console.log("User data from API:", response.data);
+            console.log("Context Fetching Firebase User data from API...");
+            const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_USER}`, { params: { id: firebase_user.id } });
+            console.log("Context Fetching User Response => ", response.data);
 
             if (response.status === 400) {
-                console.error("Missing required fields, cannot fetch user data");
+                console.log("Missing required fields, cannot fetch user data");
+                return;
             }
 
             if (response.data.message === "user-not-found") {
-                console.log("User not found");
-            }
+                console.log("Firebase User not found");
 
-            if (response.data) {
+                let new_user: User_Local = {
+                    id: firebase_user.id,
+                    name: firebase_user.display_name ? firebase_user.display_name : "Nenhum Nome Definido",
+                    email: firebase_user.email ? firebase_user.email : "Nenhum Email Definido",
+                    avatar_url: firebase_user.avatar_url ? firebase_user.avatar_url : "Nenhuma URL de Avatar Definida",
+
+                    address: {
+                        street: "Nenhuma Rua Definida",
+                        number: "Nenhum Número Definido",
+                        complement: "Nenhum Complemento Definido",
+                        city: "Nenhuma Cidade Definida",
+                        state: "Nenhum Estado Definido",
+                        zip: "Nenhum Código Postal Definido",
+                    },
+
+                    telephone: "Nenhum Número de Telefone Definido",
+
+                    isOwner: false,
+                    isAdmin: false,
+                    isEditor: false,
+                    isSubscriber: false,
+
+                    orders: [],
+                };
+
+                const newUserResponse = await axios.post(`${NEXT_PUBLIC_PATH_API_CREATE_USER}`, new_user);
+                console.log("Response:", newUserResponse);
+
+                if (newUserResponse.status === 200) {
+                    console.log("New user document created successfully");
+
+                    setCurrentUserAction(new_user);
+
+                    // Fetch user data here
+                } else {
+                    console.log(`Failed to create new user document, status code: ${newUserResponse.status}`);
+                }
+
+                return;
+            } else {
+                console.log("Firebase User found, setting the current user in Redux");
                 setCurrentUserAction(response.data as User_Local);
 
                 if (response.data.isAdmin) {
+                    console.log("User is an admin");
                     setUserIsAdminAction(true);
                 } else {
+                    console.log("User is not an admin");
                     setUserIsAdminAction(false);
                 }
             }
         } catch (error) {
             console.log("Error fetching user data:", error);
         }
+    };
+    //
+    const setFirebaseUserAction = (user: User_Firebase) => {
+        dispatch(setFirebaseUser(user));
     };
 
     // Função para atualizar o estado do Redux com os dados do usuário
@@ -160,11 +208,25 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
         setStorage(storage);
 
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            console.log("Auth state change detected:");
+            console.log("Auth state change detected:", auth);
+            console.log("Current auth user:", auth.currentUser);
             if (user) {
                 // User is signed in
                 console.log("User is signed in: ", user);
-                fetchUserDocServerSide(user.uid);
+
+                const { uid, email, displayName, photoURL } = user;
+
+                const firebase_user: User_Firebase = {
+                    id: uid,
+                    email: email || "Nenhum Email Definido",
+                    display_name: displayName || "Nenhum Nome Definido",
+                    avatar_url: photoURL || "Nenhuma Imagem Definida",
+                };
+
+                console.log("Firebase User =>", firebase_user);
+
+                setFirebaseUserAction(firebase_user);
+                fetchOrCreateAndSetUserDocServerSide(firebase_user);
             } else {
                 // User is signed out
                 console.log("User is not signed in");

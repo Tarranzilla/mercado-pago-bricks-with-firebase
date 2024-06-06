@@ -486,6 +486,7 @@ export default function UserTab() {
     }
 
     // Seletores do contexto Redux
+    const [isCustomerLoading, setIsCustomerLoading] = useState(false);
     const customer = useSelector((state: RootState) => state.user.currentUser);
     const isUserTabOpen = useSelector((state: RootState) => state.interface.isUserTabOpen);
     const userTabNeedsUpdate = useSelector((state: RootState) => state.interface.userTabNeedsUpdate);
@@ -517,6 +518,9 @@ export default function UserTab() {
     // const [localUser, setLocalUser] = useState<User_Local>(temp_local_user);
     const [editedLocalUser, setEditedLocalUser] = useState<User_Local | null>(null);
 
+    console.log(customer);
+    console.log(editedLocalUser);
+
     const customer_has_not_updated_his_address =
         customer?.address?.street === "Nenhuma Rua Definida" ||
         customer?.address?.number === "Nenhum Número Definido" ||
@@ -524,6 +528,11 @@ export default function UserTab() {
         customer?.address?.city === "Nenhuma Cidade Definida" ||
         customer?.address?.state === "Nenhum Estado Definido" ||
         customer?.address?.zip === "Nenhum Código Postal Definido";
+
+    const customer_has_not_updated_his_main_info =
+        customer?.name === "Nenhum Nome Definido" ||
+        customer?.email === "Nenhum Email Definido" ||
+        customer?.telephone === "Nenhum Número de Telefone Definido";
 
     const setCurrentUserAction = (localUser: User_Local | null) => {
         dispatch(setCurrentUser(localUser));
@@ -587,8 +596,47 @@ export default function UserTab() {
         }
     };
 
+    //
+    function sortObjectProperties(obj: { [key: string]: any }) {
+        return Object.keys(obj)
+            .sort()
+            .reduce((result, key) => {
+                if (key === "updated_at") {
+                    // Skip the 'updated_at' property
+                    return result;
+                }
+                if (key === "created_at") {
+                    // Skip the 'updated_at' property
+                    return result;
+                }
+                if (typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
+                    result[key] = sortObjectProperties(obj[key]);
+                } else {
+                    result[key] = obj[key];
+                }
+                return result;
+            }, {} as { [key: string]: any });
+    }
+
     // Comparador de objetos que os transforma em strings para ver se há diferenças
-    const isSomeLocalUserInfoEdited = customer && editedLocalUser && JSON.stringify(customer) !== JSON.stringify(editedLocalUser);
+    console.log(customer);
+    console.log(editedLocalUser);
+    // const isSomeLocalUserInfoEdited = customer && editedLocalUser && JSON.stringify(customer) !== JSON.stringify(editedLocalUser);
+
+    let isSomeLocalUserInfoEdited;
+
+    if (customer && editedLocalUser) {
+        const sortedCustomer = sortObjectProperties(customer);
+        const sortedEditedLocalUser = sortObjectProperties(editedLocalUser);
+        console.log(sortedCustomer);
+        console.log(sortedEditedLocalUser);
+        isSomeLocalUserInfoEdited =
+            sortedCustomer && sortedEditedLocalUser && JSON.stringify(sortedCustomer) !== JSON.stringify(sortedEditedLocalUser);
+    } else {
+        isSomeLocalUserInfoEdited = false;
+    }
+
+    console.log(isSomeLocalUserInfoEdited);
 
     // Estado para ver mais do que 3 pedidos
     const [seeMore, setSeeMore] = useState(false);
@@ -607,51 +655,6 @@ export default function UserTab() {
         try {
             const result = await signInWithPopup(auth, provider);
             console.log("User signed in:", result.user);
-
-            if (result.user) {
-                try {
-                    // Fetch user data from get_user API
-                    const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_USER}`, { params: { id: result.user.uid } });
-                    // console.log("User data from API:", response.data);
-
-                    if (response.status === 400) {
-                        console.error("Missing required fields, cannot fetch user data");
-                    }
-
-                    if (response.data.message === "user-not-found") {
-                        console.log("User not found, creating a new user document in the database");
-                        let new_user: User_Local = {
-                            id: result.user.uid,
-                            name: result.user.displayName ? result.user.displayName : "Nenhum Nome Definido",
-                            email: result.user.email ? result.user.email : "Nenhum Email Definido",
-                            avatar_url: result.user.photoURL ? result.user.photoURL : "Nenhuma URL de Avatar Definida",
-
-                            address: {
-                                street: "Nenhuma Rua Definida",
-                                number: "Nenhum Número Definido",
-                                complement: "Nenhum Complemento Definido",
-                                city: "Nenhuma Cidade Definida",
-                                state: "Nenhum Estado Definido",
-                                zip: "Nenhum Código Postal Definido",
-                            },
-
-                            telephone: "Nenhum Número de Telefone Definido",
-
-                            isOwner: false,
-                            isAdmin: false,
-                            isEditor: false,
-                            isSubscriber: false,
-
-                            orders: [],
-                        };
-
-                        await axios.post(`${NEXT_PUBLIC_PATH_API_CREATE_USER}`, new_user);
-                        console.log("New user document created successfully");
-                    }
-                } catch (error) {
-                    console.log("Error fetching user data:", error);
-                }
-            }
         } catch (error) {
             console.error("Error signing in:", error);
         }
@@ -739,6 +742,7 @@ export default function UserTab() {
 
     // Função para buscar o documento do usuário no Firestore
     const fetchUserData = async (uid: string) => {
+        setIsCustomerLoading(true);
         try {
             // Fetch user data from get_user API
             const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_USER}`, { params: { id: uid } });
@@ -746,15 +750,18 @@ export default function UserTab() {
 
             if (response.status === 400) {
                 console.error("Missing required fields, cannot fetch user data");
+                setIsCustomerLoading(false);
             }
 
             if (response.data.message === "user-not-found") {
                 console.log("User not found");
+                setIsCustomerLoading(false);
             }
 
             if (response.data) {
                 setEditedLocalUser(response.data as User_Local);
                 fetchOrdersForUser(response.data as User_Local);
+                setIsCustomerLoading(false);
                 console.log("Local User: ", response.data);
             }
         } catch (error) {
@@ -835,279 +842,295 @@ export default function UserTab() {
                             className={isSomeLocalUserInfoEdited ? "UserTab_Content_Wrapper Extra_Bottom_Padding" : "UserTab_Content_Wrapper"}
                             ref={scroll_ref}
                         >
-                            {customer && editedLocalUser ? (
-                                <>
-                                    {/* Card de Informações Gerais */}
-                                    <div className="User_Tab_Card">
-                                        <h1 className="User_Tab_Card_Title">Informações Gerais</h1>
-                                        <div className="User_Tab_Card_Info">
-                                            <div className="User_Tab_Card_Info_Image_Container">
-                                                {customer.avatar_url && customer.name && (
-                                                    <img className="User_Tab_Card_Info_Image" src={customer.avatar_url} alt={customer.name} />
-                                                )}
-                                                {!customer.avatar_url && (
-                                                    <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>
-                                                )}
-
-                                                <div className="User_Tab_Card_Info_Image_Edit_Btn">
-                                                    <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
-                                                        edit
-                                                    </span>
-                                                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="User_Tab_Card_Info_Items_List">
-                                                <User_Name_Info_Container
-                                                    key="Nome"
-                                                    label="Nome"
-                                                    placeholder="Novo Nome"
-                                                    propertie="name"
-                                                    localUser={customer}
-                                                    editedLocalUser={editedLocalUser}
-                                                    handleLocalUserChange={handleEditedLocalUserChange}
-                                                />
-
-                                                <User_Email_Info_Container
-                                                    key="Email"
-                                                    label="Email"
-                                                    placeholder="Novo Email"
-                                                    propertie="email"
-                                                    localUser={customer}
-                                                    editedLocalUser={editedLocalUser}
-                                                    handleLocalUserChange={handleEditedLocalUserChange}
-                                                />
-
-                                                <User_Telephone_Info_Container
-                                                    key="Telefone"
-                                                    label="Telefone"
-                                                    placeholder="Novo Telefone"
-                                                    propertie="telephone"
-                                                    localUser={customer}
-                                                    editedLocalUser={editedLocalUser}
-                                                    handleLocalUserChange={handleEditedLocalUserChange}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Card de Informações de Administrador */}
-                                    {customer && customer.isAdmin === true && (
-                                        <div className="User_Tab_Card">
-                                            <h1 className="User_Tab_Card_Title">Administração</h1>
-
-                                            <div className="Admin_Actions_List">
-                                                <Link className="Control_Panel_Link_Btn" href="/admin/control-panel">
-                                                    <p className="Control_Panel_Link_Btn_Text">Painel de Gestão</p>
-                                                    <span className="material-icons">tune</span>
-                                                </Link>
-
-                                                <Link className="Control_Panel_Link_Btn" href="/admin/product-editor">
-                                                    <p className="Control_Panel_Link_Btn_Text">Editor de Produtos</p>
-                                                    <span className="material-icons">sell</span>
-                                                </Link>
-
-                                                <Link className="Control_Panel_Link_Btn" href="/admin/order-control">
-                                                    <p className="Control_Panel_Link_Btn_Text">Controle de Pedidos</p>
-                                                    <span className="material-icons">list_alt</span>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* Card de Informações de Entrega */}
-                                    <div className="User_Tab_Card">
-                                        <h1 className="User_Tab_Card_Title">Informações de Entrega</h1>
-
-                                        {customer_has_not_updated_his_address && (
-                                            <div className="User_Card_Address_Alert">
-                                                <span className="material-icons">info</span>
-                                                <p className="User_Card_Address_Alert_Text">
-                                                    Preencha corretamente estas informações antes de efetuar um pedido.
-                                                </p>
-                                            </div>
-                                        )}
-
-                                        <div className="User_Tab_Card_Info_Items_List">
-                                            <User_Address_Info_Container
-                                                key={"Rua"}
-                                                label="Rua"
-                                                placeholder="Nova Rua"
-                                                propertie="street"
-                                                localUser={customer}
-                                                editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                            />
-
-                                            <User_Address_Info_Container
-                                                key={"Numero"}
-                                                label="Número"
-                                                placeholder="Novo Número"
-                                                propertie="number"
-                                                localUser={customer}
-                                                editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                            />
-
-                                            <User_Address_Info_Container
-                                                key={"Complemento"}
-                                                label="Complemento"
-                                                placeholder="Novo Complemento"
-                                                propertie="complement"
-                                                localUser={customer}
-                                                editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                            />
-
-                                            <User_Address_Info_Container
-                                                key={"Cidade"}
-                                                label="Cidade"
-                                                placeholder="Nova Cidade"
-                                                propertie="city"
-                                                localUser={customer}
-                                                editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                            />
-
-                                            <User_Address_Info_Container
-                                                key={"Estado"}
-                                                label="Estado"
-                                                placeholder="Novo Estado"
-                                                propertie="state"
-                                                localUser={customer}
-                                                editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                            />
-
-                                            <User_Address_Info_Container
-                                                key={"ZIP"}
-                                                label="Código Postal"
-                                                placeholder="Novo Código Postal"
-                                                propertie="zip"
-                                                localUser={customer}
-                                                editedLocalUser={editedLocalUser}
-                                                handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Card de Informações Sobre os Pedidos */}
-                                    <div className="User_Tab_Card">
-                                        <h1 className="User_Tab_Card_Title">Pedidos Realizados</h1>
-                                        <div className="User_Order_List">
-                                            {/* Lista de Pedidos do Usuário */}
-                                            {displayedOrders.map((order, index) => {
-                                                return <OrderItem key={index} order={order} index={index} />;
-                                            })}
-
-                                            {/* Mensagem de Carrinho Vazio */}
-                                            {noOrders && (
-                                                <div className="User_No_Orders">
-                                                    <p className="User_No_Orders_Text">Você ainda não fez nenhum pedido</p>
-                                                    <span className="material-icons User_No_Orders_Icon">receipt_long</span>
-                                                </div>
-                                            )}
-
-                                            {/* Botão para ver mais do que os 3 pedidos mais recentes */}
-                                            {!noOrders && orderList.length > 3 && (
-                                                <button
-                                                    className="Order_SeeMore_Btn"
-                                                    onClick={() => {
-                                                        setSeeMore(!seeMore);
-                                                    }}
-                                                >
-                                                    {(seeMore && (
-                                                        <>
-                                                            Ver apenas pedidos recentes
-                                                            <span className="material-icons">expand_less</span>
-                                                        </>
-                                                    )) ||
-                                                        (!seeMore && (
-                                                            <>
-                                                                Ver todos os pedidos <span className="material-icons">more_horiz</span>
-                                                            </>
-                                                        ))}
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Botão de Logout */}
-                                    <button className="Logout_Btn" onClick={logout}>
-                                        <span className="material-icons Logout_Btn_Icon">logout</span>
-                                        <p className="Logout_Btn_Text">Fazer Logout</p>
-                                    </button>
-                                </>
+                            {isCustomerLoading ? (
+                                <div className="User_Tab_Loading">
+                                    <div className="User_Tab_Loading_Spinner">Carregando Usuário</div>
+                                </div>
                             ) : (
                                 <>
-                                    {!loginWithEmailMode && (
-                                        <div className="User_Login_Container">
-                                            <button onClick={signInWithGoogle} className="User_Google_Login_Btn">
-                                                <p className="User_Google_Login_Btn_Text">Faça login ou crie uma conta com o Google</p>
-                                                <span className="material-icons User_Google_Login_Btn_Icon">login</span>
-                                            </button>
+                                    {customer && editedLocalUser ? (
+                                        <>
+                                            {/* Card de Informações Gerais */}
+                                            <div className="User_Tab_Card">
+                                                <h1 className="User_Tab_Card_Title">Informações Gerais</h1>
+                                                {customer_has_not_updated_his_main_info && (
+                                                    <div className="User_Card_Address_Alert">
+                                                        <span className="material-icons">info</span>
+                                                        <p className="User_Card_Address_Alert_Text">
+                                                            Preencha corretamente estas informações antes de efetuar um pedido.
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                <div className="User_Tab_Card_Info">
+                                                    <div className="User_Tab_Card_Info_Image_Container">
+                                                        {customer.avatar_url && customer.name && (
+                                                            <img className="User_Tab_Card_Info_Image" src={customer.avatar_url} alt={customer.name} />
+                                                        )}
+                                                        {!customer.avatar_url && (
+                                                            <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>
+                                                        )}
 
-                                            <div className="User_Login_Container_Separator">
-                                                <div className="User_Login_Container_Separator_Line"></div>
-                                                <p className="User_Login_Container_Separator_Text">ou</p>
-                                                <div className="User_Login_Container_Separator_Line"></div>
+                                                        <div className="User_Tab_Card_Info_Image_Edit_Btn">
+                                                            <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
+                                                                edit
+                                                            </span>
+                                                            <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="User_Tab_Card_Info_Items_List">
+                                                        <User_Name_Info_Container
+                                                            key="Nome"
+                                                            label="Nome"
+                                                            placeholder="Novo Nome"
+                                                            propertie="name"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handleLocalUserChange={handleEditedLocalUserChange}
+                                                        />
+
+                                                        <User_Email_Info_Container
+                                                            key="Email"
+                                                            label="Email"
+                                                            placeholder="Novo Email"
+                                                            propertie="email"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handleLocalUserChange={handleEditedLocalUserChange}
+                                                        />
+
+                                                        <User_Telephone_Info_Container
+                                                            key="Telefone"
+                                                            label="Telefone"
+                                                            placeholder="Novo Telefone"
+                                                            propertie="telephone"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handleLocalUserChange={handleEditedLocalUserChange}
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <button
-                                                className="User_Google_Login_Btn"
-                                                onClick={() => {
-                                                    setLoginWithEmailMode(true);
-                                                }}
-                                            >
-                                                <p className="User_Google_Login_Btn_Text">Faça login ou crie uma conta com apenas um email</p>
-                                                <span className="material-icons User_Google_Login_Btn_Icon">login</span>
-                                            </button>
-                                        </div>
-                                    )}
+                                            {/* Card de Informações de Administrador */}
+                                            {customer && customer.isAdmin === true && (
+                                                <div className="User_Tab_Card">
+                                                    <h1 className="User_Tab_Card_Title">Administração</h1>
 
-                                    {loginWithEmailMode && (
-                                        <div className="User_Login_Container Email_Login_Container">
-                                            <div className="User_Login_Input_Container">
-                                                <input
-                                                    className="User_Login_Input"
-                                                    type="email"
-                                                    value={email}
-                                                    onChange={(e) => setEmail(e.target.value)}
-                                                    placeholder="Email"
-                                                />
-                                                <span className="material-icons User_Login_Input_Icon">email</span>
+                                                    <div className="Admin_Actions_List">
+                                                        <Link className="Control_Panel_Link_Btn" href="/admin/control-panel">
+                                                            <p className="Control_Panel_Link_Btn_Text">Painel de Gestão</p>
+                                                            <span className="material-icons">tune</span>
+                                                        </Link>
+
+                                                        <Link className="Control_Panel_Link_Btn" href="/admin/product-editor">
+                                                            <p className="Control_Panel_Link_Btn_Text">Editor de Produtos</p>
+                                                            <span className="material-icons">sell</span>
+                                                        </Link>
+
+                                                        <Link className="Control_Panel_Link_Btn" href="/admin/order-control">
+                                                            <p className="Control_Panel_Link_Btn_Text">Controle de Pedidos</p>
+                                                            <span className="material-icons">list_alt</span>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Card de Informações de Entrega */}
+                                            <div className="User_Tab_Card">
+                                                <h1 className="User_Tab_Card_Title">Informações de Entrega</h1>
+
+                                                {customer_has_not_updated_his_address && (
+                                                    <div className="User_Card_Address_Alert">
+                                                        <span className="material-icons">info</span>
+                                                        <p className="User_Card_Address_Alert_Text">
+                                                            Preencha corretamente estas informações antes de efetuar um pedido.
+                                                        </p>
+                                                    </div>
+                                                )}
+
+                                                <div className="User_Tab_Card_Info_Items_List">
+                                                    <User_Address_Info_Container
+                                                        key={"Rua"}
+                                                        label="Rua"
+                                                        placeholder="Nova Rua"
+                                                        propertie="street"
+                                                        localUser={customer}
+                                                        editedLocalUser={editedLocalUser}
+                                                        handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                    />
+
+                                                    <User_Address_Info_Container
+                                                        key={"Numero"}
+                                                        label="Número"
+                                                        placeholder="Novo Número"
+                                                        propertie="number"
+                                                        localUser={customer}
+                                                        editedLocalUser={editedLocalUser}
+                                                        handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                    />
+
+                                                    <User_Address_Info_Container
+                                                        key={"Complemento"}
+                                                        label="Complemento"
+                                                        placeholder="Novo Complemento"
+                                                        propertie="complement"
+                                                        localUser={customer}
+                                                        editedLocalUser={editedLocalUser}
+                                                        handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                    />
+
+                                                    <User_Address_Info_Container
+                                                        key={"Cidade"}
+                                                        label="Cidade"
+                                                        placeholder="Nova Cidade"
+                                                        propertie="city"
+                                                        localUser={customer}
+                                                        editedLocalUser={editedLocalUser}
+                                                        handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                    />
+
+                                                    <User_Address_Info_Container
+                                                        key={"Estado"}
+                                                        label="Estado"
+                                                        placeholder="Novo Estado"
+                                                        propertie="state"
+                                                        localUser={customer}
+                                                        editedLocalUser={editedLocalUser}
+                                                        handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                    />
+
+                                                    <User_Address_Info_Container
+                                                        key={"ZIP"}
+                                                        label="Código Postal"
+                                                        placeholder="Novo Código Postal"
+                                                        propertie="zip"
+                                                        localUser={customer}
+                                                        editedLocalUser={editedLocalUser}
+                                                        handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                    />
+                                                </div>
                                             </div>
 
-                                            <div className="User_Login_Input_Container">
-                                                <input
-                                                    className="User_Login_Input Login_Password"
-                                                    type="password"
-                                                    value={password}
-                                                    onChange={(e) => setPassword(e.target.value)}
-                                                    placeholder="Senha"
-                                                />
-                                                <span className="material-icons User_Login_Input_Icon">lock</span>
+                                            {/* Card de Informações Sobre os Pedidos */}
+                                            <div className="User_Tab_Card">
+                                                <h1 className="User_Tab_Card_Title">Pedidos Realizados</h1>
+                                                <div className="User_Order_List">
+                                                    {/* Lista de Pedidos do Usuário */}
+                                                    {displayedOrders.map((order, index) => {
+                                                        return <OrderItem key={index} order={order} index={index} />;
+                                                    })}
+
+                                                    {/* Mensagem de Carrinho Vazio */}
+                                                    {noOrders && (
+                                                        <div className="User_No_Orders">
+                                                            <p className="User_No_Orders_Text">Você ainda não fez nenhum pedido</p>
+                                                            <span className="material-icons User_No_Orders_Icon">receipt_long</span>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Botão para ver mais do que os 3 pedidos mais recentes */}
+                                                    {!noOrders && orderList.length > 3 && (
+                                                        <button
+                                                            className="Order_SeeMore_Btn"
+                                                            onClick={() => {
+                                                                setSeeMore(!seeMore);
+                                                            }}
+                                                        >
+                                                            {(seeMore && (
+                                                                <>
+                                                                    Ver apenas pedidos recentes
+                                                                    <span className="material-icons">expand_less</span>
+                                                                </>
+                                                            )) ||
+                                                                (!seeMore && (
+                                                                    <>
+                                                                        Ver todos os pedidos <span className="material-icons">more_horiz</span>
+                                                                    </>
+                                                                ))}
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
 
-                                            <button className="User_Login_Btn" onClick={login}>
-                                                <p className="User_Login_Btn_Text">Login com este Email </p>
-                                                <span className="material-icons User_Login_Btn_Icon">login</span>
+                                            {/* Botão de Logout */}
+                                            <button className="Logout_Btn" onClick={logout}>
+                                                <span className="material-icons Logout_Btn_Icon">logout</span>
+                                                <p className="Logout_Btn_Text">Fazer Logout</p>
                                             </button>
-                                            <button className="User_Login_Btn Register_Btn" onClick={signinWithEmail}>
-                                                <p className="User_Login_Btn_Text">Registre uma conta com este Email</p>{" "}
-                                                <span className="material-icons User_Login_Btn_Icon">person_add_alt</span>
-                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {!loginWithEmailMode && (
+                                                <div className="User_Login_Container">
+                                                    <button onClick={signInWithGoogle} className="User_Google_Login_Btn">
+                                                        <p className="User_Google_Login_Btn_Text">Faça login ou crie uma conta com o Google</p>
+                                                        <span className="material-icons User_Google_Login_Btn_Icon">login</span>
+                                                    </button>
 
-                                            <button
-                                                className="User_Login_Btn"
-                                                onClick={() => {
-                                                    setLoginWithEmailMode(false);
-                                                }}
-                                            >
-                                                <p className="User_Login_Btn_Text">voltar</p>{" "}
-                                                <span className="material-icons User_Login_Btn_Icon">arrow_back</span>
-                                            </button>
-                                        </div>
+                                                    <div className="User_Login_Container_Separator">
+                                                        <div className="User_Login_Container_Separator_Line"></div>
+                                                        <p className="User_Login_Container_Separator_Text">ou</p>
+                                                        <div className="User_Login_Container_Separator_Line"></div>
+                                                    </div>
+
+                                                    <button
+                                                        className="User_Google_Login_Btn"
+                                                        onClick={() => {
+                                                            setLoginWithEmailMode(true);
+                                                        }}
+                                                    >
+                                                        <p className="User_Google_Login_Btn_Text">Faça login ou crie uma conta com apenas um email</p>
+                                                        <span className="material-icons User_Google_Login_Btn_Icon">login</span>
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {loginWithEmailMode && (
+                                                <div className="User_Login_Container Email_Login_Container">
+                                                    <div className="User_Login_Input_Container">
+                                                        <input
+                                                            className="User_Login_Input"
+                                                            type="email"
+                                                            value={email}
+                                                            onChange={(e) => setEmail(e.target.value)}
+                                                            placeholder="Email"
+                                                        />
+                                                        <span className="material-icons User_Login_Input_Icon">email</span>
+                                                    </div>
+
+                                                    <div className="User_Login_Input_Container">
+                                                        <input
+                                                            className="User_Login_Input Login_Password"
+                                                            type="password"
+                                                            value={password}
+                                                            onChange={(e) => setPassword(e.target.value)}
+                                                            placeholder="Senha"
+                                                        />
+                                                        <span className="material-icons User_Login_Input_Icon">lock</span>
+                                                    </div>
+
+                                                    <button className="User_Login_Btn" onClick={login}>
+                                                        <p className="User_Login_Btn_Text">Login com este Email </p>
+                                                        <span className="material-icons User_Login_Btn_Icon">login</span>
+                                                    </button>
+                                                    <button className="User_Login_Btn Register_Btn" onClick={signinWithEmail}>
+                                                        <p className="User_Login_Btn_Text">Registre uma conta com este Email</p>{" "}
+                                                        <span className="material-icons User_Login_Btn_Icon">person_add_alt</span>
+                                                    </button>
+
+                                                    <button
+                                                        className="User_Login_Btn"
+                                                        onClick={() => {
+                                                            setLoginWithEmailMode(false);
+                                                        }}
+                                                    >
+                                                        <p className="User_Login_Btn_Text">voltar</p>{" "}
+                                                        <span className="material-icons User_Login_Btn_Icon">arrow_back</span>
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </>
                             )}

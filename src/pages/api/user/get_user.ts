@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { firestore } from "@/lib/firebaseAdmin";
 
+import { User as User_Local } from "@/types/User";
+
 const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID;
 
 if (!projectUID) {
@@ -30,7 +32,9 @@ export default async function getUser(req: NextApiRequest, res: NextApiResponse)
             return res.status(200).json({ message: "user-not-found" });
         }
 
-        return res.status(200).json(doc.data());
+        const user = doc.data() as User_Local;
+
+        return res.status(200).json(user);
     } catch (error) {
         if (error instanceof Error) {
             return res.status(500).json({ error: error.message });

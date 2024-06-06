@@ -742,7 +742,7 @@ export default function UserTab() {
 
     // Função para buscar o documento do usuário no Firestore
     const fetchUserData = async (uid: string) => {
-        setIsCustomerLoading(true);
+        // setIsCustomerLoading(true);
         try {
             // Fetch user data from get_user API
             const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_USER}`, { params: { id: uid } });

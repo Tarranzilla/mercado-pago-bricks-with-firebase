@@ -65,7 +65,7 @@ main {
 }
 
 .UserTab_Content_Wrapper.Extra_Bottom_Padding {
-    padding-bottom: 12.5rem;
+    padding-bottom: 8.5rem;
 }
 
 .UserTab_Content_Wrapper::-webkit-scrollbar {
@@ -200,7 +200,7 @@ main {
 .User_Info_Edit_Control_Overlay {
     position: absolute;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
     margin-top: 0.5rem;
 

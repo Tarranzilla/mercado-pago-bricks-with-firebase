@@ -52,10 +52,11 @@ if (!businessTelephone) {
 export type OrderItemProps = {
     order: Order;
     index: number;
+    order_number: string;
 };
 
 // Componente de Pedido
-export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
+export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -65,7 +66,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
                     <div className="Order_Item_Text_Header">
                         <div className="Order_Item_Text_Header_Item">
                             <h4 className="User_Info_Label">Pedido Nº</h4>
-                            <p className="User_Order_Number">#001</p>
+                            <p className="User_Order_Number">#{order_number}</p>
                         </div>
 
                         <div className="Order_Item_Text_Header_Item">
@@ -103,8 +104,8 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index }) => {
                 <p className="User_Order_Status">
                     {Object.values(order.status).every((status) => status === false) && (
                         <>
-                            <span className="material-icons">hourglass_bottom</span>
-                            Aguardando Aprovação
+                            <span className="material-icons">request_quote</span>
+                            Aguardando Pagamento
                         </>
                     )}
                     {order.status.confirmed_by_admin === true && (
@@ -524,10 +525,11 @@ export default function UserTab() {
     const customer_has_not_updated_his_address =
         customer?.address?.street === "Nenhuma Rua Definida" ||
         customer?.address?.number === "Nenhum Número Definido" ||
-        customer?.address?.complement === "Nenhum Complemento Definido" ||
         customer?.address?.city === "Nenhuma Cidade Definida" ||
         customer?.address?.state === "Nenhum Estado Definido" ||
         customer?.address?.zip === "Nenhum Código Postal Definido";
+
+    // customer?.address?.complement === "Nenhum Complemento Definido" ||
 
     const customer_has_not_updated_his_main_info =
         customer?.name === "Nenhum Nome Definido" ||
@@ -1012,20 +1014,30 @@ export default function UserTab() {
                                                 </div>
                                             </div>
 
+                                            {/* Card de Informações Sobre as Assinaturas */}
+                                            <div className="User_Tab_Card">
+                                                <h1 className="User_Tab_Card_Title">Assinaturas</h1>
+                                                <div className="User_No_Orders">
+                                                    <span className="material-icons User_No_Orders_Icon">loyalty</span>
+                                                    <p className="User_No_Orders_Text">Nenhuma assinatura ativa.</p>
+                                                </div>
+                                            </div>
+
                                             {/* Card de Informações Sobre os Pedidos */}
                                             <div className="User_Tab_Card">
                                                 <h1 className="User_Tab_Card_Title">Pedidos Realizados</h1>
                                                 <div className="User_Order_List">
                                                     {/* Lista de Pedidos do Usuário */}
                                                     {displayedOrders.map((order, index) => {
-                                                        return <OrderItem key={index} order={order} index={index} />;
+                                                        const orderNumber = (sortedOrders.length - index).toString().padStart(4, "0");
+                                                        return <OrderItem key={index} order={order} index={index} order_number={orderNumber} />;
                                                     })}
 
                                                     {/* Mensagem de Carrinho Vazio */}
                                                     {noOrders && (
                                                         <div className="User_No_Orders">
-                                                            <p className="User_No_Orders_Text">Você ainda não fez nenhum pedido</p>
                                                             <span className="material-icons User_No_Orders_Icon">receipt_long</span>
+                                                            <p className="User_No_Orders_Text">Você ainda não fez nenhum pedido</p>
                                                         </div>
                                                     )}
 

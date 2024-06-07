@@ -46,13 +46,19 @@ const Client_Checkout = () => {
 
     const [processingPayment, setProcessingPayment] = useState<boolean>(false);
 
+    const customer_has_not_updated_his_phone = customer?.telephone === "Nenhum Número de Telefone Definido";
+
     const customer_has_not_updated_his_address =
+        customer?.name === "Nenhum Nome Definido" ||
+        customer?.email === "Nenhum Email Definido" ||
+        customer?.telephone === "Nenhum Número de Telefone Definido" ||
         customer?.address?.street === "Nenhuma Rua Definida" ||
         customer?.address?.number === "Nenhum Número Definido" ||
-        customer?.address?.complement === "Nenhum Complemento Definido" ||
         customer?.address?.city === "Nenhuma Cidade Definida" ||
         customer?.address?.state === "Nenhum Estado Definido" ||
         customer?.address?.zip === "Nenhum Código Postal Definido";
+
+    // customer?.address?.complement === "Nenhum Complemento Definido" ||
 
     const emptyCart = cartItems.length < 1;
 
@@ -214,7 +220,7 @@ const Client_Checkout = () => {
                 .then((destination) => {
                     setTimeout(() => {
                         router.push(destination);
-                    }, 2000);
+                    }, 1000);
                 })
                 .finally(() => {
                     console.log("Payment Process Finished!");
@@ -333,8 +339,8 @@ const Client_Checkout = () => {
                                                 <div className="Receive_Option LightGreen">
                                                     <span className="material-icons">info</span>
                                                     <p>
-                                                        Para habilitar a opção de Entrega em Casa, atualize as suas informações de entrega nas
-                                                        configurações da sua conta.
+                                                        Para habilitar a opção de Entrega em Casa, atualize as suas informações pessoais e de entrega
+                                                        nas configurações da sua conta.
                                                     </p>
                                                 </div>
                                             ) : (
@@ -352,7 +358,10 @@ const Client_Checkout = () => {
                                                         </div>
 
                                                         <p>
-                                                            {customer.address.street}, {customer.address.number}, {customer.address.complement}
+                                                            {customer.address.street}, {customer.address.number}
+                                                            {customer.address.complement !== "Nenhum Complemento Definido"
+                                                                ? `, ${customer.address.complement}`
+                                                                : ""}
                                                         </p>
                                                         <p>
                                                             {customer.address.city}, {customer.address.state}, {customer.address.zip}
@@ -410,9 +419,19 @@ const Client_Checkout = () => {
                                                 </p>
                                             </div>
 
+                                            {customer_has_not_updated_his_phone && (
+                                                <div className="Receive_Option LightGreen Margin_Bottom">
+                                                    <span className="material-icons">info</span>
+                                                    <p>
+                                                        Para prosseguir ao pagamento você precisa adicionar pelomenos o seu número de telefone nas
+                                                        configurações da sua conta.
+                                                    </p>
+                                                </div>
+                                            )}
+
                                             <button
                                                 className={
-                                                    emptyCart
+                                                    emptyCart || customer_has_not_updated_his_phone
                                                         ? "Cart_Footer_Checkout_Button User_Order_Total_Btn Disabled"
                                                         : " Cart_Footer_Checkout_Button User_Order_Total_Btn"
                                                 }

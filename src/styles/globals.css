@@ -22,7 +22,7 @@ body {
 }
 
 main {
-    width: 800px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 2.5rem 1rem;
 
@@ -37,6 +37,7 @@ main {
     text-align: center;
 }
 
+.Subsctiption_Banner,
 .Checkout,
 .Cart,
 .Product_Creator,
@@ -90,7 +91,7 @@ main {
     top: -1.25rem;
     left: 50%;
     transform: translateX(-50%);
-    background-color: white;
+    background-color: #f0f0f5;
     padding-inline: 1rem;
     width: max-content;
 }
@@ -300,6 +301,7 @@ main {
     border-radius: 1rem;
 
     border: 1px solid gray;
+    background-color: rgba(211, 211, 211, 0.6);
 }
 
 .Order_Item_Text {
@@ -344,7 +346,7 @@ main {
 
     background-color: lightgray;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     border-radius: 0.5rem;
 }
 
@@ -356,7 +358,7 @@ main {
 
     background-color: lightblue;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
 
@@ -537,6 +539,18 @@ main {
     top: 50%;
     transform: translateY(-50%);
     right: 1rem;
+}
+
+/* Assinatura */
+
+.Subsctiption_Banner_Subtitle {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.Subsctiption_Banner_Description {
+    font-size: 1rem;
+    text-align: center;
 }
 
 /* Lista de Produtos */
@@ -750,6 +764,9 @@ main {
 
     text-transform: uppercase;
 
+    font-size: 0.75rem;
+    letter-spacing: 0.05rem;
+
     width: 100%;
 }
 
@@ -826,6 +843,10 @@ main {
 
 .Receive_Option.LightGreen {
     background-color: lightgreen;
+}
+
+.Receive_Option.Margin_Bottom {
+    margin-bottom: 0.5rem;
 }
 
 .Recieve_Option_Map_Link {

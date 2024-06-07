@@ -2,6 +2,7 @@ import Head from "next/head";
 
 import UserTab from "@/components/User_Tab";
 import Admin_Product_List from "@/components/Admin_Product_List";
+import Client_Subscription_Banner from "@/components/Client_Subscription_Banner";
 import Client_Product_List from "@/components/Client_Product_List";
 import Client_Cart from "@/components/Client_Cart";
 import Client_Checkout from "@/components/Client_Checkout";
@@ -20,6 +21,7 @@ export default function Home() {
                 {/* <PaymentMercadoPago /> */}
                 <UserTab />
                 <Admin_Product_List />
+                <Client_Subscription_Banner />
                 <Client_Product_List />
                 <Client_Cart />
                 <Client_Checkout />

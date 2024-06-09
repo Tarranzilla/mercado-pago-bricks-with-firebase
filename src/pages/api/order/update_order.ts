@@ -265,6 +265,9 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
             }
         } else {
             // handle the case where headers['x-signature'] is an array of strings
+            console.log("Error in Request =>", req);
+            console.log("Its Headers =>", headers);
+            console.log("Its Body =>", body);
             res.setHeader("Allow", ["POST"]);
             res.status(405).end(`Method ${req.method} Not Allowed`);
         }

@@ -42,9 +42,7 @@ const Client_Subscription_Banner = () => {
                         )}
 
                         <Link
-                            href={"https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=2c9380848fde7fa4018ffdb47a4808b6"}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={"https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=2c9380848fde7fa4018ffde1fc1208a2"}
                             className={anonymousCustomer ? "Cart_Footer_Checkout_Button Disabled" : "Cart_Footer_Checkout_Button"}
                             onClick={() => {}}
                         >

@@ -67,6 +67,7 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                         // A assinatura é válida, agora você pode processar os dados e salvá-los no Firebase
                         const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID;
                         const ordersCollectionRef = firestore.collection(`projects/${projectUID}/orders`);
+                        const subscriptionsCollectionRef = firestore.collection(`projects/${projectUID}/subscriptions`);
 
                         /*
                     
@@ -164,8 +165,78 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                                 // Example: const plan = body.data;
                                 break;
                             case "subscription":
-                                // Handle subscription notification
-                                // Example: const subscription = body.data;
+                                const subscription_id = body.data.id;
+                                console.log("Subscription ID:", subscription_id);
+                                try {
+                                    const fullSubscriptionPaymentInfo = await axios.get(
+                                        `https://api.mercadopago.com/v1/payments/${subscription_id}`,
+                                        {
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                                Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
+                                            },
+                                        }
+                                    );
+
+                                    if (fullSubscriptionPaymentInfo.data) {
+                                        console.log(fullSubscriptionPaymentInfo.data);
+
+                                        const new_subscription = {
+                                            subscription_id: subscription_id,
+                                            subscription_info: fullSubscriptionPaymentInfo.data,
+                                        };
+
+                                        let subscription_data;
+
+                                        if (fullSubscriptionPaymentInfo.data.status === "approved") {
+                                            subscription_data = {
+                                                mp_subscription_status: fullSubscriptionPaymentInfo.data.status,
+                                                mp_subscription_payment_info: new_subscription,
+                                                status: {
+                                                    confirmed_by_admin: false,
+                                                    waiting_payment: false,
+                                                    in_production: true,
+                                                    waiting_for_retrieval: false,
+                                                    retrieved: false,
+                                                    waiting_for_delivery: false,
+                                                    delivered: false,
+                                                    cancelled: false,
+                                                },
+                                            };
+                                        } else {
+                                            subscription_data = {
+                                                mp_payment_status: fullSubscriptionPaymentInfo.data.status,
+                                                mp_payment_info: new_subscription,
+                                                status: {
+                                                    confirmed_by_admin: false,
+                                                    waiting_payment: true,
+                                                    in_production: false,
+                                                    waiting_for_retrieval: false,
+                                                    retrieved: false,
+                                                    waiting_for_delivery: false,
+                                                    delivered: false,
+                                                    cancelled: false,
+                                                },
+                                            };
+                                        }
+
+                                        const orderUID = fullSubscriptionPaymentInfo.data.external_reference;
+                                        // console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
+
+                                        await subscriptionsCollectionRef.doc(orderUID).set(subscription_data, { merge: true });
+                                    }
+
+                                    // Rest of your code...
+                                } catch (error) {
+                                    const axiosError = error as AxiosError; // Type assertion here
+
+                                    if (axiosError.response && axiosError.response.status === 404) {
+                                        console.error("Payment not found:", payment_id);
+                                    } else {
+                                        console.error("An error occurred:", axiosError);
+                                    }
+                                }
+                                break;
                                 break;
                             // Add more cases for other notification types as needed
                             default:

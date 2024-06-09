@@ -768,6 +768,9 @@ main {
     letter-spacing: 0.05rem;
 
     width: 100%;
+
+    text-decoration: none;
+    color: black;
 }
 
 .Cart_Footer_Checkout_Button.Disabled {

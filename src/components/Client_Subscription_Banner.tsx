@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { User as User_Local } from "@/types/User";
 
+import Link from "next/link";
+
 // Framer motion para animações
 import { motion as m, AnimatePresence, useScroll, useSpring } from "framer-motion";
 
@@ -39,9 +41,15 @@ const Client_Subscription_Banner = () => {
                             </button>
                         )}
 
-                        <button className={anonymousCustomer ? "Cart_Footer_Checkout_Button Disabled" : "Cart_Footer_Checkout_Button"}>
+                        <Link
+                            href={"https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=2c9380848fde7fa4018ffdb47a4808b6"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={anonymousCustomer ? "Cart_Footer_Checkout_Button Disabled" : "Cart_Footer_Checkout_Button"}
+                            onClick={() => {}}
+                        >
                             <p className="User_Info_Item_Edit_Btn_Text">Quero Fazer Parte do Clube Tropical!</p>
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

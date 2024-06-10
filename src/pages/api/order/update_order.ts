@@ -266,6 +266,6 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
         }
     } else {
         console.log("The request method is not POST");
-        res.setHeader("Allow", ["POST"]);
+        res.status(400);
     }
 }

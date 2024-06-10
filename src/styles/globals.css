@@ -325,6 +325,12 @@ main {
     min-width: max-content;
 }
 
+.Subscription_Item_Text_Headers_Container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
 .Order_Item_Text_Header_Item {
     display: flex;
     flex-direction: column;
@@ -336,6 +342,19 @@ main {
     padding: 0.75rem 1.25rem;
     border-radius: 1rem;
     width: 100%;
+}
+
+.Subscription_Item_Text_Header_Item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+
+    background-color: lightgray;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 1rem;
+    flex-grow: 1;
 }
 
 .User_Order_Status {

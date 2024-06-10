@@ -30,6 +30,7 @@ import { setCurrentUser } from "@/store/slices/user_slice";
 import { Order } from "@/types/Order";
 import { Address } from "@/types/Address";
 import { User as User_Local } from "@/types/User";
+import { Subscription } from "@/types/Subscription";
 
 // Variáveis de Ambiente
 const FIREBASE_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_SPECIAL_PROJECT_ID;
@@ -41,6 +42,8 @@ const NEXT_PUBLIC_PATH_API_UPDATE_USER = process.env.NEXT_PUBLIC_PATH_API_UPDATE
 const NEXT_PUBLIC_PATH_API_GET_ORDER = process.env.NEXT_PUBLIC_PATH_API_GET_ORDER;
 const NEXT_PUBLIC_PATH_API_CREATE_ORDER = process.env.NEXT_PUBLIC_PATH_API_CREATE_ORDER;
 const NEXT_PUBLIC_PATH_API_UPDATE_ORDER = process.env.NEXT_PUBLIC_PATH_API_UPDATE_ORDER;
+
+const NEXT_PUBLIC_PATH_API_GET_SUBSCRIPTION = process.env.NEXT_PUBLIC_PATH_API_GET_SUBSCRIPTION;
 
 const businessTelephone = process.env.NEXT_PUBLIC_BUSINESS_MAIN_TELEPHONE;
 
@@ -650,6 +653,10 @@ export default function UserTab() {
     const displayedOrders = seeMore ? sortedOrders : sortedOrders.slice(0, 3);
     const noOrders = orderList.length < 1;
 
+    // Estado para ver as assinaturas do usuário
+    const [subscriptionList, setSubscriptionList] = useState<Subscription[]>([]);
+    const noSubscriptions = subscriptionList.length < 1;
+
     // Funções de Autenticação
     // Login com Google
     const signInWithGoogle = async () => {
@@ -764,9 +771,33 @@ export default function UserTab() {
 
             if (response.data) {
                 setEditedLocalUser(response.data as User_Local);
+                fetchSubscriptionsForUser(response.data as User_Local);
                 fetchOrdersForUser(response.data as User_Local);
                 setIsCustomerLoading(false);
                 console.log("Local User: ", response.data);
+            }
+        } catch (error) {
+            console.log("Error fetching user data:", error);
+        }
+    };
+
+    // Função para buscar o documento de assinatura no Firestore
+    const fetchSubscriptionDoc = async (subscription_id: string): Promise<Subscription | undefined> => {
+        try {
+            // Fetch user data from get_user API
+            const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_SUBSCRIPTION}`, { params: { subscription_id: subscription_id } });
+            // console.log("User data from API:", response.data);
+
+            if (response.status === 400) {
+                console.error("Missing required fields, cannot fetch order data");
+            }
+
+            if (response.data.message === "subscription-not-found") {
+                console.log("Subscription not found");
+            }
+
+            if (response.data) {
+                return response.data as Subscription;
             }
         } catch (error) {
             console.log("Error fetching user data:", error);
@@ -793,6 +824,41 @@ export default function UserTab() {
             }
         } catch (error) {
             console.log("Error fetching user data:", error);
+        }
+    };
+
+    const fetchSubscriptionsForUser = async (user: User_Local): Promise<Subscription[] | undefined> => {
+        const user_subscriptions = user.subscriptions;
+        console.log("User Subscriptions:", user_subscriptions);
+
+        if (user_subscriptions.length < 1) {
+            console.log("Usuário nao possui Assinaturas.");
+            return [];
+        }
+
+        try {
+            const subscriptions: (Subscription | undefined)[] = await Promise.all(
+                user_subscriptions.map(async (subscription_id) => {
+                    const subscription = await fetchSubscriptionDoc(subscription_id);
+                    if (subscription) {
+                        console.log(subscription);
+                        return subscription;
+                    }
+                })
+            );
+
+            // Filter out any undefined values
+            const validSubscriptions: Subscription[] = subscriptions.filter(
+                (subscription): subscription is Subscription => subscription !== undefined
+            );
+
+            // Set the subscription list with the valid subscriptions
+            setSubscriptionList(validSubscriptions);
+
+            return validSubscriptions;
+        } catch (error) {
+            console.error("Error fetching subscriptions:", error);
+            return undefined;
         }
     };
 
@@ -1018,11 +1084,19 @@ export default function UserTab() {
 
                                             {/* Card de Informações Sobre as Assinaturas */}
                                             <div className="User_Tab_Card">
-                                                <h1 className="User_Tab_Card_Title">Assinaturas</h1>
-                                                <div className="User_No_Orders">
-                                                    <span className="material-icons User_No_Orders_Icon">loyalty</span>
-                                                    <p className="User_No_Orders_Text">Nenhuma assinatura ativa.</p>
-                                                </div>
+                                                <h1 className="User_Tab_Card_Title">Clube Tropical</h1>
+
+                                                {/* Lista de Pedidos do Usuário */}
+                                                {subscriptionList.map((subscription, index) => {
+                                                    return <div>{subscription.subscription_external_reference}</div>;
+                                                })}
+
+                                                {noSubscriptions && (
+                                                    <div className="User_No_Orders">
+                                                        <span className="material-icons User_No_Orders_Icon">loyalty</span>
+                                                        <p className="User_No_Orders_Text">Nenhuma assinatura ativa.</p>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             {/* Card de Informações Sobre os Pedidos */}

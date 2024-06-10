@@ -54,6 +54,8 @@ const Client_Subscription_Banner = () => {
     const customer = useSelector((state: RootState) => state.user.currentUser as User_Local);
     const anonymousCustomer = customer === null || customer.name === "Usuário Anônimo";
 
+    const customerIsSubscriber = customer?.isSubscriber || false;
+
     const customer_has_not_updated_his_address =
         customer?.name === "Nenhum Nome Definido" ||
         customer?.email === "Nenhum Email Definido" ||
@@ -175,6 +177,7 @@ const Client_Subscription_Banner = () => {
                             const updatedCustomer = {
                                 ...customer,
                                 subscriptions: [...customer.subscriptions, subscription.subscription_data.subscription_external_reference],
+                                isSubscriber: true,
                             };
 
                             fetch(updateUserAPI, {
@@ -278,13 +281,15 @@ const Client_Subscription_Banner = () => {
                                         : "Cart_Footer_Checkout_Button"
                                 }
                                 onClick={() => {
-                                    if (!anonymousCustomer && !customer_has_not_updated_his_address) {
+                                    if (!anonymousCustomer && !customer_has_not_updated_his_address && !customerIsSubscriber) {
                                         console.log("Processando pagamento de Assinatura!");
                                         processSubscriptionPaymentAction();
                                     }
                                 }}
                             >
-                                <p className="User_Info_Item_Edit_Btn_Text">Quero Fazer Parte do Clube Tropical!</p>
+                                <p className="User_Info_Item_Edit_Btn_Text">
+                                    {customerIsSubscriber ? "voce faz parte do clube tropical!" : "Quero fazer parte do clube tropical!"}
+                                </p>
                             </button>
                         </div>
                     </div>

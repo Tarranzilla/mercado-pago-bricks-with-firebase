@@ -284,7 +284,7 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
                         pending: "https://farol-das-ideias.vercel.app/checkout_pending",
                     },
                     external_reference: external_reference,
-                    notification_url: "https://farol-das-ideias.vercel.app/api/order/update_order",
+                    notification_url: "https://farol-das-ideias.vercel.app/api/order/update_order?source_news=webhooks",
                     payer: {
                         name: customer.name,
                         surname: customer.name,

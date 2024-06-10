@@ -99,6 +99,8 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
 
                                 if (fullPaymentInfo.data) {
                                     console.log(fullPaymentInfo.data);
+                                    const orderUID = fullPaymentInfo.data.external_reference;
+                                    // console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
 
                                     const paymentData = {
                                         payment_id: payment_id,
@@ -144,10 +146,13 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                                         };
                                     }
 
-                                    const orderUID = fullPaymentInfo.data.external_reference;
-                                    // console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
-
-                                    await ordersCollectionRef.doc(orderUID).set(orderData, { merge: true });
+                                    if (orderUID.startsWith("ASSINATURA-")) {
+                                        console.log("Resgistro de Assinatura Criado no Firebase!");
+                                        await subscriptionsCollectionRef.doc(orderUID).set(orderData, { merge: true });
+                                    } else {
+                                        console.log("Resgistro de Pedido Criado no Firebase!");
+                                        await ordersCollectionRef.doc(orderUID).set(orderData, { merge: true });
+                                    }
                                 }
 
                                 // Rest of your code...

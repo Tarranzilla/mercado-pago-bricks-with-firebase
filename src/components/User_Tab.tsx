@@ -512,6 +512,7 @@ export default function UserTab() {
             zip: "12345-678",
         },
         orders: [],
+        subscriptions: [],
     };
 
     // Estados do usuário, user é o usuário padrão do Google e localUser é o usuário do nosso banco de dados
@@ -707,6 +708,7 @@ export default function UserTab() {
                             isSubscriber: false,
 
                             orders: [],
+                            subscriptions: [],
                         };
 
                         await axios.post(`${NEXT_PUBLIC_PATH_API_CREATE_USER}`, new_user);
@@ -1037,7 +1039,7 @@ export default function UserTab() {
                                                     {noOrders && (
                                                         <div className="User_No_Orders">
                                                             <span className="material-icons User_No_Orders_Icon">receipt_long</span>
-                                                            <p className="User_No_Orders_Text">Você ainda não fez nenhum pedido</p>
+                                                            <p className="User_No_Orders_Text">Você ainda não fez nenhum pedido.</p>
                                                         </div>
                                                     )}
 

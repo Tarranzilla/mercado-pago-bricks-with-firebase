@@ -34,6 +34,7 @@ const defaultCurrentUser: User_Local = {
     },
     telephone: "no-telephone",
     orders: [],
+    subscriptions: [],
 };
 
 const initialState: UserState = {

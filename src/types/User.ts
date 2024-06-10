@@ -18,4 +18,5 @@ export type User = {
     telephone: string;
 
     orders: string[];
+    subscriptions: string[];
 };

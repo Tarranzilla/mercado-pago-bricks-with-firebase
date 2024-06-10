@@ -14,7 +14,8 @@ export default async function createUser(req: NextApiRequest, res: NextApiRespon
         return res.status(405).json({ error: "Method Not Allowed" });
     }
 
-    const { id, name, email, avatar_url, isOwner, isAdmin, isEditor, isSubscriber, address, telephone, orders }: User_Client = req.body;
+    const { id, name, email, avatar_url, isOwner, isAdmin, isEditor, isSubscriber, address, telephone, orders, subscriptions }: User_Client =
+        req.body;
 
     try {
         if (!id || !name || !email) {
@@ -35,6 +36,7 @@ export default async function createUser(req: NextApiRequest, res: NextApiRespon
             address,
             telephone,
             orders,
+            subscriptions,
             created_at: new Date(),
         };
 

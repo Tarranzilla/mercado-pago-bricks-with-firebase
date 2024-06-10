@@ -149,6 +149,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
                     isSubscriber: false,
 
                     orders: [],
+                    subscriptions: [],
                 };
 
                 const newUserResponse = await axios.post(`${NEXT_PUBLIC_PATH_API_CREATE_USER}`, new_user);

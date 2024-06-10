@@ -1200,7 +1200,7 @@ export default function UserTab() {
 
                                                 {/* Lista de Pedidos do Usuário */}
                                                 {subscriptionList.map((subscription, index) => {
-                                                    return <SubscriptionCard subscription={subscription} index={index} />;
+                                                    return <SubscriptionCard subscription={subscription} index={index} key={index} />;
                                                 })}
 
                                                 {noSubscriptions && (

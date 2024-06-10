@@ -218,9 +218,7 @@ const Client_Checkout = () => {
                     }
                 })
                 .then((destination) => {
-                    setTimeout(() => {
-                        router.push(destination);
-                    }, 1000);
+                    router.push(destination);
                 })
                 .finally(() => {
                     console.log("Payment Process Finished!");

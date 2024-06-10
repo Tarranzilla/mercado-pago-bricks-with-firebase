@@ -20,6 +20,8 @@ const secret = isProduction ? process.env.MP_PROD_WEBHOOK_KEY : process.env.MP_D
 export default async function orderUpdateHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         const { body, headers } = req;
+        console.log("Request Body =>", body);
+        console.log("Request Headers =>", headers);
 
         /* Exemplo de corpo (body) de uma notificação recebida do Mercado Pago
 
@@ -38,7 +40,7 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
 
         */
 
-        if (typeof headers["x-signature"] === "string") {
+        if (body.data && typeof headers["x-signature"] === "string") {
             // Exemplo do conteúdo enviado no header x-signature
             // ts=1704908010,v1=618c85345248dd820d5fd456117c2ab2ef8eda45a0282ff693eac24131a5e839
 
@@ -55,21 +57,20 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
             console.log("body.type =>", body.type);
             console.log("body.data =>", body.data);
 
-            if (body.data && typeof headers["x-signature"] === "string") {
-                const signatureTemplate = `id:${body.data.id};request-id:${headers["x-request-id"]};ts:${tsValue};`;
-                console.log("signatureTemplate:", signatureTemplate);
+            const signatureTemplate = `id:${body.data.id};request-id:${headers["x-request-id"]};ts:${tsValue};`;
+            console.log("signatureTemplate:", signatureTemplate);
 
-                if (typeof secret === "string") {
-                    const generatedSignature = crypto.createHmac("sha256", secret).update(signatureTemplate).digest("hex");
+            if (typeof secret === "string") {
+                const generatedSignature = crypto.createHmac("sha256", secret).update(signatureTemplate).digest("hex");
 
-                    // Comparar a chave gerada com a chave extraída do cabeçalho
-                    if (signatureValue === generatedSignature) {
-                        // A assinatura é válida, agora você pode processar os dados e salvá-los no Firebase
-                        const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID;
-                        const ordersCollectionRef = firestore.collection(`projects/${projectUID}/orders`);
-                        const subscriptionsCollectionRef = firestore.collection(`projects/${projectUID}/subscriptions`);
+                // Comparar a chave gerada com a chave extraída do cabeçalho
+                if (signatureValue === generatedSignature) {
+                    // A assinatura é válida, agora você pode processar os dados e salvá-los no Firebase
+                    const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID;
+                    const ordersCollectionRef = firestore.collection(`projects/${projectUID}/orders`);
+                    const subscriptionsCollectionRef = firestore.collection(`projects/${projectUID}/subscriptions`);
 
-                        /*
+                    /*
                     
                     Depois de dar um retorno à notificação e confirmar o seu recebimento, você obterá as informações completas do recurso 
                     notificado acessando o endpoint correspondente da API:
@@ -78,200 +79,193 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
 
                     */
 
-                        switch (body.type) {
-                            case "payment":
-                                // Handle payment notification
-                                const payment_id = body.data.id;
-                                const payment_info = body.data;
-                                const action = body.action;
-                                const action_id = body.id;
-                                const action_date = body.date_created;
-                                const vendor_id = body.user_id;
+                    switch (body.type) {
+                        case "payment":
+                            // Handle payment notification
+                            const payment_id = body.data.id;
+                            const payment_info = body.data;
+                            const action = body.action;
+                            const action_id = body.id;
+                            const action_date = body.date_created;
+                            const vendor_id = body.user_id;
 
-                                try {
-                                    const fullPaymentInfo = await axios.get(`https://api.mercadopago.com/v1/payments/${payment_id}`, {
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                            Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
-                                        },
-                                    });
+                            try {
+                                const fullPaymentInfo = await axios.get(`https://api.mercadopago.com/v1/payments/${payment_id}`, {
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
+                                    },
+                                });
 
-                                    if (fullPaymentInfo.data) {
-                                        console.log(fullPaymentInfo.data);
+                                if (fullPaymentInfo.data) {
+                                    console.log(fullPaymentInfo.data);
 
-                                        const paymentData = {
-                                            payment_id: payment_id,
-                                            payment_info: payment_info,
-                                            payment_info_full: fullPaymentInfo.data,
-                                            action: action,
-                                            action_id: action_id,
-                                            action_date: action_date,
-                                            vendor_id: vendor_id,
-                                        };
+                                    const paymentData = {
+                                        payment_id: payment_id,
+                                        payment_info: payment_info,
+                                        payment_info_full: fullPaymentInfo.data,
+                                        action: action,
+                                        action_id: action_id,
+                                        action_date: action_date,
+                                        vendor_id: vendor_id,
+                                    };
 
-                                        let orderData;
+                                    let orderData;
 
-                                        if (fullPaymentInfo.data.status === "approved") {
-                                            orderData = {
-                                                mp_payment_status: fullPaymentInfo.data.status,
-                                                mp_payment_info: paymentData,
-                                                status: {
-                                                    confirmed_by_admin: false,
-                                                    waiting_payment: false,
-                                                    in_production: true,
-                                                    waiting_for_retrieval: false,
-                                                    retrieved: false,
-                                                    waiting_for_delivery: false,
-                                                    delivered: false,
-                                                    cancelled: false,
-                                                },
-                                            };
-                                        } else {
-                                            orderData = {
-                                                mp_payment_status: fullPaymentInfo.data.status,
-                                                mp_payment_info: paymentData,
-                                                status: {
-                                                    confirmed_by_admin: false,
-                                                    waiting_payment: true,
-                                                    in_production: false,
-                                                    waiting_for_retrieval: false,
-                                                    retrieved: false,
-                                                    waiting_for_delivery: false,
-                                                    delivered: false,
-                                                    cancelled: false,
-                                                },
-                                            };
-                                        }
-
-                                        const orderUID = fullPaymentInfo.data.external_reference;
-                                        // console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
-
-                                        await ordersCollectionRef.doc(orderUID).set(orderData, { merge: true });
-                                    }
-
-                                    // Rest of your code...
-                                } catch (error) {
-                                    const axiosError = error as AxiosError; // Type assertion here
-
-                                    if (axiosError.response && axiosError.response.status === 404) {
-                                        console.error("Payment not found:", payment_id);
-                                    } else {
-                                        console.error("An error occurred:", axiosError);
-                                    }
-                                }
-                                break;
-                            case "plan":
-                                // Handle plan notification
-                                // Example: const plan = body.data;
-                                break;
-                            case "subscription":
-                                const subscription_id = body.data.id;
-                                console.log("Subscription ID:", subscription_id);
-                                try {
-                                    const fullSubscriptionPaymentInfo = await axios.get(
-                                        `https://api.mercadopago.com/v1/payments/${subscription_id}`,
-                                        {
-                                            headers: {
-                                                "Content-Type": "application/json",
-                                                Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
+                                    if (fullPaymentInfo.data.status === "approved") {
+                                        orderData = {
+                                            mp_payment_status: fullPaymentInfo.data.status,
+                                            mp_payment_info: paymentData,
+                                            status: {
+                                                confirmed_by_admin: false,
+                                                waiting_payment: false,
+                                                in_production: true,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
                                             },
-                                        }
-                                    );
-
-                                    if (fullSubscriptionPaymentInfo.data) {
-                                        console.log(fullSubscriptionPaymentInfo.data);
-
-                                        const new_subscription = {
-                                            subscription_id: subscription_id,
-                                            subscription_info: fullSubscriptionPaymentInfo.data,
                                         };
-
-                                        let subscription_data;
-
-                                        if (fullSubscriptionPaymentInfo.data.status === "approved") {
-                                            subscription_data = {
-                                                mp_subscription_status: fullSubscriptionPaymentInfo.data.status,
-                                                mp_subscription_payment_info: new_subscription,
-                                                status: {
-                                                    confirmed_by_admin: false,
-                                                    waiting_payment: false,
-                                                    in_production: true,
-                                                    waiting_for_retrieval: false,
-                                                    retrieved: false,
-                                                    waiting_for_delivery: false,
-                                                    delivered: false,
-                                                    cancelled: false,
-                                                },
-                                            };
-                                        } else {
-                                            subscription_data = {
-                                                mp_payment_status: fullSubscriptionPaymentInfo.data.status,
-                                                mp_payment_info: new_subscription,
-                                                status: {
-                                                    confirmed_by_admin: false,
-                                                    waiting_payment: true,
-                                                    in_production: false,
-                                                    waiting_for_retrieval: false,
-                                                    retrieved: false,
-                                                    waiting_for_delivery: false,
-                                                    delivered: false,
-                                                    cancelled: false,
-                                                },
-                                            };
-                                        }
-
-                                        const orderUID = fullSubscriptionPaymentInfo.data.external_reference;
-                                        // console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
-
-                                        await subscriptionsCollectionRef.doc(orderUID).set(subscription_data, { merge: true });
-                                    }
-
-                                    // Rest of your code...
-                                } catch (error) {
-                                    const axiosError = error as AxiosError; // Type assertion here
-
-                                    if (axiosError.response && axiosError.response.status === 404) {
-                                        console.error("Payment not found:", payment_id);
                                     } else {
-                                        console.error("An error occurred:", axiosError);
+                                        orderData = {
+                                            mp_payment_status: fullPaymentInfo.data.status,
+                                            mp_payment_info: paymentData,
+                                            status: {
+                                                confirmed_by_admin: false,
+                                                waiting_payment: true,
+                                                in_production: false,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        };
                                     }
-                                }
-                                break;
-                                break;
-                            // Add more cases for other notification types as needed
-                            default:
-                                // Unknown notification type
-                                // Log or handle the error
-                                console.error("Unknown notification type:", body.type);
-                                break;
-                        }
 
-                        // Responder ao Mercado Pago (se necessário)
-                        res.status(200).json({ success: true });
-                    } else {
-                        // A assinatura é inválida
-                        console.log("Nasty Bug, Invalid Signature");
-                        res.status(500).json({ error: `Invalid Signature | ${secret}` });
+                                    const orderUID = fullPaymentInfo.data.external_reference;
+                                    // console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
+
+                                    await ordersCollectionRef.doc(orderUID).set(orderData, { merge: true });
+                                }
+
+                                // Rest of your code...
+                            } catch (error) {
+                                const axiosError = error as AxiosError; // Type assertion here
+
+                                if (axiosError.response && axiosError.response.status === 404) {
+                                    console.error("Payment not found:", payment_id);
+                                } else {
+                                    console.error("An error occurred:", axiosError);
+                                }
+                            }
+                            break;
+                        case "plan":
+                            // Handle plan notification
+                            // Example: const plan = body.data;
+                            break;
+                        case "subscription":
+                            const subscription_id = body.data.id;
+                            console.log("Subscription ID:", subscription_id);
+                            try {
+                                const fullSubscriptionPaymentInfo = await axios.get(`https://api.mercadopago.com/v1/payments/${subscription_id}`, {
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
+                                    },
+                                });
+
+                                if (fullSubscriptionPaymentInfo.data) {
+                                    console.log(fullSubscriptionPaymentInfo.data);
+
+                                    const new_subscription = {
+                                        subscription_id: subscription_id,
+                                        subscription_info: fullSubscriptionPaymentInfo.data,
+                                    };
+
+                                    let subscription_data;
+
+                                    if (fullSubscriptionPaymentInfo.data.status === "approved") {
+                                        subscription_data = {
+                                            mp_subscription_status: fullSubscriptionPaymentInfo.data.status,
+                                            mp_subscription_payment_info: new_subscription,
+                                            status: {
+                                                confirmed_by_admin: false,
+                                                waiting_payment: false,
+                                                in_production: true,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        };
+                                    } else {
+                                        subscription_data = {
+                                            mp_payment_status: fullSubscriptionPaymentInfo.data.status,
+                                            mp_payment_info: new_subscription,
+                                            status: {
+                                                confirmed_by_admin: false,
+                                                waiting_payment: true,
+                                                in_production: false,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        };
+                                    }
+
+                                    const orderUID = fullSubscriptionPaymentInfo.data.external_reference;
+                                    // console.log("Order UID | EXTERNAL REFERENCE:", orderUID);
+
+                                    await subscriptionsCollectionRef.doc(orderUID).set(subscription_data, { merge: true });
+                                }
+
+                                // Rest of your code...
+                            } catch (error) {
+                                const axiosError = error as AxiosError; // Type assertion here
+
+                                if (axiosError.response && axiosError.response.status === 404) {
+                                    console.error("Payment not found:", payment_id);
+                                } else {
+                                    console.error("An error occurred:", axiosError);
+                                }
+                            }
+                            break;
+
+                        // Add more cases for other notification types as needed
+                        default:
+                            // Unknown notification type
+                            // Log or handle the error
+                            console.error("Unknown notification type:", body.type);
+                            break;
                     }
+
+                    // Responder ao Mercado Pago (se necessário)
+                    console.log("Sending response 200 to Mercado Pago");
+                    res.status(200).json({ success: true });
                 } else {
-                    // handle the case where secret is undefined
-                    console.log("Nasty Bug, Undefined Secret");
-                    res.status(500).json({ error: "Internal Server Error - Undefined secret" });
+                    // A assinatura é inválida
+                    console.log("The signatures do not match!");
+                    res.status(500).json({ error: "The signatures do not match" });
                 }
             } else {
-                // Método não permitido
-                res.setHeader("Allow", ["POST"]);
-                res.status(405).end(`Method ${req.method} Not Allowed`);
+                // handle the case where secret is undefined
+                console.log("Nasty Bug, Undefined Secret");
+                res.status(500).json({ error: "Internal Server Error - Undefined secret" });
             }
         } else {
             // handle the case where headers['x-signature'] is an array of strings
-            console.log("Error in Request =>", req);
+            console.log("Error in Request, x-signature is not a single string =>", req);
             console.log("Its Headers =>", headers);
             console.log("Its Body =>", body);
-            res.setHeader("Allow", ["POST"]);
-            res.status(405).end(`Method ${req.method} Not Allowed`);
+            res.status(500).json({ error: "Internal Server Error - x-signature is not a single string" });
         }
     } else {
-        console.log("The body is wrong in some way");
+        console.log("The request method is not POST");
+        res.setHeader("Allow", ["POST"]);
     }
 }

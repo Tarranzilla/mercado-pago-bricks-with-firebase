@@ -5,10 +5,13 @@ import { Provider as Redux_Provider } from "react-redux";
 import { store as Redux_Store } from "@/store/store";
 import { FirebaseProvider } from "@/components/Firebase_Context";
 
+import Navbar from "@/components/Navbar";
+
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <Redux_Provider store={Redux_Store}>
             <FirebaseProvider>
+                <Navbar />
                 <Component {...pageProps} />
             </FirebaseProvider>
         </Redux_Provider>

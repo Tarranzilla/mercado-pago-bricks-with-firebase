@@ -24,12 +24,88 @@ body {
 main {
     max-width: 800px;
     margin: 0 auto;
-    padding: 2.5rem 1rem;
+    padding: 4rem 1rem;
 
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
+
+/* ------ Navbar ------ */
+
+.Navbar {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    height: 5vh;
+
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+
+    padding: 0.5rem;
+
+    background-color: lightgray;
+}
+
+.Navbar_Logo,
+.Navbar_Main_Links,
+.Navbar_Tools {
+    display: flex;
+    flex: 1;
+}
+
+.Navbar_Main_Links {
+    justify-content: center;
+    gap: 1rem;
+}
+
+.Navbar_Link {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
+    font-size: 1.4rem;
+    letter-spacing: 0.05rem;
+}
+
+.Navbar_Tools {
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.Navbar_Tool {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.25rem 1rem;
+
+    background-color: lightblue;
+    border-radius: 0.5rem;
+    border: none;
+
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    font-size: 0.75rem;
+}
+
+.Navbar_Tool_Label {
+    display: none;
+}
+
+.Navbar_Tool:hover > .Navbar_Tool_Label,
+.Navbar_Tool:focus > .Navbar_Tool_Label {
+    display: block;
+}
+
+.Navbar_Tool > span {
+    font-size: 1.4rem;
+}
+
+/* ------ Geral ------ */
 
 .Website_Title {
     font-size: 2rem;
@@ -49,12 +125,20 @@ main {
     position: relative;
 }
 
+.User_Tab {
+    position: fixed;
+    top: calc(5vh + 1rem);
+    left: 1rem;
+    bottom: 1rem;
+
+    width: 28vw;
+}
+
 .UserTab_Content_Wrapper {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 
-    max-height: 60vh;
     overflow-y: scroll;
 
     padding: 1.5rem 2rem;

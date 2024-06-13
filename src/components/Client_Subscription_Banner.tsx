@@ -237,73 +237,70 @@ const Client_Subscription_Banner = () => {
 
     return (
         <div className="Subsctiption_Banner">
-            <div className="UserTab_Content_Wrapper Subsctiption_Banner_Content_Wrapper" ref={scroll_ref}>
-                {processingPayment ? (
-                    <div className="User_Tab_Card Checkout_Card">
-                        <h1 className="User_Tab_Card_Title Checkout_Card_Title">Assinatura Clube Tropical</h1>
-                        <div className="User_No_Orders">
-                            <span className="material-icons">loyalty</span>
-                            <p className="User_No_Orders_Text">Processando Pagamento...</p>
-                        </div>
+            {processingPayment ? (
+                <div className="User_Tab_Card Checkout_Card">
+                    <h1 className="User_Tab_Card_Title Checkout_Card_Title">Assinatura Clube Tropical</h1>
+                    <div className="User_No_Orders">
+                        <span className="material-icons">loyalty</span>
+                        <p className="User_No_Orders_Text">Processando Pagamento...</p>
                     </div>
-                ) : (
-                    <div className="User_Tab_Card">
-                        <h1 className="User_Tab_Card_Title">Clube Tropical</h1>
-                        <h2 className="Subsctiption_Banner_Subtitle">
-                            Que tal ter uma seleção de chocolates deliciosos chegando todo mês na sua casa?
-                        </h2>
-                        <p className="Subsctiption_Banner_Description">
-                            Membros do Clube Tropical recebem mensalmente uma caixa com 6 chocolates especiais, feitos com cacau de origem única - E
-                            também possuem acesso a descontos de 10% em todos os pedidos.
-                        </p>
-
-                        <div className="Cart_Footer_Buttons_Container">
-                            {anonymousCustomer && (
-                                <button className="Cart_Footer_Warning">
-                                    <span className="material-icons">badge</span>Crie uma conta ou conecte-se para realizar a assinatura
-                                </button>
-                            )}
-
-                            {customer_has_not_updated_his_address && (
-                                <div className="Receive_Option LightGreen">
-                                    <span className="material-icons">info</span>
-                                    <p>
-                                        Para assinar o Clube Tropical, atualize as suas informações pessoais e de entrega nas configurações da sua
-                                        conta.
-                                    </p>
-                                </div>
-                            )}
-
-                            <button
-                                className={
-                                    anonymousCustomer || customer_has_not_updated_his_address
-                                        ? "Cart_Footer_Checkout_Button Disabled"
-                                        : "Cart_Footer_Checkout_Button"
-                                }
-                                onClick={() => {
-                                    if (!anonymousCustomer && !customer_has_not_updated_his_address && !customerIsSubscriber) {
-                                        console.log("Processando pagamento de Assinatura!");
-                                        processSubscriptionPaymentAction();
-                                    }
-                                }}
-                            >
-                                <p className="User_Info_Item_Edit_Btn_Text">
-                                    {customerIsSubscriber ? "voce faz parte do clube tropical!" : "Quero fazer parte do clube tropical!"}
-                                </p>
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* Barra de Progresso de Scroll */}
-            <div className="Progress_Bar_Container">
-                <div className="Progress_Bar_Wrapper">
-                    <m.div className="Progress_Bar" style={{ scaleX }} />
                 </div>
-            </div>
+            ) : (
+                <div className="User_Tab_Card Checkout_Card">
+                    <h1 className="User_Tab_Card_Title">Clube Tropical</h1>
+                    <h2 className="Subsctiption_Banner_Subtitle">Que tal ter uma seleção de chocolates deliciosos chegando todo mês na sua casa?</h2>
+                    <p className="Subsctiption_Banner_Description">
+                        Membros do Clube Tropical recebem mensalmente uma caixa com 6 chocolates especiais, feitos com cacau de origem única - E
+                        também possuem acesso a descontos de 10% em todos os pedidos.
+                    </p>
+
+                    <div className="Cart_Footer_Buttons_Container">
+                        {anonymousCustomer && (
+                            <button className="Cart_Footer_Warning">
+                                <span className="material-icons">badge</span>Crie uma conta ou conecte-se para realizar a assinatura
+                            </button>
+                        )}
+
+                        {customer_has_not_updated_his_address && (
+                            <div className="Receive_Option LightGreen">
+                                <span className="material-icons">info</span>
+                                <p>
+                                    Para assinar o Clube Tropical, atualize as suas informações pessoais e de entrega nas configurações da sua conta.
+                                </p>
+                            </div>
+                        )}
+
+                        <button
+                            className={
+                                anonymousCustomer || customer_has_not_updated_his_address
+                                    ? "Cart_Footer_Checkout_Button Disabled"
+                                    : "Cart_Footer_Checkout_Button"
+                            }
+                            onClick={() => {
+                                if (!anonymousCustomer && !customer_has_not_updated_his_address && !customerIsSubscriber) {
+                                    console.log("Processando pagamento de Assinatura!");
+                                    processSubscriptionPaymentAction();
+                                }
+                            }}
+                        >
+                            <p className="User_Info_Item_Edit_Btn_Text">
+                                {customerIsSubscriber ? "voce faz parte do clube tropical!" : "Quero fazer parte do clube tropical!"}
+                            </p>
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
 export default Client_Subscription_Banner;
+
+/* Barra de Progresso de Scroll
+            <div className="Progress_Bar_Container">
+                <div className="Progress_Bar_Wrapper">
+                    <m.div className="Progress_Bar" style={{ scaleX }} />
+                </div>
+            </div>
+
+*/

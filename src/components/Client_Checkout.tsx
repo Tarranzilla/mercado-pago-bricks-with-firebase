@@ -66,16 +66,6 @@ const Client_Checkout = () => {
     const shipping_cost = receiveOption === "Retirada" ? 0 : 15;
     const [receiveObservation, setReceiveObservation] = useState<string>("");
 
-    // Referência para o Scroll com Framer Motion
-    const scroll_ref = useRef(null);
-    const { scrollYProgress } = useScroll({ container: scroll_ref });
-
-    const scaleX = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001,
-    });
-
     const userTabNeedsUpdateAction = () => {
         dispatch(setUserTabNeedsUpdate(true));
     };
@@ -230,10 +220,11 @@ const Client_Checkout = () => {
     return (
         <>
             <div className="Checkout">
-                <div className="UserTab_Content_Wrapper Checkout_Content_Wrapper" ref={scroll_ref}>
+                <div className="Checkout_Content_Wrapper">
+                    <h1 className="User_Tab_Card_Title">Finalização da Compra</h1>
                     {processingPayment ? (
                         <div className="User_Tab_Card Checkout_Card">
-                            <h1 className="User_Tab_Card_Title Checkout_Card_Title">Finalizar Compra</h1>
+                            <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Finalizando Compra</h1>
                             <div className="User_No_Orders">
                                 <span className="material-icons">payment</span>
                                 <p className="User_No_Orders_Text">Processando Pagamento...</p>
@@ -243,7 +234,7 @@ const Client_Checkout = () => {
                         <>
                             {!customer ? (
                                 <div className="User_Tab_Card Checkout_Card">
-                                    <h1 className="User_Tab_Card_Title Checkout_Card_Title">Finalizar Compra</h1>
+                                    <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Finalizar Compra</h1>
 
                                     <div className="User_No_Orders">
                                         <span className="material-icons User_No_Orders_Icon">badge</span>
@@ -255,7 +246,7 @@ const Client_Checkout = () => {
                             ) : (
                                 <>
                                     <div className="User_Tab_Card Checkout_Card">
-                                        <h1 className="User_Tab_Card_Title Checkout_Card_Title">Itens do Pedido</h1>
+                                        <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Itens do Pedido</h1>
 
                                         {emptyCart ? (
                                             <div className="User_No_Orders">
@@ -288,7 +279,7 @@ const Client_Checkout = () => {
                                     </div>
 
                                     <div className="User_Tab_Card Checkout_Card">
-                                        <h1 className="User_Tab_Card_Title Checkout_Card_Title">Opções de Recebimento</h1>
+                                        <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Opções de Recebimento</h1>
                                         <div className="Checkout_Receive_Options">
                                             <div
                                                 className={receiveOption === "Retirada" ? "Receive_Option Active" : "Receive_Option"}
@@ -397,7 +388,7 @@ const Client_Checkout = () => {
                                     </div>
 
                                     <div className="User_Tab_Card">
-                                        <h1 className="User_Tab_Card_Title Checkout_Card_Title">Resumo do Pedido</h1>
+                                        <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Resumo do Pedido</h1>
                                         <div className="Checkout_Order_Summary">
                                             <div className="User_Order_Total">
                                                 <h4>Valor do Produtos</h4>
@@ -446,13 +437,6 @@ const Client_Checkout = () => {
                             )}
                         </>
                     )}
-                </div>
-
-                {/* Barra de Progresso de Scroll */}
-                <div className="Progress_Bar_Container">
-                    <div className="Progress_Bar_Wrapper">
-                        <m.div className="Progress_Bar" style={{ scaleX }} />
-                    </div>
                 </div>
             </div>
         </>

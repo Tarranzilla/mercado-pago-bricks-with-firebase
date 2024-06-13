@@ -56,64 +56,55 @@ const Client_Product_List = () => {
 
     return (
         <div className="Product_List">
-            <div className="UserTab_Content_Wrapper Product_List_Content_Wrapper" ref={scroll_ref}>
-                <div className="User_Tab_Card Product_List_Card">
-                    <h1 className="User_Tab_Card_Title Product_List_Title">Lista de Produtos</h1>
+            <div className="User_Tab_Card Product_List_Container">
+                <h1 className="User_Tab_Card_Title Product_List_Title">Lista de Produtos</h1>
 
-                    {products.length > 0 ? (
-                        <div className="Product_List_List">
-                            {products.map((product) => (
-                                <div key={product.id} className="Product_List_Card">
-                                    <div className="Product_List_Card_Image_Container">
-                                        {product.images && product.images.length > 0 && (
-                                            <img
-                                                className="Product_List_Card_Image"
-                                                src={product.images[0].src}
-                                                alt={product.images[0].alt}
-                                                width={128}
-                                                height={128}
-                                            />
-                                        )}
+                {products.length > 0 ? (
+                    <div className="Product_List_List">
+                        {products.map((product) => (
+                            <div key={product.id} className="Product_List_Card">
+                                <div className="Product_List_Card_Image_Container">
+                                    {product.images && product.images.length > 0 && (
+                                        <img
+                                            className="Product_List_Card_Image"
+                                            src={product.images[0].src}
+                                            alt={product.images[0].alt}
+                                            width={128}
+                                            height={128}
+                                        />
+                                    )}
+                                </div>
+
+                                <div className="Product_List_Card_Info">
+                                    <div className="Product_List_Card_Info_Header">
+                                        <h2 className="Product_List_Card_Title">{product.title}</h2>
+                                        <p className="Product_List_Card_Price">R$ {product.price},00</p>
                                     </div>
 
-                                    <div className="Product_List_Card_Info">
-                                        <div className="Product_List_Card_Info_Header">
-                                            <h2 className="Product_List_Card_Title">{product.title}</h2>
-                                            <p className="Product_List_Card_Price">R$ {product.price},00</p>
+                                    <p className="Product_List_Card_Subtitle">{product.subtitle}</p>
+
+                                    <div className="Product_List_Card_Info_Footer">
+                                        <div
+                                            className="Product_List_Card_Edit_Btn"
+                                            onClick={() => {
+                                                addToCartAction(product);
+                                            }}
+                                        >
+                                            <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
+                                            <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
                                         </div>
-
-                                        <p className="Product_List_Card_Subtitle">{product.subtitle}</p>
-
-                                        <div className="Product_List_Card_Info_Footer">
-                                            <div
-                                                className="Product_List_Card_Edit_Btn"
-                                                onClick={() => {
-                                                    addToCartAction(product);
-                                                }}
-                                            >
-                                                <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
-                                                <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
-                                            </div>
-                                            <div className="Product_List_Card_Edit_Btn" onClick={() => {}}>
-                                                <span className="material-icons User_Tab_Edit_Icon">more_horiz</span>
-                                                <p className="User_Info_Item_Edit_Btn_Text">Mais Informações</p>
-                                            </div>
+                                        <div className="Product_List_Card_Edit_Btn" onClick={() => {}}>
+                                            <span className="material-icons User_Tab_Edit_Icon">more_horiz</span>
+                                            <p className="User_Info_Item_Edit_Btn_Text">Mais Informações</p>
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p>Nenhum produto encontrado.</p>
-                    )}
-                </div>
-            </div>
-
-            {/* Barra de Progresso de Scroll */}
-            <div className="Progress_Bar_Container">
-                <div className="Progress_Bar_Wrapper">
-                    <m.div className="Progress_Bar" style={{ scaleX }} />
-                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p>Nenhum produto encontrado.</p>
+                )}
             </div>
         </div>
     );

@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
+import { useRouter } from "next/router";
+
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 
@@ -13,6 +15,7 @@ import { Cart_Item } from "@/types/Cart_Item";
 import { motion as m, AnimatePresence, useScroll, useSpring } from "framer-motion";
 
 const Client_Cart = () => {
+    const router = useRouter();
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems as Cart_Item[]);
     const customer = useSelector((state: RootState) => state.user.currentUser as User);
@@ -45,11 +48,12 @@ const Client_Cart = () => {
     return (
         <div className="Cart">
             <div className="UserTab_Content_Wrapper Cart_Content_Wrapper" ref={scroll_ref}>
-                <div className="User_Tab_Card Card_Card">
+                <div className="User_Tab_Card Cart_Card">
                     <h1 className="User_Tab_Card_Title Cart_Card_Title">Carrinho</h1>
-                    <div className="Cart_List">
-                        {cartItems.length > 0 &&
-                            cartItems.map((cart_item, index) => {
+
+                    {cartItems.length > 0 && (
+                        <div className="Cart_List">
+                            {cartItems.map((cart_item, index) => {
                                 return (
                                     <div className="Cart_Item Product_List_Card" key={index}>
                                         <div className="Cart_Item_Image_Container">
@@ -65,7 +69,7 @@ const Client_Cart = () => {
                                         </div>
                                         <div className="Cart_Item_Info">
                                             <div className="Product_List_Card_Info_Header">
-                                                <h2>{cart_item.product.title}</h2>
+                                                <h3>{cart_item.product.title}</h3>
                                                 <p className="Product_List_Card_Price">R$ {cart_item.product.price},00</p>
                                             </div>
                                             <div className="Cart_Item_Quantity_Selector">
@@ -101,18 +105,19 @@ const Client_Cart = () => {
                                     </div>
                                 );
                             })}
+                        </div>
+                    )}
 
-                        {cartItems.length < 1 && (
-                            <div className="User_No_Orders">
-                                <span className="material-icons">remove_shopping_cart</span>
-                                <p className="User_No_Orders_Text">Nenhum item adicionado ao carrinho.</p>
-                            </div>
-                        )}
-                    </div>
+                    {cartItems.length < 1 && (
+                        <div className="User_No_Orders">
+                            <span className="material-icons">remove_shopping_cart</span>
+                            <p className="User_No_Orders_Text">Nenhum item adicionado ao carrinho.</p>
+                        </div>
+                    )}
 
                     <div className="Cart_Footer">
                         <div className="Cart_Footer_Total">
-                            <h2 className="Cart_Footer_Total_Title">Valor Total dos Produtos</h2>
+                            <h3 className="Cart_Footer_Total_Title">Valor Total dos Produtos</h3>
                             <p className="Cart_Footer_Total_Value">
                                 R$ {cartItems.length > 0 ? cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0) : "0"}
                                 ,00
@@ -127,9 +132,14 @@ const Client_Cart = () => {
                             )}
                             <button
                                 className={anonymousCustomer || cartEmpty ? "Cart_Footer_Checkout_Button Disabled" : "Cart_Footer_Checkout_Button"}
+                                onClick={() => {
+                                    if (!anonymousCustomer && !cartEmpty) {
+                                        router.push("/checkout");
+                                    }
+                                }}
                             >
                                 <p className="User_Info_Item_Edit_Btn_Text">
-                                    {cartEmpty ? "Adicione itens ao carrinho para finalizar a compra" : "Finalizar Compra"}
+                                    {cartEmpty ? "Adicione itens ao carrinho para poder finalizar a compra" : "Finalizar Compra"}
                                 </p>
                             </button>
                         </div>

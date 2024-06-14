@@ -57,7 +57,7 @@ const Client_Product_List = () => {
     return (
         <div className="Product_List">
             <div className="User_Tab_Card Product_List_Container">
-                <h1 className="User_Tab_Card_Title Product_List_Title">Chocolates</h1>
+                <h1 className="User_Tab_Card_Title Product_List_Title">Loja de Chocolates</h1>
 
                 {products.length > 0 ? (
                     <div className="Product_List_List">

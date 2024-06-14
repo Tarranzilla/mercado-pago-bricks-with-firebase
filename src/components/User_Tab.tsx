@@ -31,6 +31,7 @@ import { Order } from "@/types/Order";
 import { Address } from "@/types/Address";
 import { User as User_Local } from "@/types/User";
 import { Subscription } from "@/types/Subscription";
+import Image from "next/image";
 
 // Variáveis de Ambiente
 const FIREBASE_PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_CLIENT_SPECIAL_PROJECT_ID;
@@ -1018,8 +1019,15 @@ export default function UserTab() {
     return (
         <>
             <AnimatePresence>
-                {isUserTabOpen && (
-                    <m.div initial={{ x: -1000 }} animate={{ x: 0 }} exit={{ x: -1000 }} transition={{ duration: 0.5 }} className="User_Tab">
+                {isUserTabOpen ? (
+                    <m.div
+                        initial={{ x: -1000 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: -1000 }}
+                        transition={{ duration: 0.5 }}
+                        className="User_Tab"
+                        key={"User_Tab"}
+                    >
                         {/* Wrapper do Conteúdo da Aba do Usuário */}
                         <div
                             className={isSomeLocalUserInfoEdited ? "UserTab_Content_Wrapper Extra_Bottom_Padding" : "UserTab_Content_Wrapper"}
@@ -1289,6 +1297,11 @@ export default function UserTab() {
                                             </>
                                         ) : (
                                             <>
+                                                <div id="user-tab-no-account-connected" className="User_No_Orders">
+                                                    <span className="material-icons">person_off</span>
+                                                    <p className="User_No_Orders_Text">Nenhuma conta conectada.</p>
+                                                </div>
+
                                                 <div className="User_Login_Wrapper">
                                                     {!loginWithEmailMode && (
                                                         <div className="User_Login_Container">
@@ -1390,6 +1403,17 @@ export default function UserTab() {
                                 <m.div className="Progress_Bar" style={{ scaleX }} />
                             </div>
                         </div>
+                    </m.div>
+                ) : (
+                    <m.div
+                        initial={{ x: -1000 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: -1000 }}
+                        transition={{ duration: 0.5 }}
+                        className="User_Tab"
+                        key={"User_Tab_Cover_Image"}
+                    >
+                        <Image src="/brand_imgs/dalle1.png" alt="Arte" width={400} height={800} quality={100} className={"User_Tab_Cover_Image"} />
                     </m.div>
                 )}
             </AnimatePresence>

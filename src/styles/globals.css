@@ -19,6 +19,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    /* Add transition properties */
+    transition: left 0.5s ease-out, right 0.5s ease-out;
 }
 
 /* ------ Main Page Content */
@@ -33,6 +36,21 @@ body {
     left: calc(28vw + 2rem);
     right: calc(28vw + 2rem);
     bottom: 1rem;
+}
+
+.Main_Page_Content.expanded {
+    left: 1rem;
+    right: 1rem;
+}
+
+.Main_Page_Content.right-expanded {
+    left: calc(28vw + 2rem);
+    right: 1rem;
+}
+
+.Main_Page_Content.left-expanded {
+    left: 1rem;
+    right: calc(28vw + 2rem);
 }
 
 .Main_Page_Content_Wrapper {
@@ -139,7 +157,7 @@ body {
     flex-direction: column;
     gap: 1rem;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
     border: 1px solid gray;
     padding: 2rem;
@@ -147,12 +165,13 @@ body {
 
     min-height: 70vh;
     position: relative;
+
+    overflow: hidden;
 }
 
 .Brand_Intro > h1 {
-    font-size: 6rem;
+    font-size: 4rem;
     text-align: center;
-    opacity: 0;
 }
 
 .Intro_Image_Container {
@@ -163,12 +182,37 @@ body {
     top: 50%;
     left: 50%;
     z-index: -1;
+
+    transition: transform 2s ease-in-out;
+    animation: MoveUp 2s ease-in-out forwards;
+}
+
+.Intro_Image_Container.Active {
+    animation: MoveDown 2s ease-in-out forwards;
+}
+
+@keyframes MoveUp {
+    0% {
+        transform: translate(-50%, 0);
+    }
+    100% {
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes MoveDown {
+    0% {
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        transform: translate(-50%, 0);
+    }
 }
 
 .Intro_Image_Container > img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 0.5rem;
     animation: RotatingLogo 60s linear infinite;
 }
@@ -180,6 +224,46 @@ body {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.Brand_About {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+}
+
+.Brand_About_Item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid gray;
+    border-radius: 1rem;
+
+    flex: 1;
+
+    cursor: pointer;
+}
+
+.Brand_About_Item > h3 {
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    font-weight: 300;
+}
+
+.Brand_About_Content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.Brand_About_Content_Title {
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 /* ------ Geral ------ */
@@ -200,6 +284,13 @@ body {
     flex-direction: column;
     gap: 1rem;
     position: relative;
+}
+
+.User_Tab_Cover_Image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
 }
 
 .User_Tab {
@@ -763,12 +854,24 @@ body {
 
 /* Aba de Login */
 
+#user-tab-no-account-connected {
+    margin-block: auto;
+}
+
 .User_Login_Wrapper {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
 
-    margin-block: auto;
+.User_Login_Container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    padding: 1rem;
+    border: 1px solid gray;
+    border-radius: 1rem;
 }
 
 .User_Login_Container_Separator {
@@ -1091,9 +1194,14 @@ body {
 
 /* Checkout */
 
-#checkout-return-button {
-    margin-top: 0.5rem;
-    margin-bottom: 0.125rem;
+.Checkout_Footer_Buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#checkout-payment-button {
+    background-color: lightgreen;
 }
 
 #checkout-return-button > span {
@@ -1320,4 +1428,8 @@ circle {
 
 #walletBrick_container {
     margin-top: -1rem;
+}
+
+.Alt_Cursor {
+    cursor: help !important;
 }

@@ -1,6 +1,7 @@
 import Head from "next/head";
 
 import Brand_Intro from "@/components/Brand_Intro";
+import Brand_About from "@/components/Brand_About";
 import Client_Subscription_Banner from "@/components/Client_Subscription_Banner";
 import Client_Product_List from "@/components/Client_Product_List";
 

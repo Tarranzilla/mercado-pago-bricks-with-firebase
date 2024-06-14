@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
@@ -16,9 +17,13 @@ import { motion as m, AnimatePresence, useScroll, useSpring } from "framer-motio
 
 const Client_Cart = () => {
     const router = useRouter();
+
+    const isCheckoutPage = router.pathname.startsWith("/checkout");
+
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems as Cart_Item[]);
     const customer = useSelector((state: RootState) => state.user.currentUser as User);
+    const isCartOpen = useSelector((state: RootState) => state.interface.isCartOpen);
 
     const anonymousCustomer = customer === null || customer.name === "Usuário Anônimo";
     const cartEmpty = cartItems.length < 1;
@@ -46,114 +51,149 @@ const Client_Cart = () => {
     });
 
     return (
-        <div className="Cart">
-            <div className="UserTab_Content_Wrapper Cart_Content_Wrapper" ref={scroll_ref}>
-                <div className="User_Tab_Card Cart_Card">
-                    <h1 className="User_Tab_Card_Title Cart_Card_Title">Carrinho</h1>
+        <>
+            <AnimatePresence>
+                {isCartOpen ? (
+                    <m.div initial={{ x: 1000 }} animate={{ x: 0 }} exit={{ x: 1000 }} transition={{ duration: 0.5 }} className="Cart" key={"Cart"}>
+                        <div className="UserTab_Content_Wrapper Cart_Content_Wrapper" ref={scroll_ref}>
+                            <div className="User_Tab_Card Cart_Card">
+                                <h1 className="User_Tab_Card_Title Cart_Card_Title">Carrinho</h1>
 
-                    {cartItems.length > 0 && (
-                        <div className="Cart_List">
-                            {cartItems.map((cart_item, index) => {
-                                return (
-                                    <div className="Cart_Item Product_List_Card" key={index}>
-                                        <div className="Cart_Item_Image_Container">
-                                            {cart_item.product.images && cart_item.product.images.length > 0 && (
-                                                <img
-                                                    className="Product_List_Card_Image"
-                                                    src={cart_item.product.images[0].src}
-                                                    alt={cart_item.product.images[0].alt}
-                                                    width={128}
-                                                    height={128}
-                                                />
-                                            )}
-                                        </div>
-                                        <div className="Cart_Item_Info">
-                                            <div className="Product_List_Card_Info_Header">
-                                                <h3>{cart_item.product.title}</h3>
-                                                <p className="Product_List_Card_Price">R$ {cart_item.product.price},00</p>
-                                            </div>
-                                            <div className="Cart_Item_Quantity_Selector">
-                                                <button
-                                                    className="Cart_Item_Button"
-                                                    onClick={() => {
-                                                        removeCartItemAction(cart_item.product);
-                                                    }}
-                                                >
-                                                    <p className="User_Info_Item_Edit_Btn_Text">Remover</p>
-                                                </button>
-                                                <button
-                                                    className="Cart_Item_Button Cart_Item_Button_Decrement"
-                                                    onClick={() => {
-                                                        decrementCartItemAction(cart_item.product);
-                                                    }}
-                                                >
-                                                    <span className="material-icons">do_not_disturb_on</span>
-                                                </button>
+                                {cartItems.length > 0 && (
+                                    <div className="Cart_List">
+                                        {cartItems.map((cart_item, index) => {
+                                            return (
+                                                <div className="Cart_Item Product_List_Card" key={index}>
+                                                    <div className="Cart_Item_Image_Container">
+                                                        {cart_item.product.images && cart_item.product.images.length > 0 && (
+                                                            <img
+                                                                className="Product_List_Card_Image"
+                                                                src={cart_item.product.images[0].src}
+                                                                alt={cart_item.product.images[0].alt}
+                                                                width={128}
+                                                                height={128}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div className="Cart_Item_Info">
+                                                        <div className="Product_List_Card_Info_Header">
+                                                            <h3>{cart_item.product.title}</h3>
+                                                            <p className="Product_List_Card_Price">R$ {cart_item.product.price},00</p>
+                                                        </div>
+                                                        <div className="Cart_Item_Quantity_Selector">
+                                                            <button
+                                                                className="Cart_Item_Button"
+                                                                onClick={() => {
+                                                                    removeCartItemAction(cart_item.product);
+                                                                }}
+                                                            >
+                                                                <p className="User_Info_Item_Edit_Btn_Text">Remover</p>
+                                                            </button>
+                                                            <button
+                                                                className="Cart_Item_Button Cart_Item_Button_Decrement"
+                                                                onClick={() => {
+                                                                    decrementCartItemAction(cart_item.product);
+                                                                }}
+                                                            >
+                                                                <span className="material-icons">do_not_disturb_on</span>
+                                                            </button>
 
-                                                <h3 className="Cart_Item_Quantity_Ammount">{cart_item.quantity}</h3>
+                                                            <h3 className="Cart_Item_Quantity_Ammount">{cart_item.quantity}</h3>
 
-                                                <button
-                                                    className="Cart_Item_Button Cart_Item_Button_Increment"
-                                                    onClick={() => {
-                                                        addCartItemAction(cart_item.product);
-                                                    }}
-                                                >
-                                                    <span className="material-icons">add_circle</span>
-                                                </button>
-                                            </div>
-                                        </div>
+                                                            <button
+                                                                className="Cart_Item_Button Cart_Item_Button_Increment"
+                                                                onClick={() => {
+                                                                    addCartItemAction(cart_item.product);
+                                                                }}
+                                                            >
+                                                                <span className="material-icons">add_circle</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
-                                );
-                            })}
-                        </div>
-                    )}
+                                )}
 
-                    {cartItems.length < 1 && (
-                        <div className="User_No_Orders">
-                            <span className="material-icons">remove_shopping_cart</span>
-                            <p className="User_No_Orders_Text">Nenhum item adicionado ao carrinho.</p>
-                        </div>
-                    )}
+                                {cartItems.length < 1 && (
+                                    <div className="User_No_Orders">
+                                        <span className="material-icons">remove_shopping_cart</span>
+                                        <p className="User_No_Orders_Text">Nenhum item adicionado ao carrinho.</p>
+                                    </div>
+                                )}
 
-                    <div className="Cart_Footer">
-                        <div className="Cart_Footer_Total">
-                            <h3 className="Cart_Footer_Total_Title">Valor Total dos Produtos</h3>
-                            <p className="Cart_Footer_Total_Value">
-                                R$ {cartItems.length > 0 ? cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0) : "0"}
-                                ,00
-                            </p>
+                                <div className="Cart_Footer">
+                                    <div className="Cart_Footer_Total">
+                                        <h3 className="Cart_Footer_Total_Title">Valor Total dos Produtos</h3>
+                                        <p className="Cart_Footer_Total_Value">
+                                            R${" "}
+                                            {cartItems.length > 0
+                                                ? cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+                                                : "0"}
+                                            ,00
+                                        </p>
+                                    </div>
+
+                                    <div className="Cart_Footer_Buttons_Container">
+                                        {isCheckoutPage ? (
+                                            <>
+                                                <button className="Cart_Footer_Checkout_Button Disabled Alt_Cursor">
+                                                    <span className="material-icons">receipt_long</span>Você Está Finalizando Esta Compra
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {anonymousCustomer && (
+                                                    <button className="Cart_Footer_Warning">
+                                                        <span className="material-icons">badge</span>Crie uma conta ou conecte-se para finalizar a
+                                                        compra
+                                                    </button>
+                                                )}
+                                                <button
+                                                    className={
+                                                        anonymousCustomer || cartEmpty
+                                                            ? "Cart_Footer_Checkout_Button Disabled"
+                                                            : "Cart_Footer_Checkout_Button"
+                                                    }
+                                                    onClick={() => {
+                                                        if (!anonymousCustomer && !cartEmpty) {
+                                                            router.push("/checkout");
+                                                        }
+                                                    }}
+                                                >
+                                                    <p className="User_Info_Item_Edit_Btn_Text">
+                                                        {cartEmpty ? "Adicione itens ao carrinho para poder finalizar a compra" : "Finalizar Compra"}
+                                                    </p>
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="Cart_Footer_Buttons_Container">
-                            {anonymousCustomer && (
-                                <button className="Cart_Footer_Warning">
-                                    <span className="material-icons">badge</span>Crie uma conta ou conecte-se para finalizar a compra
-                                </button>
-                            )}
-                            <button
-                                className={anonymousCustomer || cartEmpty ? "Cart_Footer_Checkout_Button Disabled" : "Cart_Footer_Checkout_Button"}
-                                onClick={() => {
-                                    if (!anonymousCustomer && !cartEmpty) {
-                                        router.push("/checkout");
-                                    }
-                                }}
-                            >
-                                <p className="User_Info_Item_Edit_Btn_Text">
-                                    {cartEmpty ? "Adicione itens ao carrinho para poder finalizar a compra" : "Finalizar Compra"}
-                                </p>
-                            </button>
+                        {/* Barra de Progresso de Scroll */}
+                        <div className="Progress_Bar_Container">
+                            <div className="Progress_Bar_Wrapper">
+                                <m.div className="Progress_Bar" style={{ scaleX }} />
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Barra de Progresso de Scroll */}
-            <div className="Progress_Bar_Container">
-                <div className="Progress_Bar_Wrapper">
-                    <m.div className="Progress_Bar" style={{ scaleX }} />
-                </div>
-            </div>
-        </div>
+                    </m.div>
+                ) : (
+                    <m.div
+                        initial={{ x: 1000 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: 1000 }}
+                        transition={{ duration: 0.5 }}
+                        className="Cart"
+                        key={"Cart_Cover_Image"}
+                    >
+                        <Image src="/brand_imgs/dalle2.png" alt="Arte" width={400} height={800} quality={100} className={"User_Tab_Cover_Image"} />
+                    </m.div>
+                )}
+            </AnimatePresence>
+        </>
     );
 };
 

@@ -396,10 +396,6 @@ const Client_Checkout = () => {
                                         </div>
                                     </div>
 
-                                    <Link href={"/#inicio"} className=" Cart_Footer_Checkout_Button User_Order_Total_Btn" id="checkout-return-button">
-                                        <span className="material-icons">arrow_back</span>Voltar a Página Inicial
-                                    </Link>
-
                                     <div className="User_Tab_Card">
                                         <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Resumo do Pedido</h1>
                                         <div className="Checkout_Order_Summary">
@@ -431,23 +427,33 @@ const Client_Checkout = () => {
                                                 </div>
                                             )}
 
-                                            <button
-                                                id="checkout-payment-button"
-                                                className={
-                                                    emptyCart || customer_has_not_updated_his_phone
-                                                        ? "Cart_Footer_Checkout_Button User_Order_Total_Btn Disabled"
-                                                        : " Cart_Footer_Checkout_Button User_Order_Total_Btn"
-                                                }
-                                                onClick={() => {
-                                                    console.log("Processando Pagamento...");
-                                                    if (!emptyCart && !customer_has_not_updated_his_phone) {
-                                                        processPaymentAction();
+                                            <div className="Checkout_Footer_Buttons">
+                                                <Link
+                                                    href={"/#inicio"}
+                                                    className=" Cart_Footer_Checkout_Button User_Order_Total_Btn"
+                                                    id="checkout-return-button"
+                                                >
+                                                    <span className="material-icons">arrow_back</span>Voltar a Página Inicial
+                                                </Link>
+
+                                                <button
+                                                    id="checkout-payment-button"
+                                                    className={
+                                                        emptyCart || customer_has_not_updated_his_phone
+                                                            ? "Cart_Footer_Checkout_Button User_Order_Total_Btn Disabled"
+                                                            : " Cart_Footer_Checkout_Button User_Order_Total_Btn"
                                                     }
-                                                }}
-                                            >
-                                                {emptyCart ? "Para prosseguir ao pagamento adicione itens ao pedido" : "Prosseguir ao Pagamento"}
-                                                <span className="material-icons">receipt_long</span>
-                                            </button>
+                                                    onClick={() => {
+                                                        console.log("Processando Pagamento...");
+                                                        if (!emptyCart && !customer_has_not_updated_his_phone) {
+                                                            processPaymentAction();
+                                                        }
+                                                    }}
+                                                >
+                                                    {emptyCart ? "Para prosseguir ao pagamento adicione itens ao pedido" : "Prosseguir ao Pagamento"}
+                                                    <span className="material-icons">payment</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </>

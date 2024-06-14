@@ -261,7 +261,10 @@ const Client_Checkout = () => {
                                                         return (
                                                             <div key={index} className="User_Order_Product">
                                                                 <p className="User_Order_Product_Title">{cart_item.product.title}</p>
-                                                                <p className="User_Order_Product_Qtty">{cart_item.quantity}x</p>
+                                                                <p className="User_Order_Product_Qtty">
+                                                                    <p>{cart_item.quantity}</p>
+                                                                    <span>X</span>
+                                                                </p>
                                                                 <p className="User_Order_Product_Price">R$ {cart_item.product.price},00</p>
                                                             </div>
                                                         );

@@ -272,12 +272,12 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 </a>
             </div>
 
-            <div className="Order_Expand_Btn" onClick={() => setIsExpanded(!isExpanded)}>
-                <p className="Order_Expand_Btn_Text">Ver Detalhes do Pedido</p>
+            <button className="Order_Expand_Btn" onClick={() => setIsExpanded(!isExpanded)}>
+                <p className="Order_Expand_Btn_Text">Detalhes do Pedido</p>
                 <span className={isExpanded ? "material-icons Order_Expand_Btn_Icon Active" : "material-icons Order_Expand_Btn_Icon"}>
                     expand_more
                 </span>
-            </div>
+            </button>
 
             <AnimatePresence>
                 {isExpanded && (
@@ -301,7 +301,10 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                                     return (
                                         <div key={index} className="User_Order_Product">
                                             <p className="User_Order_Product_Title">{order_item.product.title}</p>
-                                            <p className="User_Order_Product_Qtty">{order_item.quantity}x</p>
+                                            <div className="User_Order_Product_Qtty">
+                                                <p>{order_item.quantity}</p>
+                                                <span>X</span>
+                                            </div>
                                             <p className="User_Order_Product_Price">R${order_item.product.price},00</p>
                                         </div>
                                     );
@@ -439,7 +442,7 @@ export const User_Name_Info_Container: React.FC<User_String_Info_Container_Props
 
             {/* Botões de Edição */}
             {isEditing ? (
-                <div
+                <button
                     className="User_Info_Item_Edit_Btn"
                     onClick={() => {
                         setIsEditing(false);
@@ -447,9 +450,9 @@ export const User_Name_Info_Container: React.FC<User_String_Info_Container_Props
                 >
                     <span className="material-icons User_Tab_Edit_Icon">save</span>
                     <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
-                </div>
+                </button>
             ) : (
-                <div
+                <button
                     className="User_Info_Item_Edit_Btn"
                     onClick={() => {
                         setIsEditing(true);
@@ -457,7 +460,7 @@ export const User_Name_Info_Container: React.FC<User_String_Info_Container_Props
                 >
                     <span className="material-icons User_Tab_Edit_Icon">edit</span>
                     <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                </div>
+                </button>
             )}
         </div>
     );
@@ -496,7 +499,7 @@ export const User_Email_Info_Container: React.FC<User_String_Info_Container_Prop
 
             {/* Botões de Edição */}
             {isEditing ? (
-                <div
+                <button
                     className="User_Info_Item_Edit_Btn"
                     onClick={() => {
                         setIsEditing(false);
@@ -504,9 +507,9 @@ export const User_Email_Info_Container: React.FC<User_String_Info_Container_Prop
                 >
                     <span className="material-icons User_Tab_Edit_Icon">save</span>
                     <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
-                </div>
+                </button>
             ) : (
-                <div
+                <button
                     className="User_Info_Item_Edit_Btn"
                     onClick={() => {
                         setIsEditing(true);
@@ -514,7 +517,7 @@ export const User_Email_Info_Container: React.FC<User_String_Info_Container_Prop
                 >
                     <span className="material-icons User_Tab_Edit_Icon">edit</span>
                     <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                </div>
+                </button>
             )}
         </div>
     );
@@ -553,7 +556,7 @@ export const User_Telephone_Info_Container: React.FC<User_String_Info_Container_
 
             {/* Botões de Edição */}
             {isEditing ? (
-                <div
+                <button
                     className="User_Info_Item_Edit_Btn"
                     onClick={() => {
                         setIsEditing(false);
@@ -561,9 +564,9 @@ export const User_Telephone_Info_Container: React.FC<User_String_Info_Container_
                 >
                     <span className="material-icons User_Tab_Edit_Icon">save</span>
                     <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
-                </div>
+                </button>
             ) : (
-                <div
+                <button
                     className="User_Info_Item_Edit_Btn"
                     onClick={() => {
                         setIsEditing(true);
@@ -571,7 +574,7 @@ export const User_Telephone_Info_Container: React.FC<User_String_Info_Container_
                 >
                     <span className="material-icons User_Tab_Edit_Icon">edit</span>
                     <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                </div>
+                </button>
             )}
         </div>
     );
@@ -633,6 +636,8 @@ export default function UserTab() {
 
     console.log(customer);
     console.log(editedLocalUser);
+
+    const [addressEditControlOpen, setAddressEditControlOpen] = useState(false);
 
     const customer_has_not_updated_his_address =
         customer?.address?.street === "Nenhuma Rua Definida" ||
@@ -1149,118 +1154,72 @@ export default function UserTab() {
                                                             <p>{customer.address.zip}</p>
                                                         </div>
 
-                                                        <button className="User_Info_Item_Edit_Btn">
-                                                            <span className="material-icons User_Tab_Edit_Icon">edit</span>
-                                                            <p className="User_Info_Item_Edit_Btn_Text">editar</p>
+                                                        <button
+                                                            className="User_Info_Item_Edit_Btn"
+                                                            onClick={() => {
+                                                                setAddressEditControlOpen(!addressEditControlOpen);
+                                                            }}
+                                                        >
+                                                            {addressEditControlOpen ? (
+                                                                <>
+                                                                    <span className="material-icons User_Tab_Edit_Icon">hide_source</span>
+                                                                    <p className="User_Info_Item_Edit_Btn_Text"> Ocultar Edição</p>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <span className="material-icons User_Tab_Edit_Icon">edit</span>
+                                                                    <p className="User_Info_Item_Edit_Btn_Text">Editar</p>
+                                                                </>
+                                                            )}
                                                         </button>
                                                     </div>
 
-                                                    <div className="User_Tab_Address_Edit_Control">
-                                                        <div className="Address_Edit_Control_Item" id="address-street-control-item">
-                                                            <h4>Rua</h4>
-                                                            <input
-                                                                placeholder={customer.address.street}
-                                                                onChange={(e) => handleEditedLocalUserAddressChange("street", e.target.value)}
-                                                            />
+                                                    {addressEditControlOpen && (
+                                                        <div className="User_Tab_Address_Edit_Control">
+                                                            <div className="Address_Edit_Control_Item" id="address-street-control-item">
+                                                                <h4>Rua</h4>
+                                                                <input
+                                                                    placeholder={customer.address.street}
+                                                                    onChange={(e) => handleEditedLocalUserAddressChange("street", e.target.value)}
+                                                                />
+                                                            </div>
+                                                            <div className="Address_Edit_Control_Item" id="address-number-control-item">
+                                                                <h4>Número</h4>
+                                                                <input
+                                                                    placeholder={customer.address.number}
+                                                                    onChange={(e) => handleEditedLocalUserAddressChange("number", e.target.value)}
+                                                                />
+                                                            </div>
+                                                            <div className="Address_Edit_Control_Item" id="address-complement-control-item">
+                                                                <h4>Complemento</h4>
+                                                                <input
+                                                                    placeholder={customer.address.complement}
+                                                                    onChange={(e) => handleEditedLocalUserAddressChange("complement", e.target.value)}
+                                                                />
+                                                            </div>
+                                                            <div className="Address_Edit_Control_Item" id="address-city-control-item">
+                                                                <h4>Cidade</h4>
+                                                                <input
+                                                                    placeholder={customer.address.city}
+                                                                    onChange={(e) => handleEditedLocalUserAddressChange("city", e.target.value)}
+                                                                />
+                                                            </div>
+                                                            <div className="Address_Edit_Control_Item" id="address-state-control-item">
+                                                                <h4>Estado</h4>
+                                                                <input
+                                                                    placeholder={customer.address.state}
+                                                                    onChange={(e) => handleEditedLocalUserAddressChange("state", e.target.value)}
+                                                                />
+                                                            </div>
+                                                            <div className="Address_Edit_Control_Item" id="address-zip-control-item">
+                                                                <h4>Código Postal</h4>
+                                                                <input
+                                                                    placeholder={customer.address.zip}
+                                                                    onChange={(e) => handleEditedLocalUserAddressChange("zip", e.target.value)}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        <div className="Address_Edit_Control_Item" id="address-number-control-item">
-                                                            <h4>Número</h4>
-                                                            <input
-                                                                placeholder={customer.address.number}
-                                                                onChange={(e) => handleEditedLocalUserAddressChange("number", e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="Address_Edit_Control_Item" id="address-complement-control-item">
-                                                            <h4>Complemento</h4>
-                                                            <input
-                                                                placeholder={customer.address.complement}
-                                                                onChange={(e) => handleEditedLocalUserAddressChange("complement", e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="Address_Edit_Control_Item" id="address-city-control-item">
-                                                            <h4>Cidade</h4>
-                                                            <input
-                                                                placeholder={customer.address.city}
-                                                                onChange={(e) => handleEditedLocalUserAddressChange("city", e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="Address_Edit_Control_Item" id="address-state-control-item">
-                                                            <h4>Estado</h4>
-                                                            <input
-                                                                placeholder={customer.address.state}
-                                                                onChange={(e) => handleEditedLocalUserAddressChange("state", e.target.value)}
-                                                            />
-                                                        </div>
-                                                        <div className="Address_Edit_Control_Item" id="address-zip-control-item">
-                                                            <h4>Código Postal</h4>
-                                                            <input
-                                                                placeholder={customer.address.zip}
-                                                                onChange={(e) => handleEditedLocalUserAddressChange("zip", e.target.value)}
-                                                            />
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="User_Tab_Card_Info_Items_List">
-                                                        <User_Address_Info_Container
-                                                            key={"Rua"}
-                                                            label="Rua"
-                                                            placeholder="Nova Rua"
-                                                            propertie="street"
-                                                            localUser={customer}
-                                                            editedLocalUser={editedLocalUser}
-                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                                        />
-
-                                                        <User_Address_Info_Container
-                                                            key={"Numero"}
-                                                            label="Número"
-                                                            placeholder="Novo Número"
-                                                            propertie="number"
-                                                            localUser={customer}
-                                                            editedLocalUser={editedLocalUser}
-                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                                        />
-
-                                                        <User_Address_Info_Container
-                                                            key={"Complemento"}
-                                                            label="Complemento"
-                                                            placeholder="Novo Complemento"
-                                                            propertie="complement"
-                                                            localUser={customer}
-                                                            editedLocalUser={editedLocalUser}
-                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                                        />
-
-                                                        <User_Address_Info_Container
-                                                            key={"Cidade"}
-                                                            label="Cidade"
-                                                            placeholder="Nova Cidade"
-                                                            propertie="city"
-                                                            localUser={customer}
-                                                            editedLocalUser={editedLocalUser}
-                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                                        />
-
-                                                        <User_Address_Info_Container
-                                                            key={"Estado"}
-                                                            label="Estado"
-                                                            placeholder="Novo Estado"
-                                                            propertie="state"
-                                                            localUser={customer}
-                                                            editedLocalUser={editedLocalUser}
-                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                                        />
-
-                                                        <User_Address_Info_Container
-                                                            key={"ZIP"}
-                                                            label="Código Postal"
-                                                            placeholder="Novo Código Postal"
-                                                            propertie="zip"
-                                                            localUser={customer}
-                                                            editedLocalUser={editedLocalUser}
-                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
-                                                        />
-                                                    </div>
+                                                    )}
                                                 </div>
 
                                                 {/* Card de Informações Sobre as Assinaturas */}
@@ -1654,5 +1613,71 @@ export default function UserTab() {
 
                                                 <span className="material-icons Order_Expand_Btn">chevron_right</span>
                                             </div>
+
+*/
+
+/* User_Tab_Card_Info_Items_List
+
+<div className="User_Tab_Card_Info_Items_List">
+                                                        <User_Address_Info_Container
+                                                            key={"Rua"}
+                                                            label="Rua"
+                                                            placeholder="Nova Rua"
+                                                            propertie="street"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                        />
+
+                                                        <User_Address_Info_Container
+                                                            key={"Numero"}
+                                                            label="Número"
+                                                            placeholder="Novo Número"
+                                                            propertie="number"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                        />
+
+                                                        <User_Address_Info_Container
+                                                            key={"Complemento"}
+                                                            label="Complemento"
+                                                            placeholder="Novo Complemento"
+                                                            propertie="complement"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                        />
+
+                                                        <User_Address_Info_Container
+                                                            key={"Cidade"}
+                                                            label="Cidade"
+                                                            placeholder="Nova Cidade"
+                                                            propertie="city"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                        />
+
+                                                        <User_Address_Info_Container
+                                                            key={"Estado"}
+                                                            label="Estado"
+                                                            placeholder="Novo Estado"
+                                                            propertie="state"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                        />
+
+                                                        <User_Address_Info_Container
+                                                            key={"ZIP"}
+                                                            label="Código Postal"
+                                                            placeholder="Novo Código Postal"
+                                                            propertie="zip"
+                                                            localUser={customer}
+                                                            editedLocalUser={editedLocalUser}
+                                                            handlelocalUserAddressChange={handleEditedLocalUserAddressChange}
+                                                        />
+                                                    </div>
 
 */

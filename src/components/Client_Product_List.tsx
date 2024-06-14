@@ -57,7 +57,7 @@ const Client_Product_List = () => {
     return (
         <div className="Product_List">
             <div className="User_Tab_Card Product_List_Container">
-                <h1 className="User_Tab_Card_Title Product_List_Title">Lista de Produtos</h1>
+                <h1 className="User_Tab_Card_Title Product_List_Title">Chocolates</h1>
 
                 {products.length > 0 ? (
                     <div className="Product_List_List">
@@ -84,7 +84,7 @@ const Client_Product_List = () => {
                                     <p className="Product_List_Card_Subtitle">{product.subtitle}</p>
 
                                     <div className="Product_List_Card_Info_Footer">
-                                        <div
+                                        <button
                                             className="Product_List_Card_Edit_Btn"
                                             onClick={() => {
                                                 addToCartAction(product);
@@ -92,11 +92,11 @@ const Client_Product_List = () => {
                                         >
                                             <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
                                             <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
-                                        </div>
-                                        <div className="Product_List_Card_Edit_Btn" onClick={() => {}}>
+                                        </button>
+                                        <button className="Product_List_Card_Edit_Btn" onClick={() => {}}>
                                             <span className="material-icons User_Tab_Edit_Icon">more_horiz</span>
                                             <p className="User_Info_Item_Edit_Btn_Text">Mais Informações</p>
-                                        </div>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

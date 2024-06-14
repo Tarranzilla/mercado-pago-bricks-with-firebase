@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/router";
 
+import Link from "next/link";
+
 import { setUserTabNeedsUpdate } from "@/store/slices/interface_slice";
 
 import { motion as m, useScroll, useSpring } from "framer-motion";
@@ -242,6 +244,10 @@ const Client_Checkout = () => {
                                             Você precisa estar conectado na sua conta para fazer um pedido e finalizar a compra.
                                         </p>
                                     </div>
+
+                                    <Link href={"/#inicio"} className=" Cart_Footer_Checkout_Button User_Order_Total_Btn" id="checkout-return-button">
+                                        <span className="material-icons">arrow_back</span>Voltar a Página Inicial
+                                    </Link>
                                 </div>
                             ) : (
                                 <>
@@ -284,7 +290,7 @@ const Client_Checkout = () => {
                                     <div className="User_Tab_Card Checkout_Card">
                                         <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Opções de Recebimento</h1>
                                         <div className="Checkout_Receive_Options">
-                                            <div
+                                            <button
                                                 className={receiveOption === "Retirada" ? "Receive_Option Active" : "Receive_Option"}
                                                 onClick={() => {
                                                     const element = document.getElementById("receive_option_1");
@@ -304,7 +310,7 @@ const Client_Checkout = () => {
                                                     Veja o Endereço
                                                 </a>
                                                 <input type="radio" name="receive_option" id="receive_option_1" defaultChecked />
-                                            </div>
+                                            </button>
 
                                             {customer_has_not_updated_his_address ? (
                                                 <div className="Receive_Option Disabled">
@@ -313,7 +319,7 @@ const Client_Checkout = () => {
                                                     <input type="radio" name="receive_option" id="receive_option_2" />
                                                 </div>
                                             ) : (
-                                                <div
+                                                <button
                                                     className={receiveOption === "Entrega" ? "Receive_Option Active" : "Receive_Option"}
                                                     onClick={() => {
                                                         const element = document.getElementById("receive_option_2");
@@ -324,7 +330,7 @@ const Client_Checkout = () => {
                                                     <span className="material-icons">local_shipping</span>
                                                     <label htmlFor="receive_option_2">Entrega em Casa</label>
                                                     <input type="radio" name="receive_option" id="receive_option_2" />
-                                                </div>
+                                                </button>
                                             )}
 
                                             {customer_has_not_updated_his_address ? (
@@ -390,6 +396,10 @@ const Client_Checkout = () => {
                                         </div>
                                     </div>
 
+                                    <Link href={"/#inicio"} className=" Cart_Footer_Checkout_Button User_Order_Total_Btn" id="checkout-return-button">
+                                        <span className="material-icons">arrow_back</span>Voltar a Página Inicial
+                                    </Link>
+
                                     <div className="User_Tab_Card">
                                         <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Resumo do Pedido</h1>
                                         <div className="Checkout_Order_Summary">
@@ -422,6 +432,7 @@ const Client_Checkout = () => {
                                             )}
 
                                             <button
+                                                id="checkout-payment-button"
                                                 className={
                                                     emptyCart || customer_has_not_updated_his_phone
                                                         ? "Cart_Footer_Checkout_Button User_Order_Total_Btn Disabled"
@@ -429,10 +440,13 @@ const Client_Checkout = () => {
                                                 }
                                                 onClick={() => {
                                                     console.log("Processando Pagamento...");
-                                                    processPaymentAction();
+                                                    if (!emptyCart && !customer_has_not_updated_his_phone) {
+                                                        processPaymentAction();
+                                                    }
                                                 }}
                                             >
                                                 {emptyCart ? "Para prosseguir ao pagamento adicione itens ao pedido" : "Prosseguir ao Pagamento"}
+                                                <span className="material-icons">receipt_long</span>
                                             </button>
                                         </div>
                                     </div>

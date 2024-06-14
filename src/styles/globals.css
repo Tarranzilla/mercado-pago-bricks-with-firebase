@@ -46,6 +46,8 @@ body {
     border-radius: 1rem;
 
     position: relative;
+
+    flex: 1;
 }
 
 .Main_Page_Content_Wrapper::-webkit-scrollbar {
@@ -79,6 +81,10 @@ body {
     flex: 1;
 }
 
+.Navbar_Logo {
+    justify-content: flex-end;
+}
+
 .Navbar_Main_Links {
     justify-content: center;
     gap: 1rem;
@@ -93,7 +99,7 @@ body {
 }
 
 .Navbar_Tools {
-    justify-content: flex-end;
+    justify-content: center;
     gap: 0.5rem;
 }
 
@@ -124,6 +130,56 @@ body {
 
 .Navbar_Tool > span {
     font-size: 1.4rem;
+}
+
+/* ------ Intro da Marca ------ */
+
+.Brand_Intro {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid gray;
+    padding: 2rem;
+    border-radius: 1rem;
+
+    min-height: 70vh;
+    position: relative;
+}
+
+.Brand_Intro > h1 {
+    font-size: 6rem;
+    text-align: center;
+    opacity: 0;
+}
+
+.Intro_Image_Container {
+    width: 512px;
+    height: 512px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+}
+
+.Intro_Image_Container > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    animation: RotatingLogo 60s linear infinite;
+}
+
+@keyframes RotatingLogo {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* ------ Geral ------ */
@@ -776,6 +832,10 @@ body {
     text-align: center;
 }
 
+.Subsctiption_Banner_Image {
+    border-radius: 1rem;
+}
+
 /* Lista de Produtos */
 
 .Product_List_Container {
@@ -1031,6 +1091,19 @@ body {
 
 /* Checkout */
 
+#checkout-return-button {
+    margin-top: 0.5rem;
+    margin-bottom: 0.125rem;
+}
+
+#checkout-return-button > span {
+    font-size: 1.25rem;
+}
+
+#checkout-payment-button > span {
+    font-size: 1.5rem;
+}
+
 .User_Shipping_Total,
 .User_Order_Total {
     display: flex;
@@ -1075,6 +1148,8 @@ body {
     border: none;
     padding: 1rem 1.5rem;
     border-radius: 0.5rem;
+
+    font-size: 1rem;
 
     cursor: pointer;
 

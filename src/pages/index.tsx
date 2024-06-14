@@ -1,5 +1,6 @@
 import Head from "next/head";
 
+import Brand_Intro from "@/components/Brand_Intro";
 import Client_Subscription_Banner from "@/components/Client_Subscription_Banner";
 import Client_Product_List from "@/components/Client_Product_List";
 
@@ -13,7 +14,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            {/* <PaymentMercadoPago /> */}
+            <Brand_Intro />
             <Client_Subscription_Banner />
             <Client_Product_List />
         </>

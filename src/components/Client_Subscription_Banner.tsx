@@ -9,6 +9,7 @@ import { Subscription } from "@/types/Subscription";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 // Framer motion para animações
 import { motion as m, AnimatePresence, useScroll, useSpring } from "framer-motion";
@@ -288,6 +289,17 @@ const Client_Subscription_Banner = () => {
                             </p>
                         </button>
                     </div>
+
+                    <Image
+                        src="/subscription_imgs/Clube_Tropical_001.png"
+                        alt="Chocolate Box"
+                        width={400}
+                        height={400}
+                        layout="responsive"
+                        objectFit="cover"
+                        quality={100}
+                        className="Subsctiption_Banner_Image"
+                    />
                 </div>
             )}
         </div>

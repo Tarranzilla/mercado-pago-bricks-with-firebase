@@ -77,14 +77,14 @@ const Admin_Product_List = () => {
 
                                             <div className="Product_List_Card_Info_Footer">
                                                 <p className="Product_List_Card_Price">R$ {product.price},00</p>
-                                                <div className="Product_List_Card_Edit_Btn" onClick={() => {}}>
+                                                <button className="Product_List_Card_Edit_Btn" onClick={() => {}}>
                                                     <span className="material-icons User_Tab_Edit_Icon">edit</span>
                                                     <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                                                </div>
-                                                <div className="Product_List_Card_Edit_Btn" onClick={() => {}}>
+                                                </button>
+                                                <button className="Product_List_Card_Edit_Btn" onClick={() => {}}>
                                                     <span className="material-icons User_Tab_Edit_Icon">delete</span>
                                                     <p className="User_Info_Item_Edit_Btn_Text">excluir</p>
-                                                </div>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

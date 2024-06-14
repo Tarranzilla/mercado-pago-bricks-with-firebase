@@ -3,28 +3,6 @@ import Link from "next/link";
 const Navbar = () => {
     return (
         <nav className="Navbar">
-            <div className="Navbar_Logo">
-                <h1>Tropical Cacau</h1>
-            </div>
-
-            <div className="Navbar_Main_Links">
-                <Link className="Navbar_Link" href="/#inicio">
-                    Início
-                </Link>
-
-                <Link className="Navbar_Link" href="/#sobre">
-                    Sobre
-                </Link>
-
-                <Link className="Navbar_Link" href="/#produtos">
-                    Chocolates
-                </Link>
-
-                <Link className="Navbar_Link" href="/#contato">
-                    Contato
-                </Link>
-            </div>
-
             <div className="Navbar_Tools">
                 <button className="Navbar_Tool">
                     <p className="Navbar_Tool_Label">Idioma</p>

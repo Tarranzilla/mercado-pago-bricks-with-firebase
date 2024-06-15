@@ -235,8 +235,8 @@ const Client_Checkout = () => {
                     ) : (
                         <>
                             {!customer ? (
-                                <div className="User_Tab_Card Checkout_Card">
-                                    <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Finalizar Compra</h1>
+                                <div className="User_Tab_Card Checkout_Card Margin_Block">
+                                    <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Por Favor Conecte-se</h1>
 
                                     <div className="User_No_Orders">
                                         <span className="material-icons User_No_Orders_Icon">badge</span>

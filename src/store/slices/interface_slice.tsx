@@ -40,7 +40,7 @@ const initialInterfaceState: InterfaceState = {
     isSearchOpen: false,
     isCartOpen: false,
     isCartHelperOpen: false,
-    isUserTabOpen: true,
+    isUserTabOpen: false,
     userTabNeedsUpdate: false,
     isControlPanelOpen: false,
 };

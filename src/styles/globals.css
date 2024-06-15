@@ -1,6 +1,129 @@
 @import "@material-design-icons/font";
 
+@font-face {
+    font-family: "Cooper_TrueType";
+    src: url("/fonts/CooperBold_TrueType.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Cooper_TrueType";
+    src: url("/fonts/CooperBlack_TrueType.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ProfilePro_WOFF2";
+    src: url("/fonts/ProfilePro_Thin_WOFF2.woff2") format("woff2");
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ProfilePro_WOFF2";
+    src: url("/fonts/ProfilePro_ExtraLight_WOFF2.woff2") format("woff2");
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ProfilePro_WOFF2";
+    src: url("/fonts/ProfilePro_Light_WOFF2.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ProfilePro_WOFF2";
+    src: url("/fonts/ProfilePro_Regular_WOFF2.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ProfilePro_WOFF2";
+    src: url("/fonts/ProfilePro_Medium_WOFF2.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ProfilePro_WOFF2";
+    src: url("/fonts/ProfilePro_Bold_WOFF2.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ProfilePro_WOFF2";
+    src: url("/fonts/ProfilePro_Black_WOFF2.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+}
+
 :root {
+    --cinza_escuro: #333;
+    --cinza_neutro: #b3b3b3;
+    --fundo_claro: #fcf0be;
+    --amarelo_primario: #ffd800;
+    --marrom_primario: #6f2f11;
+    --vermelho_primario: #e32528;
+    --verde_primario: #67b22f;
+    --bg_color: #fcf0be;
+    --bg_color_faded_1: #fcf0beb9;
+    --bg_color_faded_2: #fcf0be5d;
+    --text_color: #6f2f11;
+    --text_color_faded_1: #6f2f11b9;
+    --text_color_faded_2: #6f2f115d;
+    --anchor_color: #6f2f11;
+    --anchor_hover_color: #ffd800;
+    --primary_color: #6f2f11;
+    --primary_color_faded_1: #6f2f11b9;
+    --primary_color_faded_2: #6f2f115d;
+    --secondary_color: #333;
+    --secondary_color_faded_1: #333;
+    --secondary_color_faded_2: #333;
+    --info_color: #333;
+    --info_color_faded_1: #333;
+    --info_color_faded_2: #333;
+    --success_color: #67b22f;
+    --warning_color: #ffd800;
+    --danger_color: #e32528;
+    --shopping_cart_color: var(--cinza_neutro);
+    --searchbar_color: var(--cinza_neutro);
+    --menu_color: var(--cinza_neutro);
+    --cardText_color: #ffd800;
+    --mobile_menu_text_color: #6f2f11;
+}
+
+.darkmode {
+    --bg_color: #6f2f11;
+    --bg_color_faded_1: #6f2f11b9;
+    --bg_color_faded_2: #6f2f115d;
+    --text_color: #fcf0be;
+    --text_color_faded_1: #fcf0beb9;
+    --text_color_faded_2: #f5f5f55d;
+    --anchor_color: #fcf0be;
+    --anchor_hover_color: #ffd800;
+    --primary_color: #ffd800;
+    --primary_color_faded_1: #ffd800b9;
+    --primary_color_faded_2: #ffd8005d;
+    --secondary_color: #333;
+    --secondary_color_faded_1: #333;
+    --secondary_color_faded_2: #333;
+    --info_color: #333;
+    --info_color_faded_1: #333;
+    --info_color_faded_2: #333;
+    --success_color: #67b22f;
+    --warning_color: #ffd800;
+    --danger_color: #e34545;
+    --shopping_cart_color: var(--cinza_neutro);
+    --searchbar_color: var(--cinza_neutro);
+    --menu_color: var(--cinza_escuro);
+    --cardText_color: #ffd800;
+    --mobile_menu_text_color: #ffd800;
 }
 
 * {
@@ -22,6 +145,7 @@ body {
 
     /* Add transition properties */
     transition: left 0.5s ease-out, right 0.5s ease-out;
+    font-family: "ProfilePro_WOFF2", sans-serif;
 }
 
 /* ------ Main Page Content */
@@ -335,7 +459,7 @@ body {
     flex-direction: column;
     margin-top: 1rem;
     gap: 0.5rem;
-    padding: 1rem;
+    padding: 1.5rem;
     border: 1px solid gray;
     border-radius: 1rem;
 
@@ -1193,6 +1317,17 @@ body {
 }
 
 /* Checkout */
+
+.Checkout {
+    flex: 1;
+}
+
+.Margin_Block {
+    margin-block: auto;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
 
 .Checkout_Footer_Buttons {
     display: flex;

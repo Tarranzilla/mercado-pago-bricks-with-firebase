@@ -134,7 +134,8 @@
 
 body {
     font-family: "Roboto", sans-serif;
-    background: #f0f0f5;
+    background: var(--bg_color);
+    color: var(--text_color);
     -webkit-font-smoothing: antialiased;
 
     min-height: 100vh;
@@ -156,7 +157,7 @@ body {
     gap: 1rem;
 
     position: fixed;
-    top: calc(5vh + 1rem);
+    top: calc(8rem + 1rem);
     left: calc(28vw + 2rem);
     right: calc(28vw + 2rem);
     bottom: 1rem;
@@ -201,19 +202,32 @@ body {
 .Navbar {
     z-index: 1000;
     position: fixed;
-    top: 0;
+    top: 0.5rem;
     left: 0;
-
-    height: 5vh;
 
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 100%;
-    gap: 1rem;
+    height: 8rem;
 
-    padding: 0.5rem 1rem;
+    padding: 1rem;
+    padding-top: 0;
+}
 
-    background-color: lightgray;
+.Navbar_Main_Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.Navbar_Brand_Name {
+    font-size: 2rem;
+    font-family: "Cooper_TrueType", sans-serif;
+    letter-spacing: 0.15rem;
+    font-weight: 400;
 }
 
 .Navbar_Logo,
@@ -248,30 +262,55 @@ body {
 .Navbar_Tool {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     cursor: pointer;
     padding: 0.25rem 1rem;
 
-    background-color: lightblue;
+    background-color: var(--text_color);
     border-radius: 0.5rem;
     border: none;
 
     text-transform: uppercase;
     letter-spacing: 0.05rem;
     font-size: 0.75rem;
+
+    text-decoration: none;
+    color: var(--anchor_color);
+
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.Navbar_Tool.Active {
+    background-color: var(--anchor_hover_color);
+    color: var(--text_color);
 }
 
 .Navbar_Tool_Label {
-    display: none;
+    display: block;
+    max-width: 0;
+    margin-right: 0;
+    overflow: hidden;
+    transition: max-width 0.3s ease-in-out, margin-right 0.3s ease-in-out, color 0.3s ease-in-out;
+    white-space: nowrap;
+
+    color: var(--bg_color);
+
+    font-family: sans-serif;
+}
+
+.Navbar_Tool.Active > .Navbar_Tool_Label,
+.Navbar_Tool.Active > span {
+    color: var(--text_color);
 }
 
 .Navbar_Tool:hover > .Navbar_Tool_Label,
 .Navbar_Tool:focus > .Navbar_Tool_Label {
-    display: block;
+    max-width: 200px;
+    margin-right: 0.5rem;
 }
 
 .Navbar_Tool > span {
     font-size: 1.4rem;
+    color: var(--bg_color);
 }
 
 /* ------ Intro da Marca ------ */
@@ -287,7 +326,7 @@ body {
     padding: 2rem;
     border-radius: 1rem;
 
-    min-height: 70vh;
+    min-height: 60vh;
     position: relative;
 
     overflow: hidden;
@@ -299,8 +338,8 @@ body {
 }
 
 .Intro_Image_Container {
-    width: 512px;
-    height: 512px;
+    width: 90%;
+    height: 90%;
     position: absolute;
     transform: translate(-50%, -50%);
     top: 50%;
@@ -355,6 +394,7 @@ body {
     justify-content: space-between;
     width: 100%;
     gap: 1rem;
+    margin-top: auto;
 }
 
 .Brand_About_Item {
@@ -370,12 +410,19 @@ body {
     flex: 1;
 
     cursor: pointer;
+
+    background-image: url("/brand_imgs/dalle4.png");
+}
+
+.Brand_About_Item:last-of-type {
+    background-image: url("/brand_imgs/dalle3.png");
 }
 
 .Brand_About_Item > h3 {
     text-transform: uppercase;
-    letter-spacing: 0.05rem;
-    font-weight: 300;
+    letter-spacing: 0.2rem;
+    font-weight: 800;
+    color: var(--bg_color);
 }
 
 .Brand_About_Content {
@@ -419,7 +466,7 @@ body {
 
 .User_Tab {
     position: fixed;
-    top: calc(5vh + 1rem);
+    top: 1rem;
     left: 1rem;
     bottom: 1rem;
 
@@ -497,7 +544,7 @@ body {
     top: -1.25rem;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #f0f0f5;
+    background-color: var(--bg_color);
     padding-inline: 1rem;
     width: max-content;
 }
@@ -508,7 +555,7 @@ body {
     top: -0.75rem;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #f0f0f5;
+    background-color: var(--bg_color);
     padding-inline: 1rem;
     width: max-content;
 }
@@ -543,21 +590,20 @@ body {
 
 .User_Tab_Card_Info {
     display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    flex-direction: row;
+    gap: 1rem;
 }
 
 .User_Tab_Card_Info_Image_Container {
-    width: 280px;
-    height: 280px;
+    min-width: 96px;
+    height: 100%;
     display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 
-    border: 1px solid gray;
-    padding: 1rem;
     border-radius: 0.5rem;
 
     margin-inline: auto;
-    margin-top: 1rem;
 
     position: relative;
 }
@@ -614,10 +660,8 @@ body {
 }
 
 .User_Tab_Card_Info_Image_Edit_Btn {
-    position: absolute;
-    bottom: -1rem;
-    left: 50%;
-    transform: translateX(-50%);
+    padding: 0.5rem 0.5rem;
+    margin-left: unset;
 }
 
 .User_Info_Item_Edit_Btn_Text {
@@ -794,12 +838,11 @@ body {
 .Order_Item_Text_Header_Item {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
     align-items: flex-start;
 
     background-color: lightgray;
     border: none;
-    padding: 0.75rem 1.25rem;
+    padding: 0.5rem 1rem;
     border-radius: 1rem;
     flex-grow: 1;
 }
@@ -807,12 +850,11 @@ body {
 .Subscription_Item_Text_Header_Item {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
     align-items: flex-start;
 
     background-color: lightgray;
     border: none;
-    padding: 0.75rem 1.25rem;
+    padding: 0.5rem 1rem;
     border-radius: 1rem;
     flex-grow: 1;
 }
@@ -821,12 +863,26 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 1rem;
 
     background-color: lightgray;
     border: none;
-    padding: 0.75rem 1rem;
+    padding: 1rem 1rem;
+    border-radius: 1rem;
+}
+
+.User_Order_Status_State {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    background-color: lightblue;
+    padding: 0.5rem 1rem;
     border-radius: 0.5rem;
+}
+
+.User_Order_Status_State > p {
 }
 
 .User_Order_Status_Call_Btn {
@@ -1182,7 +1238,7 @@ body {
 
 .Cart {
     position: fixed;
-    top: calc(5vh + 1rem);
+    top: 1rem;
     right: 1rem;
     bottom: 1rem;
     width: 28vw;
@@ -1544,7 +1600,7 @@ circle {
 .Progress_Bar_Wrapper {
     width: 100%;
     height: 0.5rem;
-    background: lightgray;
+    background: var(--cinza_neutro);
 
     border-radius: 1rem;
     overflow: hidden;
@@ -1553,7 +1609,7 @@ circle {
 .Progress_Bar {
     width: 100%;
     height: 0.5rem;
-    background: #009ee3;
+    background: #2a42ca;
     transform-origin: 0%;
 
     position: relative;

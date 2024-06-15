@@ -7,44 +7,40 @@ const Brand_Intro = () => {
     const [about, setAbout] = useState(null || 0);
 
     return (
-        <div className="Brand_Intro">
-            {!about && (
-                <>
-                    <h1>TROPICAL CACAU</h1>
-                </>
-            )}
+        <>
+            <div className="Brand_Intro">
+                <div className={about ? "Intro_Image_Container Active" : "Intro_Image_Container"}>
+                    <Image
+                        src="/brand_imgs/Icone_TC_512.png"
+                        alt="Chocolate Box"
+                        width={400}
+                        height={400}
+                        quality={100}
+                        className={!about ? "Intro_Image Active" : "Intro_Image"}
+                    />
+                </div>
 
-            <div className={about ? "Intro_Image_Container Active" : "Intro_Image_Container"}>
-                <Image
-                    src="/brand_imgs/Icone_TC_512.png"
-                    alt="Chocolate Box"
-                    width={400}
-                    height={400}
-                    quality={100}
-                    className={!about ? "Intro_Image Active" : "Intro_Image"}
-                />
+                {about === 1 && (
+                    <div className="Brand_About_Content About_Who">
+                        <h2 className="Brand_About_Content_Title">Quem Somos</h2>
+                        <p>
+                            A Tropical Cacau é uma empresa de chocolates artesanais que visa a produção de chocolates de qualidade e com sabores
+                            únicos. Nossos chocolates são feitos com cacau de origem e com ingredientes selecionados para garantir a melhor
+                            experiência ao paladar.
+                        </p>
+                    </div>
+                )}
+
+                {about === 2 && (
+                    <div className="Brand_About_Content About_Cacau">
+                        <h2 className="Brand_About_Content_Title">A História do Cacau</h2>
+                        <p>
+                            O cacau é uma fruta originária da América Central e do Sul e é cultivado em países tropicais como Brasil, Costa Rica,
+                            Equador, Gana e outros. O cacau é uma fruta rica em nutrientes e possui propriedades benéficas para a saúde.
+                        </p>
+                    </div>
+                )}
             </div>
-
-            {about === 1 && (
-                <div className="Brand_About_Content About_Who">
-                    <h2 className="Brand_About_Content_Title">Quem Somos</h2>
-                    <p>
-                        A Tropical Cacau é uma empresa de chocolates artesanais que visa a produção de chocolates de qualidade e com sabores únicos.
-                        Nossos chocolates são feitos com cacau de origem e com ingredientes selecionados para garantir a melhor experiência ao
-                        paladar.
-                    </p>
-                </div>
-            )}
-
-            {about === 2 && (
-                <div className="Brand_About_Content About_Cacau">
-                    <h2 className="Brand_About_Content_Title">A História do Cacau</h2>
-                    <p>
-                        O cacau é uma fruta originária da América Central e do Sul e é cultivado em países tropicais como Brasil, Costa Rica, Equador,
-                        Gana e outros. O cacau é uma fruta rica em nutrientes e possui propriedades benéficas para a saúde.
-                    </p>
-                </div>
-            )}
 
             <div className="Brand_About">
                 <button
@@ -72,7 +68,7 @@ const Brand_Intro = () => {
                     <h3>{about === 2 ? "Voltar" : "A História do Cacau"}</h3>
                 </button>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -102,10 +102,13 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 </div>
 
                 <p className="User_Order_Status User_Subscription_Status">
+                    <h4>Status</h4>
                     {Object.values(subscription.status).every((status) => status === false) && (
                         <>
-                            <span className="material-icons">request_quote</span>
-                            Aguardando Pagamento
+                            <div className="User_Order_Status_State">
+                                <p>Aguardando Pagamento</p>
+                                <span className="material-icons">request_quote</span>
+                            </div>
                         </>
                     )}
                     {subscription.status.confirmed_by_admin === true && (
@@ -184,6 +187,15 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                         <p className="User_Order_Number">#{order_number}</p>
                     </div>
 
+                    <div className="User_Order_Price Order_Item_Text_Header_Item Bigger">
+                        <h4>Valor Total: </h4>
+                        <p>
+                            R$
+                            {order.order_items.reduce((total, order_item) => total + order_item.product.price * order_item.quantity, 0)}
+                            ,00
+                        </p>
+                    </div>
+
                     <div className="Order_Item_Text_Header_Item">
                         <h4>Código Identificador</h4>
                         <p>{order.order_external_reference}</p>
@@ -202,22 +214,16 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                             })}
                         </p>
                     </div>
-
-                    <div className="User_Order_Price Order_Item_Text_Header_Item Bigger">
-                        <h4>Valor Total: </h4>
-                        <p>
-                            R$
-                            {order.order_items.reduce((total, order_item) => total + order_item.product.price * order_item.quantity, 0)}
-                            ,00
-                        </p>
-                    </div>
                 </div>
 
                 <p className="User_Order_Status">
+                    <h4>Status </h4>
                     {Object.values(order.status).every((status) => status === false) && (
                         <>
-                            <span className="material-icons">request_quote</span>
-                            Aguardando Pagamento
+                            <div className="User_Order_Status_State">
+                                <p>Aguardando Pagamento</p>
+                                <span className="material-icons">request_quote</span>
+                            </div>
                         </>
                     )}
                     {order.status.confirmed_by_admin === true && (

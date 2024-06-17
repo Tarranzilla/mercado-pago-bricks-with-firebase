@@ -722,6 +722,10 @@ body {
     font-size: 1.25rem;
 }
 
+.User_Tab_Edit_Icon {
+    font-size: 1rem;
+}
+
 .User_Account_Info {
     display: flex;
     flex-direction: row;

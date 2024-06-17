@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
-import { setUserTabNeedsUpdate } from "@/store/slices/interface_slice";
+import { setUserTabNeedsUpdate, setUserTabOpen } from "@/store/slices/interface_slice";
 
 import { User as User_Local } from "@/types/User";
 import { Subscription } from "@/types/Subscription";
@@ -66,6 +66,10 @@ const Client_Subscription_Banner = () => {
         customer?.address?.city === "Nenhuma Cidade Definida" ||
         customer?.address?.state === "Nenhum Estado Definido" ||
         customer?.address?.zip === "Nenhum Código Postal Definido";
+
+    const setUserTabOpenAction = (isOpen: boolean) => {
+        dispatch(setUserTabOpen(isOpen));
+    };
 
     const [processingPayment, setProcessingPayment] = useState(false);
 
@@ -255,20 +259,30 @@ const Client_Subscription_Banner = () => {
                         também possuem acesso a descontos de 10% em todos os pedidos.
                     </p>
 
-                    <div className="Cart_Footer_Buttons_Container">
+                    <div className="Cart_Footer_Buttons_Container max_width_40em">
                         {anonymousCustomer && (
-                            <button className="Cart_Footer_Warning">
+                            <button
+                                className="Cart_Footer_Warning"
+                                onClick={() => {
+                                    setUserTabOpenAction(true);
+                                }}
+                            >
                                 <span className="material-icons">badge</span>Crie uma conta ou conecte-se para realizar a assinatura
                             </button>
                         )}
 
                         {customer_has_not_updated_his_address && (
-                            <div className="Receive_Option LightGreen">
+                            <button
+                                onClick={() => {
+                                    setUserTabOpenAction(true);
+                                }}
+                                className="Receive_Option LightGreen"
+                            >
                                 <span className="material-icons">info</span>
                                 <p>
                                     Para assinar o Clube Tropical, atualize as suas informações pessoais e de entrega nas configurações da sua conta.
                                 </p>
-                            </div>
+                            </button>
                         )}
 
                         <button
@@ -281,6 +295,8 @@ const Client_Subscription_Banner = () => {
                                 if (!anonymousCustomer && !customer_has_not_updated_his_address && !customerIsSubscriber) {
                                     console.log("Processando pagamento de Assinatura!");
                                     processSubscriptionPaymentAction();
+                                } else {
+                                    setUserTabOpenAction(true);
                                 }
                             }}
                         >

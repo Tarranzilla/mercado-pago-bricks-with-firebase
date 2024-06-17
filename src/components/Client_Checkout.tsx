@@ -265,7 +265,7 @@ const Client_Checkout = () => {
                                                     <h4>Produtos</h4>
                                                     {cartItems.map((cart_item, index) => {
                                                         return (
-                                                            <div key={index} className="User_Order_Product">
+                                                            <div key={index} className="User_Order_Product User_Order_Checkout_Product">
                                                                 <p className="User_Order_Product_Title">{cart_item.product.title}</p>
                                                                 <p className="User_Order_Product_Qtty">
                                                                     <p>{cart_item.quantity}</p>

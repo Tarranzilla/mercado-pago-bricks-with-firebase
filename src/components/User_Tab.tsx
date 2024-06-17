@@ -1404,9 +1404,9 @@ export default function UserTab() {
                         )}
 
                         {/* Barra de Progresso de Scroll */}
-                        <div className="Progress_Bar_Container">
-                            <div className="Progress_Bar_Wrapper">
-                                <m.div className="Progress_Bar" style={{ scaleX }} />
+                        <div className="Progress_Bar_Container" key={"User_Tab_PB_Container"}>
+                            <div className="Progress_Bar_Wrapper" key={"User_Tab_PB_Wrapper"}>
+                                <m.div className="Progress_Bar" key={"User_Tab_PB"} style={{ scaleX }} />
                             </div>
                         </div>
                     </m.div>

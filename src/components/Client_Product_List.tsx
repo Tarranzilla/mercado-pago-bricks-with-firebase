@@ -6,7 +6,9 @@ import Product from "@/types/Product";
 
 // Redux para gerenciamento de contexto
 import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store/store";
 
+import { setCartOpen } from "@/store/slices/interface_slice";
 import { addCartItem } from "@/store/slices/cart_slice";
 
 // import productList from "@/data/products_list";
@@ -32,6 +34,12 @@ if (!NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS) {
 const Client_Product_List = () => {
     const dispatch = useDispatch();
     const [products, setProducts] = useState<Product[]>([]);
+
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
+    const setCartOpenAction = (isOpen: boolean) => {
+        dispatch(setCartOpen(isOpen));
+    };
 
     const addToCartAction = (product: Product) => {
         dispatch(addCartItem({ product: product }));
@@ -83,21 +91,39 @@ const Client_Product_List = () => {
 
                                     <p className="Product_List_Card_Subtitle">{product.subtitle}</p>
 
-                                    <div className="Product_List_Card_Info_Footer">
-                                        <button
-                                            className="Product_List_Card_Edit_Btn"
-                                            onClick={() => {
-                                                addToCartAction(product);
-                                            }}
-                                        >
-                                            <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
-                                            <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
-                                        </button>
-                                        <button className="Product_List_Card_Edit_Btn" onClick={() => {}}>
-                                            <span className="material-icons User_Tab_Edit_Icon">more_horiz</span>
-                                            <p className="User_Info_Item_Edit_Btn_Text">Mais Informações</p>
-                                        </button>
-                                    </div>
+                                    <m.div className="Product_List_Card_Info_Footer">
+                                        <AnimatePresence>
+                                            {cartItems.find((item) => item.product.id === product.id) && (
+                                                <m.div
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    exit={{ opacity: 0 }}
+                                                    className="Product_List_Card_CartQtty_Indicator"
+                                                >
+                                                    <p className="Product_List_Card_CartQtty_Indicator_Text">
+                                                        {cartItems.find((item) => item.product.id === product.id)?.quantity}
+                                                    </p>
+                                                </m.div>
+                                            )}
+
+                                            <m.button
+                                                key={"addToCart" + product.id}
+                                                layout
+                                                className="Product_List_Card_Edit_Btn"
+                                                onClick={() => {
+                                                    addToCartAction(product);
+                                                    setCartOpenAction(true);
+                                                }}
+                                            >
+                                                <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
+                                                <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
+                                            </m.button>
+                                            <m.button key={"seeMore" + product.id} layout className="Product_List_Card_Edit_Btn" onClick={() => {}}>
+                                                <span className="material-icons User_Tab_Edit_Icon">more_horiz</span>
+                                                <p className="User_Info_Item_Edit_Btn_Text">Mais Informações</p>
+                                            </m.button>
+                                        </AnimatePresence>
+                                    </m.div>
                                 </div>
                             </div>
                         ))}

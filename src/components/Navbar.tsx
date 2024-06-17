@@ -4,11 +4,17 @@ import { setUserTabOpen, setCartOpen } from "@/store/slices/interface_slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
+import { motion as m, AnimatePresence } from "framer-motion";
+
 const Navbar = () => {
     const dispatch = useDispatch();
 
     const userTabOpen = useSelector((state: RootState) => state.interface.isUserTabOpen);
     const cartOpen = useSelector((state: RootState) => state.interface.isCartOpen);
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
+    const totalCartItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+    const uniqueCartItems = cartItems.length;
 
     const toggleUserTab = () => {
         dispatch(setUserTabOpen(!userTabOpen));
@@ -56,6 +62,19 @@ const Navbar = () => {
                     >
                         <p className="Navbar_Tool_Label">Carrinho</p>
                         <span className="material-icons">shopping_cart</span>
+
+                        <AnimatePresence>
+                            {totalCartItems > 0 && (
+                                <m.div
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 10 }}
+                                    className="Cart_Items_Indicator"
+                                >
+                                    <p>{totalCartItems}</p>
+                                </m.div>
+                            )}
+                        </AnimatePresence>
                     </button>
                 </div>
             </div>

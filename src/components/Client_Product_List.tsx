@@ -162,7 +162,7 @@ const Client_Product_List = () => {
                                     </select>
 
                                     <button
-                                        className="Filter_Display_Mode_Btn"
+                                        className={activeLayout === "list" ? "Filter_Display_Mode_Btn Active" : "Filter_Display_Mode_Btn"}
                                         onClick={() => {
                                             setActiveLayout("list");
                                         }}
@@ -171,7 +171,7 @@ const Client_Product_List = () => {
                                     </button>
 
                                     <button
-                                        className="Filter_Display_Mode_Btn"
+                                        className={activeLayout === "grid" ? "Filter_Display_Mode_Btn Active" : "Filter_Display_Mode_Btn"}
                                         onClick={() => {
                                             setActiveLayout("grid");
                                         }}

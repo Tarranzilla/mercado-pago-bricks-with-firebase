@@ -1256,6 +1256,12 @@ body {
     cursor: pointer;
 
     text-decoration: none;
+
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.Filter_Display_Mode_Btn.Active {
+    background-color: var(--anchor_hover_color);
 }
 
 .Filter_Display_Mode_Btn > span {
@@ -1306,6 +1312,10 @@ body {
 
     background-color: var(--bg_color);
     color: var(--text_color);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.05rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
 
     border: none;
     padding: 0.5rem 1rem;

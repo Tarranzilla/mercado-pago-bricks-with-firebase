@@ -97,7 +97,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
     // Função para buscar o documento do usuário no Firestore pelo Client Side
     const fetchUserDocClientSide = async (uid: string) => {
         if (!firestore) {
-            console.log("Firestore is not initialized");
+            // console.log("Firestore is not initialized");
             return;
         }
 
@@ -106,17 +106,17 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
 
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
-            console.log("User Document Found! Document Data:", userDoc.data());
+            // console.log("User Document Found! Document Data:", userDoc.data());
 
             if (userDoc.data().isAdmin === true) {
-                console.log("User is an admin");
+                // console.log("User is an admin");
                 setUserIsAdminAction(true);
             } else {
-                console.log("User is not an admin");
+                // console.log("User is not an admin");
                 setUserIsAdminAction(false);
             }
         } else {
-            console.log("User document not found");
+            // console.log("User document not found");
             setUserIsAdminAction(false);
         }
     };
@@ -125,9 +125,9 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
     const fetchOrCreateAndSetUserDocServerSide = async (firebase_user: User_Firebase) => {
         try {
             // Fetch user data from get_user API
-            console.log("Context Fetching Firebase User data from API...");
+            // console.log("Context Fetching Firebase User data from API...");
             const response = await axios.get(`${NEXT_PUBLIC_PATH_API_GET_USER}`, { params: { id: firebase_user.id } });
-            console.log("Context Fetching User Response => ", response.data);
+            // console.log("Context Fetching User Response => ", response.data);
 
             if (response.status === 400) {
                 console.log("Missing required fields, cannot fetch user data");
@@ -135,7 +135,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
             }
 
             if (response.data.message === "user-not-found") {
-                console.log("Firebase User not found");
+                // console.log("Firebase User not found");
 
                 let new_user: User_Local = {
                     id: firebase_user.id,
@@ -164,7 +164,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
                 };
 
                 const newUserResponse = await axios.post(`${NEXT_PUBLIC_PATH_API_CREATE_USER}`, new_user);
-                console.log("Response:", newUserResponse);
+                // console.log("Response:", newUserResponse);
 
                 if (newUserResponse.status === 200) {
                     console.log("New user document created successfully");
@@ -181,17 +181,17 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
 
                 return;
             } else {
-                console.log("Firebase User found, setting the current user in Redux");
+                // console.log("Firebase User found, setting the current user in Redux");
                 setCurrentUserAction(response.data as User_Local);
                 setCurrentEditedUserAction(response.data as User_Local);
                 fetchSubscriptionsForUser(response.data as User_Local);
                 fetchOrdersForUser(response.data as User_Local);
 
                 if (response.data.isAdmin) {
-                    console.log("User is an admin");
+                    // console.log("User is an admin");
                     setUserIsAdminAction(true);
                 } else {
-                    console.log("User is not an admin");
+                    // console.log("User is not an admin");
                     setUserIsAdminAction(false);
                 }
             }
@@ -250,7 +250,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
     // Função para buscar todos os documentos de assinatura de um determinado usuário no Firestore
     const fetchSubscriptionsForUser = async (user: User_Local): Promise<Subscription[] | undefined> => {
         const user_subscriptions = user.subscriptions;
-        console.log("User Subscriptions:", user_subscriptions);
+        // console.log("User Subscriptions:", user_subscriptions);
 
         if (user_subscriptions.length < 1) {
             console.log("Usuário nao possui Assinaturas.");
@@ -262,7 +262,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
                 user_subscriptions.map(async (subscription_id) => {
                     const subscription = await fetchSubscriptionDoc(subscription_id);
                     if (subscription) {
-                        console.log(subscription);
+                        // console.log(subscription);
                         return subscription;
                     }
                 })
@@ -313,7 +313,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
     // Função para buscar todos os pedidos para o usuário - O usuário deve ter uma lista de referências externas de pedidos e então buscamos no banco de dados
     const fetchOrdersForUser = async (user: User_Local): Promise<Order[] | undefined> => {
         const user_orders = user.orders;
-        console.log("User Orders:", user_orders);
+        // console.log("User Orders:", user_orders);
 
         if (user_orders.length < 1) {
             console.log("Usuário nao possui pedidos.");
@@ -325,7 +325,7 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
                 user_orders.map(async (order_id) => {
                     const order = await fetchOrderDoc(order_id);
                     if (order) {
-                        console.log(order);
+                        // console.log(order);
                         return order;
                     }
                 })
@@ -356,11 +356,11 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
         setStorage(storage);
 
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            console.log("Auth state change detected:", auth);
-            console.log("Current auth user:", auth.currentUser);
+            // console.log("Auth state change detected:", auth);
+            // console.log("Current auth user:", auth.currentUser);
             if (user) {
                 // User is signed in
-                console.log("User is signed in: ", user);
+                // console.log("User is signed in: ", user);
 
                 const { uid, email, displayName, photoURL } = user;
 
@@ -371,13 +371,13 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
                     avatar_url: photoURL || "Nenhuma Imagem Definida",
                 };
 
-                console.log("Firebase User =>", firebase_user);
+                // console.log("Firebase User =>", firebase_user);
 
                 setFirebaseUserAction(firebase_user);
                 fetchOrCreateAndSetUserDocServerSide(firebase_user);
             } else {
                 // User is signed out
-                console.log("User is not signed in");
+                // console.log("User is not signed in");
                 setFirebaseUserAction(null);
                 setCurrentUserAction(null);
                 setCurrentEditedUserAction(null);

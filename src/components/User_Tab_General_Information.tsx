@@ -5,6 +5,8 @@ import { setCurrentEditedUser } from "@/store/slices/user_slice";
 import { User as User_Local } from "@/types/User";
 import { Address } from "@/types/Address";
 
+import Image from "next/image";
+
 export type User_String_Info_Container_Props = {
     label: string;
     placeholder: string;
@@ -218,7 +220,7 @@ const User_Tab_General_Information = () => {
                     <div className="User_Tab_Card_Info">
                         <div className="User_Tab_Card_Info_Image_Container">
                             {customer.avatar_url && customer.name && (
-                                <img className="User_Tab_Card_Info_Image" src={customer.avatar_url} alt={customer.name} />
+                                <Image className="User_Tab_Card_Info_Image" width={128} height={128} src={customer.avatar_url} alt={customer.name} />
                             )}
                             {!customer.avatar_url && <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>}
 

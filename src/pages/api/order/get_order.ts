@@ -13,7 +13,7 @@ export default async function getOrder(req: NextApiRequest, res: NextApiResponse
     }
 
     const { order_id } = req.query;
-    console.log("getting order:", order_id);
+    // console.log("getting order:", order_id);
 
     if (!order_id) {
         return res.status(400).json({ error: "Missing required fields" });
@@ -31,7 +31,7 @@ export default async function getOrder(req: NextApiRequest, res: NextApiResponse
             return res.status(200).json({ message: "order-not-found" });
         }
 
-        console.log("order found:", doc.data());
+        // console.log("order found:", doc.data());
         return res.status(200).json(doc.data());
     } catch (error) {
         if (error instanceof Error) {

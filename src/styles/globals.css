@@ -576,7 +576,7 @@ body {
 
 .User_Tab_Address_Resume {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
 }
 
 .User_Tab_Address_Edit_Control {
@@ -1168,7 +1168,7 @@ body {
 /* Assinatura */
 
 .Subsctiption_Banner {
-    height: 75vh;
+    min-height: 75vh;
 }
 
 .Subsctiption_Banner_Subtitle {
@@ -1187,6 +1187,10 @@ body {
 
 .Subsctiption_Banner_Image {
     border-radius: 1rem;
+    object-fit: cover;
+    object-position: top;
+    width: 100%;
+    height: auto;
 }
 
 /* Lista de Produtos */
@@ -1205,7 +1209,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
 
     background-color: var(--text_color);
     color: var(--bg_color);
@@ -1267,6 +1270,7 @@ body {
     padding-block: 0.5rem;
     border-bottom: 1px solid var(--bg_color_faded_1);
     border-top: 1px solid var(--bg_color_faded_1);
+    margin-block: 0.5rem;
 }
 
 .Product_List_Filter_Categories::-webkit-scrollbar {
@@ -1301,7 +1305,6 @@ body {
 .Product_List_Filter_Options {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
     width: 100%;
 }
 .Product_List_Filter_Select {
@@ -1317,6 +1320,18 @@ body {
     background-color: var(--bg_color);
     color: var(--text_color);
     padding: 0.5rem;
+}
+
+.No_Products {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem;
+}
+
+.No_Products > span {
+    font-size: 3rem;
 }
 
 .Product_List_List {

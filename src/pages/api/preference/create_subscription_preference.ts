@@ -258,8 +258,8 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
     if (req.method === "POST") {
         let { customer, subscriptionRequest }: { customer: User; subscriptionRequest: SubscriptionDetails } = req.body;
 
-        console.log("Dados Recebidos do Cliente:", customer);
-        console.log("Detalhes da Assinatura Recebidos:", subscriptionRequest);
+        // console.log("Dados Recebidos do Cliente:", customer);
+        // console.log("Detalhes da Assinatura Recebidos:", subscriptionRequest);
 
         const customTitle = `Assinatura ${subscriptionRequest.plan_name} - ${subscriptionRequest.duration} Meses`;
 
@@ -270,7 +270,7 @@ export default function preferenceHandler(req: NextApiRequest, res: NextApiRespo
             quantity: 1,
         };
 
-        console.log("Detalhes da Assinatura Processados:", processedSubscriptionDetail);
+        // console.log("Detalhes da Assinatura Processados:", processedSubscriptionDetail);
 
         // console.log(cartItems);
         const preference = new Preference(client);

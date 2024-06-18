@@ -33,7 +33,7 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        console.log(colorMode);
+        // console.log(colorMode);
         if (colorMode === "light") {
             document.body.classList.remove("darkmode");
         } else {

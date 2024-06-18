@@ -13,7 +13,7 @@ export default async function getSubscription(req: NextApiRequest, res: NextApiR
     }
 
     const { subscription_id } = req.query;
-    console.log("getting order:", subscription_id);
+    // console.log("getting order:", subscription_id);
 
     if (!subscription_id) {
         return res.status(400).json({ error: "Missing required fields" });
@@ -31,7 +31,7 @@ export default async function getSubscription(req: NextApiRequest, res: NextApiR
             return res.status(200).json({ message: "subscription-not-found" });
         }
 
-        console.log("subscription found:", doc.data());
+        // console.log("subscription found:", doc.data());
         return res.status(200).json(doc.data());
     } catch (error) {
         if (error instanceof Error) {

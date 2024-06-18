@@ -73,16 +73,6 @@ const Client_Subscription_Banner = () => {
 
     const [processingPayment, setProcessingPayment] = useState(false);
 
-    // Referência para o Scroll com Framer Motion
-    const scroll_ref = useRef(null);
-    const { scrollYProgress } = useScroll({ container: scroll_ref });
-
-    const scaleX = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001,
-    });
-
     const userTabNeedsUpdateAction = () => {
         dispatch(setUserTabNeedsUpdate(true));
     };
@@ -311,8 +301,6 @@ const Client_Subscription_Banner = () => {
                         alt="Chocolate Box"
                         width={400}
                         height={400}
-                        layout="responsive"
-                        objectFit="cover"
                         quality={100}
                         className="Subsctiption_Banner_Image"
                     />
@@ -323,12 +311,3 @@ const Client_Subscription_Banner = () => {
 };
 
 export default Client_Subscription_Banner;
-
-/* Barra de Progresso de Scroll
-            <div className="Progress_Bar_Container">
-                <div className="Progress_Bar_Wrapper">
-                    <m.div className="Progress_Bar" style={{ scaleX }} />
-                </div>
-            </div>
-
-*/

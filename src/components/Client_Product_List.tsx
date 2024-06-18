@@ -56,22 +56,12 @@ const Client_Product_List = () => {
         dispatch(addCartItem({ product: product }));
     };
 
-    // Referência para o Scroll com Framer Motion
-    const scroll_ref = useRef(null);
-    const { scrollYProgress } = useScroll({ container: scroll_ref });
-
-    const scaleX = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001,
-    });
-
     useEffect(() => {
         axios.get(NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS).then((response) => {
             setProducts(response.data);
             setActiveProducts(response.data);
             setSortedProducts(response.data);
-            console.log("Produtos Recebidos:", response.data);
+            // console.log("Produtos Recebidos:", response.data);
         });
     }, []);
 
@@ -116,46 +106,67 @@ const Client_Product_List = () => {
                     </button>
                     <h2 className="Product_List_Filter_Title">Encontre seu Chocolate Ideal</h2>
 
-                    {!isFilterCollapsed && (
-                        <div className="Product_List_Filter_Options">
-                            <div className="Product_List_Filter_Group">
-                                <div className="Product_List_Filter_Categories">
-                                    {categories.map((category) => (
-                                        <button
-                                            className={activeCategory === category ? "Filter_Category_Btn Active" : "Filter_Category_Btn"}
-                                            key={category}
-                                            onClick={() => {
-                                                setActiveCategory(category);
-                                            }}
-                                        >
-                                            {category}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="Product_List_Filter_Group">
-                                <span className="material-icons">filter_list</span>
-                                <select
-                                    className="Product_List_Filter_Select"
-                                    value={activePriceFilter}
-                                    onChange={(e) => setActivePriceFilter(e.target.value)}
+                    <AnimatePresence>
+                        {!isFilterCollapsed && (
+                            <m.div
+                                initial={{ height: 0 }}
+                                animate={{ height: "auto" }}
+                                exit={{ height: 0 }}
+                                transition={{ duration: 0.2, ease: [0.43, 0.13, 0.23, 0.96], when: "beforeChildren" }}
+                                layout
+                                className="Product_List_Filter_Options"
+                            >
+                                <m.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }}
+                                    className="Product_List_Filter_Group"
                                 >
-                                    <option className="Product_List_Filter_Select_Option" value="all">
-                                        Novidades
-                                    </option>
-                                    <option className="Product_List_Filter_Select_Option" value="asc">
-                                        Menor Preço
-                                    </option>
-                                    <option className="Product_List_Filter_Select_Option" value="desc">
-                                        Maior Preço
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    )}
+                                    <div className="Product_List_Filter_Categories">
+                                        {categories.map((category) => (
+                                            <button
+                                                className={activeCategory === category ? "Filter_Category_Btn Active" : "Filter_Category_Btn"}
+                                                key={category}
+                                                onClick={() => {
+                                                    setActiveCategory(category);
+                                                }}
+                                            >
+                                                {category}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </m.div>
+                                <m.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }}
+                                    className="Product_List_Filter_Group"
+                                >
+                                    <span className="material-icons">filter_list</span>
+                                    <select
+                                        className="Product_List_Filter_Select"
+                                        value={activePriceFilter}
+                                        onChange={(e) => setActivePriceFilter(e.target.value)}
+                                    >
+                                        <option className="Product_List_Filter_Select_Option" value="all">
+                                            Novidades
+                                        </option>
+                                        <option className="Product_List_Filter_Select_Option" value="asc">
+                                            Menor Preço
+                                        </option>
+                                        <option className="Product_List_Filter_Select_Option" value="desc">
+                                            Maior Preço
+                                        </option>
+                                    </select>
+                                </m.div>
+                            </m.div>
+                        )}
+                    </AnimatePresence>
                 </div>
 
-                {products.length > 0 ? (
+                {activeProducts.length > 0 ? (
                     <div className="Product_List_List">
                         {activeProducts.map((product) => (
                             <m.div layout key={product.id} className="Product_List_Card">
@@ -217,7 +228,10 @@ const Client_Product_List = () => {
                         ))}
                     </div>
                 ) : (
-                    <p>Nenhum produto encontrado.</p>
+                    <div className="No_Products">
+                        <span className="material-icons">category</span>
+                        <p>Produtos Indisponíveis no Momento.</p>
+                    </div>
                 )}
             </div>
         </div>

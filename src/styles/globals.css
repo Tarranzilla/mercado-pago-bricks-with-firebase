@@ -133,7 +133,7 @@
 }
 
 body {
-    font-family: "Roboto", sans-serif;
+    font-family: "ProfilePro_WOFF2", sans-serif;
     background: var(--bg_color);
     color: var(--text_color);
     -webkit-font-smoothing: antialiased;
@@ -143,13 +143,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    /* Add transition properties */
-    transition: left 0.5s ease-out, right 0.5s ease-out;
-    font-family: "ProfilePro_WOFF2", sans-serif;
 }
 
-/* ------ Main Page Content */
+/* ------ Main Page Content ------ */
 
 .Main_Page_Content {
     display: flex;
@@ -161,6 +157,8 @@ body {
     left: calc(28vw + 2rem);
     right: calc(28vw + 2rem);
     bottom: 1rem;
+
+    transition: left 0.5s ease-out, right 0.5s ease-out;
 }
 
 .Main_Page_Content.expanded {

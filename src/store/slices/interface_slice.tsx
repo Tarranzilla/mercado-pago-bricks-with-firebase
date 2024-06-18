@@ -54,6 +54,7 @@ const InterfaceSlice = createSlice({
             state.selectedLanguage = action.payload;
         },
         toggleColorMode: (state) => {
+            console.log("Toggling color mode");
             state.colorMode = state.colorMode === "light" ? "dark" : "light";
         },
         setContentViewerMode: (state, action: PayloadAction<"standard" | "media" | "text">) => {

@@ -1,6 +1,8 @@
 import Link from "next/link";
 
-import { setUserTabOpen, setCartOpen } from "@/store/slices/interface_slice";
+import { useEffect, useState } from "react";
+
+import { setUserTabOpen, setCartOpen, toggleColorMode } from "@/store/slices/interface_slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
@@ -8,6 +10,12 @@ import { motion as m, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
     const dispatch = useDispatch();
+
+    const colorMode = useSelector((state: RootState) => state.interface.colorMode);
+
+    const toggleColorModeAction = () => {
+        dispatch(toggleColorMode());
+    };
 
     const userTabOpen = useSelector((state: RootState) => state.interface.isUserTabOpen);
     const cartOpen = useSelector((state: RootState) => state.interface.isCartOpen);
@@ -24,6 +32,15 @@ const Navbar = () => {
         dispatch(setCartOpen(!cartOpen));
     };
 
+    useEffect(() => {
+        console.log(colorMode);
+        if (colorMode === "light") {
+            document.body.classList.remove("darkmode");
+        } else {
+            document.body.classList.add("darkmode");
+        }
+    }, [colorMode]);
+
     return (
         <nav className="Navbar">
             <div className="Navbar_Main_Container">
@@ -39,7 +56,12 @@ const Navbar = () => {
                         <span className="material-icons">badge</span>
                     </button>
 
-                    <button className="Navbar_Tool">
+                    <button
+                        className="Navbar_Tool"
+                        onClick={() => {
+                            toggleColorModeAction();
+                        }}
+                    >
                         <p className="Navbar_Tool_Label">Menu</p>
                         <span className="material-icons">menu_book</span>
                     </button>

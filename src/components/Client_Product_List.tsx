@@ -160,6 +160,24 @@ const Client_Product_List = () => {
                                             Maior Preço
                                         </option>
                                     </select>
+
+                                    <button
+                                        className="Filter_Display_Mode_Btn"
+                                        onClick={() => {
+                                            setActiveLayout("list");
+                                        }}
+                                    >
+                                        <span className="material-icons">view_list</span>
+                                    </button>
+
+                                    <button
+                                        className="Filter_Display_Mode_Btn"
+                                        onClick={() => {
+                                            setActiveLayout("grid");
+                                        }}
+                                    >
+                                        <span className="material-icons">grid_view</span>
+                                    </button>
                                 </m.div>
                             </m.div>
                         )}
@@ -169,10 +187,10 @@ const Client_Product_List = () => {
                 {activeProducts.length > 0 ? (
                     <div className="Product_List_List">
                         {activeProducts.map((product) => (
-                            <m.div layout key={product.id} className="Product_List_Card">
-                                <div className="Product_List_Card_Image_Container">
+                            <m.div layout key={product.id} className={activeLayout === "list" ? "Product_List_Card" : "Product_List_Card Grid"}>
+                                <m.div layout className="Product_List_Card_Image_Container">
                                     {product.images && product.images.length > 0 && (
-                                        <img
+                                        <m.img
                                             className="Product_List_Card_Image"
                                             src={product.images[0].src}
                                             alt={product.images[0].alt}
@@ -180,7 +198,7 @@ const Client_Product_List = () => {
                                             height={128}
                                         />
                                     )}
-                                </div>
+                                </m.div>
 
                                 <div className="Product_List_Card_Info">
                                     <div className="Product_List_Card_Info_Header">
@@ -192,31 +210,34 @@ const Client_Product_List = () => {
 
                                     <m.div className="Product_List_Card_Info_Footer">
                                         <AnimatePresence>
-                                            {cartItems.find((item) => item.product.id === product.id) && (
-                                                <m.div
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    exit={{ opacity: 0 }}
-                                                    className="Product_List_Card_CartQtty_Indicator"
-                                                >
-                                                    <p className="Product_List_Card_CartQtty_Indicator_Text">
-                                                        {cartItems.find((item) => item.product.id === product.id)?.quantity}
-                                                    </p>
-                                                </m.div>
-                                            )}
+                                            <m.div layout className="Product_List_Card_Checkout_Btn_Container">
+                                                {cartItems.find((item) => item.product.id === product.id) && (
+                                                    <m.div
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                        exit={{ opacity: 0 }}
+                                                        className="Product_List_Card_CartQtty_Indicator"
+                                                    >
+                                                        <p className="Product_List_Card_CartQtty_Indicator_Text">
+                                                            {cartItems.find((item) => item.product.id === product.id)?.quantity}
+                                                        </p>
+                                                    </m.div>
+                                                )}
 
-                                            <m.button
-                                                key={"addToCart" + product.id}
-                                                layout
-                                                className="Product_List_Card_Edit_Btn"
-                                                onClick={() => {
-                                                    addToCartAction(product);
-                                                    setCartOpenAction(true);
-                                                }}
-                                            >
-                                                <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
-                                                <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
-                                            </m.button>
+                                                <m.button
+                                                    key={"addToCart" + product.id}
+                                                    layout
+                                                    className="Product_List_Card_Edit_Btn"
+                                                    onClick={() => {
+                                                        addToCartAction(product);
+                                                        setCartOpenAction(true);
+                                                    }}
+                                                >
+                                                    <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
+                                                    <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
+                                                </m.button>
+                                            </m.div>
+
                                             <m.button key={"seeMore" + product.id} layout className="Product_List_Card_Edit_Btn" onClick={() => {}}>
                                                 <span className="material-icons User_Tab_Edit_Icon">more_horiz</span>
                                                 <p className="User_Info_Item_Edit_Btn_Text">Mais Informações</p>

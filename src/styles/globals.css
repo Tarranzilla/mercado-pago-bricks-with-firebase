@@ -1241,6 +1241,27 @@ body {
     transition: rotate 0.3s ease-in-out;
 }
 
+.Filter_Display_Mode_Btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: var(--bg_color);
+    color: var(--text_color);
+
+    border: none;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+
+    text-decoration: none;
+}
+
+.Filter_Display_Mode_Btn > span {
+    font-size: 1.2rem;
+}
+
 .Product_List_Filter_Collapse_Btn > span {
     color: var(--text_color);
 }
@@ -1259,7 +1280,7 @@ body {
     flex-direction: row;
     align-items: center;
     width: 100%;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .Product_List_Filter_Categories {
@@ -1370,6 +1391,10 @@ body {
     flex-shrink: 0;
 }
 
+.Product_List_Card.Grid > .Product_List_Card_Image_Container {
+    max-width: 320px;
+}
+
 .Cart_Item_Image_Container {
     aspect-ratio: 1/1;
     max-width: 82px;
@@ -1414,6 +1439,15 @@ body {
     display: flex;
     gap: 0.5rem;
     margin-top: auto;
+}
+
+.Product_List_Card.Grid > .Product_List_Card_Info > .Product_List_Card_Info_Footer {
+    flex-direction: column;
+}
+
+.Product_List_Card_Checkout_Btn_Container {
+    display: flex;
+    gap: 0.5rem;
 }
 
 .Product_List_Card_CartQtty_Indicator {

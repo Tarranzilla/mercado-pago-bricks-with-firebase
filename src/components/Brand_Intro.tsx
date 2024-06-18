@@ -11,6 +11,7 @@ const Brand_Intro = () => {
     return (
         <>
             <div className="Brand_Intro">
+                <h1>Deliciosos Chocolates Orgânicos</h1>
                 <div className={about ? "Intro_Image_Container Active" : "Intro_Image_Container"}>
                     <Image
                         src="/brand_imgs/Icone_TC_512_HQ.png"
@@ -21,8 +22,16 @@ const Brand_Intro = () => {
                         className={!about ? "Intro_Image Active" : "Intro_Image"}
                     />
                 </div>
+            </div>
+        </>
+    );
+};
 
-                <AnimatePresence mode="wait">
+export default Brand_Intro;
+
+/*
+
+            <AnimatePresence mode="wait">
                     {about === 1 && (
                         <m.div
                             initial={{ y: -500 }}
@@ -58,7 +67,6 @@ const Brand_Intro = () => {
                         </m.div>
                     )}
                 </AnimatePresence>
-            </div>
 
             <div className="Brand_About">
                 <button
@@ -86,8 +94,5 @@ const Brand_Intro = () => {
                     <h3>{about === 2 ? "Voltar" : "A História do Cacau"}</h3>
                 </button>
             </div>
-        </>
-    );
-};
 
-export default Brand_Intro;
+*/

@@ -180,7 +180,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+
     overflow-y: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
 
     padding: 1.5rem 1.5rem;
     border: 1px solid var(--text_color);
@@ -189,6 +192,11 @@ body {
     position: relative;
 
     flex: 1;
+}
+
+.Main_Page_Content_Wrapper > * {
+    scroll-margin-block: 2rem;
+    scroll-snap-align: start;
 }
 
 .Main_Page_Content_Wrapper::-webkit-scrollbar {
@@ -348,50 +356,32 @@ body {
     padding: 2rem;
     border-radius: 1rem;
 
-    min-height: 60vh;
+    min-height: 75vh;
     position: relative;
 
     overflow: hidden;
 }
 
 .Brand_Intro > h1 {
-    font-size: 4rem;
+    font-size: 10rem;
+    line-height: 8rem;
     text-align: center;
+    color: var(--bg_color);
+    z-index: 2;
+    text-shadow: var(--text_color) 0 0 0.5rem;
 }
 
 .Intro_Image_Container {
     width: 90%;
     height: 90%;
     position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50%;
+    bottom: 0;
     left: 50%;
     z-index: 1;
 
-    transition: transform 0.5s ease-in-out;
-    animation: MoveUp 0.5s ease-in-out forwards;
-}
+    transform: translateX(-50%) translateY(50%);
 
-.Intro_Image_Container.Active {
-    animation: MoveDown 0.5s ease-in-out forwards;
-}
-
-@keyframes MoveUp {
-    0% {
-        transform: translate(-50%, 0);
-    }
-    100% {
-        transform: translate(-50%, -50%);
-    }
-}
-
-@keyframes MoveDown {
-    0% {
-        transform: translate(-50%, -50%);
-    }
-    100% {
-        transform: translate(-50%, 0);
-    }
+    transition: transform 0.5s ease-in-out, bottom 0.5s ease-in-out, right 0.5s ease-in-out;
 }
 
 .Intro_Image_Container > img {
@@ -1177,6 +1167,10 @@ body {
 
 /* Assinatura */
 
+.Subsctiption_Banner {
+    height: 75vh;
+}
+
 .Subsctiption_Banner_Subtitle {
     font-size: 1.5rem;
     text-align: center;
@@ -1203,17 +1197,140 @@ body {
     gap: 1rem;
     padding: 2rem;
     border: 1px solid var(--text_color_faded_1);
+
+    position: relative;
+}
+
+.Product_List_Filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    background-color: var(--text_color);
+    color: var(--bg_color);
+    padding: 1rem;
+    border-radius: 1rem;
+
+    position: sticky;
+    top: 0rem;
+
+    z-index: 2;
+
+    box-shadow: 0 0 0.25rem rgba(0, 0, 0, 1);
+}
+
+.Product_List_Filter_Collapse_Btn {
+    position: absolute;
+    right: 1rem;
+    background-color: var(--bg_color);
+    border: none;
+    border-radius: 50%;
+    height: 1.8rem;
+    width: 1.8rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: rotate 0.3s ease-in-out;
+}
+
+.Product_List_Filter_Collapse_Btn > span {
+    color: var(--text_color);
+}
+
+.Product_List_Filter_Collapse_Btn.Active {
+    rotate: -180deg;
+}
+
+.Product_List_Filter_Title {
+    width: 100%;
+    text-align: center;
+}
+
+.Product_List_Filter_Group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.Product_List_Filter_Categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+    padding-block: 0.5rem;
+    border-bottom: 1px solid var(--bg_color_faded_1);
+    border-top: 1px solid var(--bg_color_faded_1);
+}
+
+.Product_List_Filter_Categories::-webkit-scrollbar {
+    display: none;
+}
+
+.Filter_Category_Btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: var(--bg_color);
+    color: var(--text_color);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+    min-width: max-content;
+    flex-grow: 1;
+
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.Filter_Category_Btn.Active {
+    background-color: var(--anchor_hover_color);
+}
+
+.Product_List_Filter_Options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+.Product_List_Filter_Select {
+    padding: 0.5rem;
+    border: 1px solid var(--cinza_neutro);
+    background-color: var(--bg_color);
+    color: var(--text_color);
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+.Product_List_Filter_Select_Option {
+    background-color: var(--bg_color);
+    color: var(--text_color);
+    padding: 0.5rem;
 }
 
 .Product_List_List {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
+    margin-inline: 1rem;
+    margin-top: 1rem;
 }
 
 .Product_List_Card {
     display: flex;
     gap: 2rem;
+
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--text_color_faded_2);
 }
 
 .Cart_Item {

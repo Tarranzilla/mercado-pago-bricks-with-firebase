@@ -29,6 +29,16 @@ if (!NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS) {
 const Admin_Product_List = () => {
     const [products, setProducts] = useState<Product[]>([]);
 
+    // all, barras clásssicas, discos, bombons, dia dos pais, dia dos namorados, páscoa,
+
+    const categories = ["all", "barras clássicas", "discos", "bombons", "dia dos pais", "dia dos namorados", "páscoa"];
+
+    const [activeCategory, setActiveCategory] = useState("all");
+    const [activePriceFilter, setActivePriceFilter] = useState("all"); // all, asc, desc
+    const [activeProducts, setActiveProducts] = useState<Product[]>([]);
+
+    const [activeLayout, setActiveLayout] = useState("list"); // grid, list,
+
     const local_user = useSelector((state: RootState) => state.user.currentUser as User);
 
     // Referência para o Scroll com Framer Motion
@@ -47,6 +57,31 @@ const Admin_Product_List = () => {
             console.log("Produtos Recebidos:", response.data);
         });
     }, []);
+
+    useEffect(() => {
+        console.log("Categoria Ativa:", activeCategory);
+
+        if (activeCategory === "all") {
+            setActiveProducts(products);
+        } else {
+            const filtered_products = products.filter((product) => product.category === activeCategory);
+            setActiveProducts(filtered_products);
+        }
+    }, [activeCategory]);
+
+    useEffect(() => {
+        console.log("Filtro de Preço Ativo:", activePriceFilter);
+
+        if (activePriceFilter === "all") {
+            setActiveProducts(products);
+        } else if (activePriceFilter === "asc") {
+            const sorted_products = products.sort((a, b) => a.price - b.price);
+            setActiveProducts(sorted_products);
+        } else if (activePriceFilter === "desc") {
+            const sorted_products = products.sort((a, b) => b.price - a.price);
+            setActiveProducts(sorted_products);
+        }
+    }, [activePriceFilter]);
 
     return (
         <div className="Product_List">

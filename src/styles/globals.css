@@ -1233,6 +1233,8 @@ body {
     align-items: center;
     justify-content: center;
 
+    cursor: pointer;
+
     transition: rotate 0.3s ease-in-out;
 }
 

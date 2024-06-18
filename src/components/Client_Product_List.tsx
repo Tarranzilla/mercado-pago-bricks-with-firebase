@@ -158,7 +158,7 @@ const Client_Product_List = () => {
                 {products.length > 0 ? (
                     <div className="Product_List_List">
                         {activeProducts.map((product) => (
-                            <div key={product.id} className="Product_List_Card">
+                            <m.div layout key={product.id} className="Product_List_Card">
                                 <div className="Product_List_Card_Image_Container">
                                     {product.images && product.images.length > 0 && (
                                         <img
@@ -213,7 +213,7 @@ const Client_Product_List = () => {
                                         </AnimatePresence>
                                     </m.div>
                                 </div>
-                            </div>
+                            </m.div>
                         ))}
                     </div>
                 ) : (

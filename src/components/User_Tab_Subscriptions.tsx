@@ -61,7 +61,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                     </div>
                 </div>
 
-                <p className="User_Order_Status User_Subscription_Status">
+                <div className="User_Order_Status User_Subscription_Status">
                     <h4>Status</h4>
                     {Object.values(subscription.status).every((status) => status === false) && (
                         <>
@@ -112,7 +112,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                             <span className="material-icons">do_not_disturb</span> Cancelado
                         </>
                     )}
-                </p>
+                </div>
 
                 <a
                     className="User_Order_Status_Call_Btn"

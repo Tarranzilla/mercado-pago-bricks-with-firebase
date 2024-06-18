@@ -112,8 +112,8 @@ const User_Tab_Content = () => {
     if (customer && editedCustomer) {
         const sortedCustomer = sortObjectProperties(customer);
         const sortedEditedCustomer = sortObjectProperties(editedCustomer);
-        console.log(sortedCustomer);
-        console.log(sortedEditedCustomer);
+        // console.log(sortedCustomer);
+        // console.log(sortedEditedCustomer);
         isSomeLocalUserInfoEdited = sortedCustomer && sortedEditedCustomer && JSON.stringify(sortedCustomer) !== JSON.stringify(sortedEditedCustomer);
     } else {
         isSomeLocalUserInfoEdited = false;
@@ -131,7 +131,7 @@ const User_Tab_Content = () => {
         const provider = new GoogleAuthProvider();
         try {
             const result = await signInWithPopup(auth, provider);
-            console.log("User signed in:", result.user);
+            // console.log("User signed in:", result.user);
         } catch (error) {
             console.error("Error signing in:", error);
         }
@@ -142,7 +142,7 @@ const User_Tab_Content = () => {
         const auth = getAuth();
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log("User signed up:", userCredential.user);
+            // console.log("User signed up:", userCredential.user);
 
             if (userCredential.user) {
                 // Set the displayName
@@ -158,7 +158,7 @@ const User_Tab_Content = () => {
                     }
 
                     if (response.data.message === "user-not-found") {
-                        console.log("User not found, creating a new user document in the database");
+                        // console.log("User not found, creating a new user document in the database");
                         let new_user: User_Local = {
                             id: userCredential.user.uid,
                             name: userCredential.user.displayName ? userCredential.user.displayName : "Nenhum Nome Definido",
@@ -201,7 +201,7 @@ const User_Tab_Content = () => {
         const auth = getAuth();
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("User logged in:", userCredential.user);
+            // console.log("User logged in:", userCredential.user);
         } catch (error) {
             console.error("Error logging in:", error);
         }
@@ -212,7 +212,7 @@ const User_Tab_Content = () => {
         try {
             await signOut(auth);
             setCurrentUserAction(null);
-            console.log("User signed out");
+            // console.log("User signed out");
         } catch (error) {
             console.error("Error signing out:", error);
         }

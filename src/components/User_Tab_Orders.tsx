@@ -63,7 +63,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                     </div>
                 </div>
 
-                <p className="User_Order_Status">
+                <div className="User_Order_Status">
                     <h4>Status </h4>
                     {Object.values(order.status).every((status) => status === false) && (
                         <>
@@ -114,7 +114,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                             <span className="material-icons">do_not_disturb</span> Cancelado
                         </>
                     )}
-                </p>
+                </div>
 
                 <a
                     className="User_Order_Status_Call_Btn"

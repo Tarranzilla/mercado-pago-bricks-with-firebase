@@ -234,53 +234,28 @@ const Client_Subscription_Banner = () => {
     return (
         <div className="Subsctiption_Banner">
             {processingPayment ? (
-                <div className="User_Tab_Card Checkout_Card Subscription_Banner_Card">
-                    <h1 className="User_Tab_Card_Title Checkout_Card_Title">Assinatura Clube Tropical</h1>
+                <div className="Subscription_Banner_Card">
+                    <h1 className="Subscription_Banner_Title">Clube Tropical</h1>
                     <div className="User_No_Orders">
                         <span className="material-icons">loyalty</span>
                         <p className="User_No_Orders_Text">Processando Pagamento...</p>
                     </div>
                 </div>
             ) : (
-                <div className="User_Tab_Card Checkout_Card Subscription_Banner_Card">
-                    <h1 className="User_Tab_Card_Title">Clube Tropical</h1>
+                <div className="Subscription_Banner_Card">
+                    <h1 className="Subscription_Banner_Title">Clube Tropical</h1>
                     <h2 className="Subsctiption_Banner_Subtitle">Que tal ter uma seleção de chocolates deliciosos chegando todo mês na sua casa?</h2>
                     <p className="Subsctiption_Banner_Description">
                         Membros do Clube Tropical recebem mensalmente uma caixa com 6 chocolates especiais, feitos com cacau de origem única - E
                         também possuem acesso a descontos de 10% em todos os pedidos.
                     </p>
 
-                    <div className="Cart_Footer_Buttons_Container max_width_40em">
-                        {anonymousCustomer && (
-                            <button
-                                className="Cart_Footer_Warning"
-                                onClick={() => {
-                                    setUserTabOpenAction(true);
-                                }}
-                            >
-                                <span className="material-icons">badge</span>Crie uma conta ou conecte-se para realizar a assinatura
-                            </button>
-                        )}
-
-                        {customer_has_not_updated_his_address && (
-                            <button
-                                onClick={() => {
-                                    setUserTabOpenAction(true);
-                                }}
-                                className="Receive_Option LightGreen"
-                            >
-                                <span className="material-icons">info</span>
-                                <p>
-                                    Para assinar o Clube Tropical, atualize as suas informações pessoais e de entrega nas configurações da sua conta.
-                                </p>
-                            </button>
-                        )}
-
+                    <div className="Subscription_Banner_Buttons_Container">
                         <button
                             className={
                                 anonymousCustomer || customer_has_not_updated_his_address
-                                    ? "Cart_Footer_Checkout_Button Disabled"
-                                    : "Cart_Footer_Checkout_Button"
+                                    ? "Subscription_Banner_Button Disabled"
+                                    : "Subscription_Banner_Button"
                             }
                             onClick={() => {
                                 if (!anonymousCustomer && !customer_has_not_updated_his_address && !customerIsSubscriber) {
@@ -291,10 +266,37 @@ const Client_Subscription_Banner = () => {
                                 }
                             }}
                         >
-                            <p className="User_Info_Item_Edit_Btn_Text">
+                            <span className="material-icons User_No_Orders_Icon">loyalty</span>
+                            <p className="Subscription_Banner_Button_Text">
                                 {customerIsSubscriber ? "voce faz parte do clube tropical!" : "Quero fazer parte do clube tropical!"}
                             </p>
                         </button>
+
+                        {anonymousCustomer && (
+                            <button
+                                className="Subscription_Banner_Warning"
+                                onClick={() => {
+                                    setUserTabOpenAction(true);
+                                }}
+                            >
+                                <span className="material-icons">badge</span>{" "}
+                                <p className="Subscription_Banner_Button_Text">Crie uma conta ou conecte-se para realizar a assinatura</p>
+                            </button>
+                        )}
+
+                        {customer_has_not_updated_his_address && (
+                            <button
+                                onClick={() => {
+                                    setUserTabOpenAction(true);
+                                }}
+                                className="Subscription_Banner_Warning"
+                            >
+                                <span className="material-icons">info</span>
+                                <p className="Subscription_Banner_Button_Text">
+                                    Para assinar o Clube Tropical, atualize as suas informações pessoais e de entrega nas configurações da sua conta
+                                </p>
+                            </button>
+                        )}
                     </div>
 
                     <div className="Subscription_Banner_Image_Container">

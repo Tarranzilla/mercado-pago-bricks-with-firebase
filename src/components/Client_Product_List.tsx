@@ -88,10 +88,10 @@ const Client_Product_List = () => {
 
     return (
         <div className="Product_List">
-            <div className="User_Tab_Card Product_List_Container">
-                <h1 className="User_Tab_Card_Title Product_List_Title">Loja de Chocolates</h1>
-                <h2 className="Subsctiption_Banner_Subtitle">Nossos chocolates são feitos com ingredientes frescos e cuidadosamente selecionados!</h2>
-                <p className="Subsctiption_Banner_Description">
+            <div className="Product_List_Card">
+                <h1 className="Product_List_Title">Loja de Chocolates</h1>
+                <h2 className="Product_List_Subtitle">Nossos chocolates são feitos com ingredientes frescos e cuidadosamente selecionados!</h2>
+                <p className="Product_List_Description">
                     A cada estação buscamos desenvolver novos sabores capazes de refletir as épocas festivas e os ingredientes disponíveis.
                 </p>
 
@@ -187,11 +187,11 @@ const Client_Product_List = () => {
                 {activeProducts.length > 0 ? (
                     <div className="Product_List_List">
                         {activeProducts.map((product) => (
-                            <m.div layout key={product.id} className={activeLayout === "list" ? "Product_List_Card" : "Product_List_Card Grid"}>
-                                <m.div layout className="Product_List_Card_Image_Container">
+                            <m.div layout key={product.id} className={activeLayout === "list" ? "Product_List_Item" : "Product_List_Item Grid"}>
+                                <m.div layout className="Product_List_Item_Image_Container">
                                     {product.images && product.images.length > 0 && (
                                         <m.img
-                                            className="Product_List_Card_Image"
+                                            className="Product_List_Item_Image"
                                             src={product.images[0].src}
                                             alt={product.images[0].alt}
                                             width={128}
@@ -200,25 +200,26 @@ const Client_Product_List = () => {
                                     )}
                                 </m.div>
 
-                                <div className="Product_List_Card_Info">
-                                    <div className="Product_List_Card_Info_Header">
-                                        <h2 className="Product_List_Card_Title">{product.title}</h2>
-                                        <p className="Product_List_Card_Price">R$ {product.price},00</p>
+                                <div className="Product_List_Item_Info">
+                                    <div className="Product_List_Item_Info_Header">
+                                        <h2 className="Product_List_Item_Title">{product.title}</h2>
+                                        <p className="Product_List_Item_Price">R$ {product.price},00</p>
                                     </div>
 
-                                    <p className="Product_List_Card_Subtitle">{product.subtitle}</p>
+                                    <p className="Product_List_Item_Subtitle">{product.subtitle}</p>
 
-                                    <m.div className="Product_List_Card_Info_Footer">
+                                    <m.div className="Product_List_Item_Info_Footer">
                                         <AnimatePresence>
-                                            <m.div layout className="Product_List_Card_Checkout_Btn_Container">
+                                            <m.div layout className="Product_List_Item_AddToCart_Btn_Container">
                                                 {cartItems.find((item) => item.product.id === product.id) && (
                                                     <m.div
+                                                        layout
                                                         initial={{ opacity: 0 }}
                                                         animate={{ opacity: 1 }}
                                                         exit={{ opacity: 0 }}
-                                                        className="Product_List_Card_CartQtty_Indicator"
+                                                        className="Product_List_Item_CartQtty_Indicator"
                                                     >
-                                                        <p className="Product_List_Card_CartQtty_Indicator_Text">
+                                                        <p className="Product_List_Item_CartQtty_Indicator_Text">
                                                             {cartItems.find((item) => item.product.id === product.id)?.quantity}
                                                         </p>
                                                     </m.div>
@@ -227,20 +228,25 @@ const Client_Product_List = () => {
                                                 <m.button
                                                     key={"addToCart" + product.id}
                                                     layout
-                                                    className="Product_List_Card_Edit_Btn"
+                                                    className="Product_List_Item_AddToCart_Btn"
                                                     onClick={() => {
                                                         addToCartAction(product);
                                                         setCartOpenAction(true);
                                                     }}
                                                 >
                                                     <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>
-                                                    <p className="User_Info_Item_Edit_Btn_Text">Adicionar ao Carrinho</p>
+                                                    <p className="Product_List_Item_AddToCart_Btn_Text">Adicionar ao Carrinho</p>
                                                 </m.button>
                                             </m.div>
 
-                                            <m.button key={"seeMore" + product.id} layout className="Product_List_Card_Edit_Btn" onClick={() => {}}>
+                                            <m.button
+                                                key={"seeMore" + product.id}
+                                                layout
+                                                className="Product_List_Item_SeeMore_Btn"
+                                                onClick={() => {}}
+                                            >
                                                 <span className="material-icons User_Tab_Edit_Icon">more_horiz</span>
-                                                <p className="User_Info_Item_Edit_Btn_Text">Mais Informações</p>
+                                                <p className="Product_List_Item_SeeMore_Btn_Text">Mais Informações</p>
                                             </m.button>
                                         </AnimatePresence>
                                     </m.div>

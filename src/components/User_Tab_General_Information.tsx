@@ -142,7 +142,7 @@ const User_Tab_General_Information = () => {
                             )}
                             {!customer.avatar_url && <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>}
 
-                            <span className="User_Info_Item_Icon material-icons">mode_edit</span>
+                            <span className="User_Info_Item_Icon Avatar_Img material-icons">mode_edit</span>
                         </div>
 
                         <div className="User_Tab_Card_Info_Items_List">

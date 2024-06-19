@@ -24,9 +24,7 @@ const Client_Cart = () => {
         <>
             <AnimatePresence>
                 {isCartOpen ? (
-                    <m.div initial={{ x: 1000 }} animate={{ x: 0 }} exit={{ x: 1000 }} transition={{ duration: 0.5 }} className="Cart" key={"Cart"}>
-                        <Client_Cart_Content />
-                    </m.div>
+                    <Client_Cart_Content />
                 ) : (
                     <m.div
                         initial={{ x: 1000 }}

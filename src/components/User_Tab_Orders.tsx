@@ -29,117 +29,154 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
 
     return (
         <div className="User_Order_Item" key={index}>
-            <div className="Order_Item_Text">
-                <div className="Order_Item_Text_Headers_Container">
-                    <div className="Order_Item_Text_Header_Item">
-                        <h4 className="User_Info_Label">Pedido Nº</h4>
-                        <p className="User_Order_Number">#{order_number}</p>
-                    </div>
-
-                    <div className="User_Order_Price Order_Item_Text_Header_Item Bigger">
-                        <h4>Valor Total: </h4>
-                        <p>
-                            R$
-                            {order.order_items.reduce((total, order_item) => total + order_item.product.price * order_item.quantity, 0)}
-                            ,00
-                        </p>
-                    </div>
-
-                    <div className="Order_Item_Text_Header_Item">
-                        <h4>Código Identificador</h4>
-                        <p>{order.order_external_reference}</p>
-                    </div>
-
-                    <div className="User_Order_Date Order_Item_Text_Header_Item Bigger">
-                        <h4>Data do Pedido</h4>
-                        <p className="User_Info_Detail User_Order_Date">
-                            {new Date(order.order_date).toLocaleString("pt-BR", {
-                                timeZone: "America/Sao_Paulo",
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                            })}
-                        </p>
-                    </div>
+            <div className="Order_Item_Header">
+                <div className="Order_Item_Text_Header_Item">
+                    <h4 className="User_Info_Label">Pedido Nº</h4>
+                    <p className="User_Order_Number">#{order_number}</p>
                 </div>
 
-                <div className="User_Order_Status">
-                    <h4>Status </h4>
-                    {Object.values(order.status).every((status) => status === false) && (
-                        <>
-                            <div className="User_Order_Status_State">
-                                <p>Aguardando Pagamento</p>
-                                <Link
-                                    href={order.order_payment_link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="User_Order_Status_State_Payment_Link"
-                                >
-                                    Link de Pagamento
-                                </Link>
-                            </div>
-                        </>
-                    )}
-                    {order.status.confirmed_by_admin === true && (
-                        <>
-                            <span className="material-icons">hourglass_bottom</span>
-                            Confirmado
-                        </>
-                    )}
-                    {order.status.waiting_payment === true && (
-                        <>
-                            <p>Aguardando Pagamento</p> <button className="User_Order_Status_State_Payment_Link">Link de Pagamento</button>
-                        </>
-                    )}
-                    {order.status.in_production === true && (
-                        <>
-                            <span className="material-icons">category</span> Em Produção
-                        </>
-                    )}
-                    {order.status.waiting_for_retrieval === true && (
-                        <>
-                            <span className="material-icons">store</span> Aguardando Retirada
-                        </>
-                    )}
-                    {order.status.retrieved === true && (
-                        <>
-                            <span className="material-icons">markunread_mailbox</span> Retirado no Balcão
-                        </>
-                    )}
-                    {order.status.waiting_for_delivery === true && (
-                        <>
-                            <span className="material-icons">conveyor_belt</span> Aguardando Entrega
-                        </>
-                    )}
-                    {order.status.delivered === true && (
-                        <>
-                            <span className="material-icons">markunread_mailbox</span> Entregue
-                        </>
-                    )}
-                    {order.status.cancelled === true && (
-                        <>
-                            <span className="material-icons">do_not_disturb</span> Cancelado
-                        </>
-                    )}
+                <div className="Order_Item_Text_Header_Item">
+                    <h4>Valor Total: </h4>
+                    <p>
+                        R$
+                        {order.order_items.reduce((total, order_item) => total + order_item.product.price * order_item.quantity, 0)}
+                        ,00
+                    </p>
                 </div>
 
-                <a
-                    className="User_Order_Status_Call_Btn"
-                    href={generate_whatsapp_url_for_more_order_info(order.order_external_reference, businessTelephone)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <span className="material-icons">support_agent</span> Solicitar Atendimento
-                </a>
+                <div className="Order_Item_Text_Header_Item">
+                    <h4>Código Identificador</h4>
+                    <p>{order.order_external_reference}</p>
+                </div>
+
+                <div className="Order_Item_Text_Header_Item">
+                    <h4>Data do Pedido</h4>
+                    <p className="User_Info_Detail User_Order_Date">
+                        {new Date(order.order_date).toLocaleString("pt-BR", {
+                            timeZone: "America/Sao_Paulo",
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        })}
+                    </p>
+                </div>
             </div>
 
+            <div className="User_Order_Status">
+                <h4>Status </h4>
+                {Object.values(order.status).every((status) => status === false) && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p>Aguardando Pagamento</p>
+                            <div className="Subscription_Status_Alert">
+                                <span className="material-icons">info</span>
+                                <p>
+                                    Se você nao concluiu o pagamento acesse o link abaixo, caso contrário aguarde alguns minutos e se nao estiver
+                                    atualizado solicite atendimento.
+                                </p>
+                            </div>
+                            <Link
+                                href={order.order_payment_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="User_Order_Status_State_Payment_Link"
+                            >
+                                <span className="material-icons">payment</span> Link de Pagamento
+                            </Link>
+                        </div>
+                    </>
+                )}
+                {order.status.confirmed_by_admin === true && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p></p>
+                        </div>
+                        <span className="material-icons">hourglass_bottom</span>
+                        Confirmado
+                    </>
+                )}
+                {order.status.waiting_payment === true && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p>Aguardando Pagamento</p>
+                            <div className="Subscription_Status_Alert">
+                                <span className="material-icons">info</span>
+                                <p>
+                                    Se você nao concluiu o pagamento acesse o link abaixo, caso contrário aguarde alguns minutos e se nao estiver
+                                    atualizado solicite atendimento.
+                                </p>
+                            </div>
+                            <Link
+                                href={order.order_payment_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="User_Order_Status_State_Payment_Link"
+                            >
+                                <span className="material-icons">payment</span> Link de Pagamento
+                            </Link>
+                        </div>
+                    </>
+                )}
+                {order.status.in_production === true && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p>Em Produção</p>
+                        </div>
+                    </>
+                )}
+                {order.status.waiting_for_retrieval === true && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p>Aguardando Retirada</p>
+                        </div>
+                    </>
+                )}
+                {order.status.retrieved === true && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p>Retirado no Balcão</p>
+                        </div>
+                    </>
+                )}
+                {order.status.waiting_for_delivery === true && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p>Aguardando Entrega</p>
+                        </div>
+                    </>
+                )}
+                {order.status.delivered === true && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p>Entregue</p>
+                        </div>
+                    </>
+                )}
+                {order.status.cancelled === true && (
+                    <>
+                        <div className="User_Order_Status_State">
+                            <p>Cancelado</p>
+                        </div>
+                    </>
+                )}
+            </div>
+
+            <a
+                className="User_Order_Status_Call_Btn"
+                href={generate_whatsapp_url_for_more_order_info(order.order_external_reference, businessTelephone)}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <span className="material-icons">support_agent</span> Solicitar Atendimento
+            </a>
+
             <button className="Order_Expand_Btn" onClick={() => setIsExpanded(!isExpanded)}>
-                <p className="Order_Expand_Btn_Text">Detalhes do Pedido</p>
                 <span className={isExpanded ? "material-icons Order_Expand_Btn_Icon Active" : "material-icons Order_Expand_Btn_Icon"}>
                     expand_more
                 </span>
+                <p className="Order_Expand_Btn_Text">Detalhes do Pedido</p>
             </button>
 
             <AnimatePresence>

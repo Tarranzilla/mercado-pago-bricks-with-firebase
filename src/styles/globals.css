@@ -230,7 +230,7 @@ body {
 }
 
 .Navbar_Brand_Name {
-    font-size: 2rem;
+    font-size: 2.8rem;
     font-family: "Cooper_TrueType", sans-serif;
     letter-spacing: 0.15rem;
     font-weight: 400;
@@ -648,167 +648,6 @@ body {
     color: var(--bg_color);
 }
 
-.User_Order_List {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.User_Order_Item {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-
-    padding: 1rem;
-    border-radius: 1rem;
-
-    background-color: var(--primary_color_faded_2);
-}
-
-.Order_Item_Text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.Order_Item_Text_Headers_Container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-}
-
-.Order_Item_Text_Header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 100%;
-    min-width: max-content;
-}
-
-.Order_Item_Text_Header_Item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    background-color: var(--text_color_faded_1);
-    color: var(--bg_color);
-
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    flex-grow: 1;
-}
-
-.User_Order_Status {
-    display: flex;
-    flex-direction: column;
-
-    background-color: var(--text_color_faded_1);
-    color: var(--bg_color);
-
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-}
-
-.User_Order_Status_State {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.User_Order_Status_State > p,
-.User_Order_Status_State > span {
-    color: var(--bg_color);
-}
-
-.User_Order_Status_State_Payment_Link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-
-    margin-left: auto;
-
-    background-color: var(--bg_color);
-    color: var(--text_color);
-
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-
-    text-decoration: none;
-}
-
-.User_Order_Status_Call_Btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-
-    background-color: var(--text_color);
-    color: var(--bg_color);
-
-    border: none;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-
-    text-decoration: none;
-}
-
-.User_Order_Status_Call_Btn > * {
-    color: var(--bg_color);
-}
-
-.Order_Expand_Btn {
-    margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-
-    background-color: var(--text_color);
-    color: var(--bg_color);
-
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-}
-
-.Order_Expand_Btn_Icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border: none;
-    border-radius: 0.5rem;
-
-    text-decoration: none;
-    color: var(--bg_color);
-
-    transition: transform 0.25s;
-}
-
-.Order_Expand_Btn_Icon.Active {
-    transform: rotate(180deg);
-}
-
-.User_Order_Extra_Info {
-    display: flex;
-    flex-direction: column;
-
-    border-radius: 1rem;
-    background-color: var(--text_color_faded_1);
-    color: var(--bg_color);
-    margin-top: 1rem;
-}
-
 .User_Order_Product_List {
     display: flex;
     flex-direction: column;
@@ -1022,6 +861,8 @@ body {
     border-radius: 0.5rem;
 }
 
+/* ------ User General Info / Informações Gerais do Usuário ------ */
+
 .User_Tab_Card_Info {
     display: flex;
     flex-direction: row;
@@ -1095,6 +936,8 @@ body {
     font-size: 1rem;
 }
 
+/* ------ Address / Endereço ------ */
+
 .User_Tab_Address_Edit_Control {
     display: flex;
     flex-wrap: wrap;
@@ -1121,6 +964,8 @@ body {
 #address-number-control-item {
     flex-grow: 1;
 }
+
+/* ------ Subscriptions / Assinaturas ------ */
 
 .User_Subscription_Item {
     display: flex;
@@ -1207,6 +1052,149 @@ body {
     cursor: pointer;
 
     text-decoration: none;
+}
+
+/* Orders / Pedidos */
+
+.User_Order_List {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    color: var(--bg_color);
+}
+
+.User_Order_Item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+
+    border: 1px solid var(--bg_color);
+}
+
+.Order_Item_Header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.Order_Item_Text_Header_Item {
+    flex-grow: 1;
+    border: 1px solid var(--bg_color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.User_Order_Status {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--bg_color);
+    color: var(--text_color);
+}
+
+.User_Order_Status_State {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.User_Order_Status_State_Payment_Link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+}
+
+.User_Order_Status_Call_Btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+}
+
+.Order_Expand_Btn {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    font-size: 1rem;
+}
+
+.Order_Expand_Btn_Icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    color: var(--bg_color);
+
+    transition: transform 0.25s;
+}
+
+.Order_Expand_Btn_Icon.Active {
+    transform: rotate(180deg);
+}
+
+.User_Order_Extra_Info {
+    display: flex;
+    flex-direction: column;
+}
+
+.User_Order_Product_Price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 7rem;
+    padding: 0.25rem;
+
+    border-radius: 2.4rem;
+    background-color: var(--bg_color);
+    color: var(--text_color);
+
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1rem;
 }
 
 /* Aba de Login */

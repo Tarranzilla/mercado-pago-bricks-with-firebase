@@ -268,7 +268,7 @@ const Client_Subscription_Banner = () => {
                         >
                             <span className="material-icons User_No_Orders_Icon">loyalty</span>
                             <p className="Subscription_Banner_Button_Text">
-                                {customerIsSubscriber ? "voce faz parte do clube tropical!" : "Quero fazer parte do clube tropical!"}
+                                {customerIsSubscriber ? "Você já faz parte do clube tropical!" : "Quero fazer parte do clube tropical!"}
                             </p>
                         </button>
 

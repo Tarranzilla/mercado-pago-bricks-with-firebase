@@ -226,39 +226,39 @@ const Client_Checkout = () => {
                 <div className="Checkout_Content_Wrapper">
                     <h1 className="User_Tab_Card_Title">Finalização da Compra</h1>
                     {processingPayment ? (
-                        <div className="User_Tab_Card Checkout_Card">
-                            <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Finalizando Compra</h1>
-                            <div className="User_No_Orders">
+                        <div className="Checkout_Card">
+                            <h1 className="Checkout_Card_Title">Finalizando Compra</h1>
+                            <div className="Checkout_No_Orders">
                                 <span className="material-icons">payment</span>
-                                <p className="User_No_Orders_Text">Processando Pagamento...</p>
+                                <p className="Checkout_No_Orders_Text">Processando Pagamento...</p>
                             </div>
                         </div>
                     ) : (
                         <>
                             {!customer ? (
-                                <div className="User_Tab_Card Checkout_Card Margin_Block">
-                                    <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Por Favor Conecte-se</h1>
+                                <div className="Checkout_Card Margin_Block">
+                                    <h1 className="Checkout_Card_Title">Por Favor Conecte-se</h1>
 
-                                    <div className="User_No_Orders">
+                                    <div className="Checkout_No_Orders">
                                         <span className="material-icons User_No_Orders_Icon">badge</span>
-                                        <p className="User_No_Orders_Text">
+                                        <p className="Checkout_No_Orders_Text">
                                             Você precisa estar conectado na sua conta para fazer um pedido e finalizar a compra.
                                         </p>
                                     </div>
 
-                                    <Link href={"/#inicio"} className=" Cart_Footer_Checkout_Button User_Order_Total_Btn" id="checkout-return-button">
+                                    <Link href={"/#inicio"} className="Checkout_Button Checkout_Return_Btn" id="checkout-return-button">
                                         <span className="material-icons">arrow_back</span>Voltar a Página Inicial
                                     </Link>
                                 </div>
                             ) : (
                                 <>
-                                    <div className="User_Tab_Card Checkout_Card">
-                                        <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Itens do Pedido</h1>
+                                    <div className="Checkout_Card">
+                                        <h1 className="Checkout_Card_Title">Itens do Pedido</h1>
 
                                         {emptyCart ? (
-                                            <div className="User_No_Orders">
+                                            <div className="Checkout_No_Orders">
                                                 <span className="material-icons">list_alt</span>
-                                                <p className="User_No_Orders_Text">Nenhum item adicionado ao pedido.</p>
+                                                <p className="Checkout_No_Orders_Text">Nenhum item adicionado ao pedido.</p>
                                             </div>
                                         ) : (
                                             <>
@@ -288,8 +288,8 @@ const Client_Checkout = () => {
                                         )}
                                     </div>
 
-                                    <div className="User_Tab_Card Checkout_Card">
-                                        <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Opções de Recebimento</h1>
+                                    <div className="Checkout_Card">
+                                        <h1 className="Checkout_Card_Title">Opções de Recebimento</h1>
                                         <div className="Checkout_Receive_Options">
                                             <button
                                                 className={receiveOption === "Retirada" ? "Receive_Option Active" : "Receive_Option"}
@@ -397,8 +397,8 @@ const Client_Checkout = () => {
                                         </div>
                                     </div>
 
-                                    <div className="User_Tab_Card">
-                                        <h1 className="User_Tab_Card_SubTitle Checkout_Card_Title">Resumo do Pedido</h1>
+                                    <div className="Checkout_Card">
+                                        <h1 className="Checkout_Card_Title">Resumo do Pedido</h1>
                                         <div className="Checkout_Order_Summary">
                                             <div className="User_Order_Total">
                                                 <h4>Valor do Produtos</h4>
@@ -429,11 +429,7 @@ const Client_Checkout = () => {
                                             )}
 
                                             <div className="Checkout_Footer_Buttons">
-                                                <Link
-                                                    href={"/#inicio"}
-                                                    className=" Cart_Footer_Checkout_Button User_Order_Total_Btn"
-                                                    id="checkout-return-button"
-                                                >
+                                                <Link href={"/#inicio"} className="Checkout_Button User_Order_Total_Btn" id="checkout-return-button">
                                                     <span className="material-icons">arrow_back</span>Voltar a Página Inicial
                                                 </Link>
 
@@ -441,8 +437,8 @@ const Client_Checkout = () => {
                                                     id="checkout-payment-button"
                                                     className={
                                                         emptyCart || customer_has_not_updated_his_phone
-                                                            ? "Cart_Footer_Checkout_Button User_Order_Total_Btn Disabled"
-                                                            : " Cart_Footer_Checkout_Button User_Order_Total_Btn"
+                                                            ? "Checkout_Button User_Order_Total_Btn Disabled"
+                                                            : " Checkout_Button User_Order_Total_Btn"
                                                     }
                                                     onClick={() => {
                                                         console.log("Processando Pagamento...");

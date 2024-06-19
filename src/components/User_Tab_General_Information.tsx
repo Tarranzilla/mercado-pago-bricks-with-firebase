@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { setCurrentEditedUser } from "@/store/slices/user_slice";
+import { setUserTabOpen } from "@/store/slices/interface_slice";
 import { User as User_Local } from "@/types/User";
 import { Address } from "@/types/Address";
 
@@ -31,42 +32,15 @@ export const User_Name_Info_Container: React.FC<User_String_Info_Container_Props
             <div className="User_Info_Item">
                 <p className="User_Info_Item_Label">{label}</p>
 
-                {/* Input de Edição ou Detalhe de Item */}
-                {isEditing ? (
-                    <input
-                        className="User_Info_Item_Input"
-                        type="text"
-                        placeholder={placeholder}
-                        value={editedLocalUser.name}
-                        onChange={(e) => handleLocalUserChange("name", e.target.value)}
-                    />
-                ) : (
-                    <p className="User_Info_Item_Detail">{editedLocalUser.name !== localUser.name ? `${editedLocalUser.name}*` : localUser.name}</p>
-                )}
+                <input
+                    className="User_Info_Item_Input"
+                    type="text"
+                    placeholder={placeholder}
+                    value={editedLocalUser.name}
+                    onChange={(e) => handleLocalUserChange("name", e.target.value)}
+                />
+                <span className="User_Info_Item_Icon material-icons">mode_edit</span>
             </div>
-
-            {/* Botões de Edição */}
-            {isEditing ? (
-                <button
-                    className="User_Info_Item_Edit_Btn"
-                    onClick={() => {
-                        setIsEditing(false);
-                    }}
-                >
-                    <span className="material-icons User_Tab_Edit_Icon">save</span>
-                    <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
-                </button>
-            ) : (
-                <button
-                    className="User_Info_Item_Edit_Btn"
-                    onClick={() => {
-                        setIsEditing(true);
-                    }}
-                >
-                    <span className="material-icons User_Tab_Edit_Icon">edit</span>
-                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                </button>
-            )}
         </div>
     );
 };
@@ -86,44 +60,16 @@ export const User_Email_Info_Container: React.FC<User_String_Info_Container_Prop
             <div className="User_Info_Item">
                 <p className="User_Info_Item_Label">{label}</p>
 
-                {/* Input de Edição ou Detalhe de Item */}
-                {isEditing ? (
-                    <input
-                        className="User_Info_Item_Input"
-                        type="text"
-                        placeholder={placeholder}
-                        value={editedLocalUser.email}
-                        onChange={(e) => handleLocalUserChange("email", e.target.value)}
-                    />
-                ) : (
-                    <p className="User_Info_Item_Detail">
-                        {editedLocalUser.email !== localUser.email ? `${editedLocalUser.email}*` : localUser.email}
-                    </p>
-                )}
-            </div>
+                <input
+                    className="User_Info_Item_Input"
+                    type="text"
+                    placeholder={placeholder}
+                    value={editedLocalUser.email}
+                    onChange={(e) => handleLocalUserChange("email", e.target.value)}
+                />
 
-            {/* Botões de Edição */}
-            {isEditing ? (
-                <button
-                    className="User_Info_Item_Edit_Btn"
-                    onClick={() => {
-                        setIsEditing(false);
-                    }}
-                >
-                    <span className="material-icons User_Tab_Edit_Icon">save</span>
-                    <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
-                </button>
-            ) : (
-                <button
-                    className="User_Info_Item_Edit_Btn"
-                    onClick={() => {
-                        setIsEditing(true);
-                    }}
-                >
-                    <span className="material-icons User_Tab_Edit_Icon">edit</span>
-                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                </button>
-            )}
+                <span className="User_Info_Item_Icon material-icons">mode_edit</span>
+            </div>
         </div>
     );
 };
@@ -143,44 +89,16 @@ export const User_Telephone_Info_Container: React.FC<User_String_Info_Container_
             <div className="User_Info_Item">
                 <p className="User_Info_Item_Label">{label}</p>
 
-                {/* Input de Edição ou Detalhe de Item */}
-                {isEditing ? (
-                    <input
-                        className="User_Info_Item_Input"
-                        type="text"
-                        placeholder={placeholder}
-                        value={editedLocalUser.telephone}
-                        onChange={(e) => handleLocalUserChange("telephone", e.target.value)}
-                    />
-                ) : (
-                    <p className="User_Info_Item_Detail">
-                        {editedLocalUser.telephone !== localUser.telephone ? `${editedLocalUser.telephone}*` : localUser.telephone}
-                    </p>
-                )}
-            </div>
+                <input
+                    className="User_Info_Item_Input"
+                    type="text"
+                    placeholder={placeholder}
+                    value={editedLocalUser.telephone}
+                    onChange={(e) => handleLocalUserChange("telephone", e.target.value)}
+                />
 
-            {/* Botões de Edição */}
-            {isEditing ? (
-                <button
-                    className="User_Info_Item_Edit_Btn"
-                    onClick={() => {
-                        setIsEditing(false);
-                    }}
-                >
-                    <span className="material-icons User_Tab_Edit_Icon">save</span>
-                    <p className="User_Info_Item_Edit_Btn_Text">salvar</p>
-                </button>
-            ) : (
-                <button
-                    className="User_Info_Item_Edit_Btn"
-                    onClick={() => {
-                        setIsEditing(true);
-                    }}
-                >
-                    <span className="material-icons User_Tab_Edit_Icon">edit</span>
-                    <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                </button>
-            )}
+                <span className="User_Info_Item_Icon material-icons">mode_edit</span>
+            </div>
         </div>
     );
 };
@@ -209,12 +127,12 @@ const User_Tab_General_Information = () => {
     return (
         <>
             {customer && editedCustomer && (
-                <div className="User_Tab_Card">
-                    <h1 className="User_Tab_Card_SubTitle">Informações Gerais</h1>
+                <div className="User_Tab_Card" id="General_Information_Card">
+                    <h1 className="User_Tab_Card_Title">Informações Gerais</h1>
                     {customer_has_not_updated_his_main_info && (
-                        <div className="User_Card_Address_Alert">
+                        <div className="User_Tab_Card_Alert">
                             <span className="material-icons">info</span>
-                            <p className="User_Card_Address_Alert_Text">Preencha corretamente estas informações antes de efetuar um pedido.</p>
+                            <p className="User_Tab_Card_Alert_Text">Preencha corretamente estas informações antes de efetuar um pedido.</p>
                         </div>
                     )}
                     <div className="User_Tab_Card_Info">
@@ -224,12 +142,7 @@ const User_Tab_General_Information = () => {
                             )}
                             {!customer.avatar_url && <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>}
 
-                            <div className="User_Tab_Card_Info_Image_Edit_Btn">
-                                <span className="material-icons User_Info_Item_Edit_Btn_Icon" onClick={() => {}}>
-                                    edit
-                                </span>
-                                <p className="User_Info_Item_Edit_Btn_Text">editar</p>
-                            </div>
+                            <span className="User_Info_Item_Icon material-icons">mode_edit</span>
                         </div>
 
                         <div className="User_Tab_Card_Info_Items_List">

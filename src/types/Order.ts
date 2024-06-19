@@ -3,6 +3,7 @@ import { Cart_Item } from "./Cart_Item";
 export type Order = {
     order_preference_id: string;
     order_external_reference: string;
+    order_payment_link: string;
     order_items: Cart_Item[];
     order_date: Date;
     order_type: string;

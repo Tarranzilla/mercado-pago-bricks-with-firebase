@@ -28,7 +28,7 @@ export default function UserTab() {
                         className="User_Tab"
                         key={"User_Tab_Cover_Image"}
                     >
-                        <Image src="/brand_imgs/dalle1.png" alt="Arte" width={400} height={800} className={"User_Tab_Cover_Image"} />
+                        <Image src="/brand_imgs/arte_parana.png" alt="Arte" width={400} height={800} className={"User_Tab_Cover_Image"} />
                     </m.div>
                 )}
             </AnimatePresence>

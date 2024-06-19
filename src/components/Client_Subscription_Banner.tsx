@@ -122,6 +122,7 @@ const Client_Subscription_Banner = () => {
                     const new_subscription: Subscription = {
                         subscription_preference_id: new_subscription_preference.id || "error-generating-id",
                         subscription_external_reference: new_subscription_preference.external_reference || "default_reference",
+                        subscription_payment_link: new_subscription_preference.full_preference.init_point || "default_payment_link",
 
                         subscription_id: "tropical-clube-3-meses",
                         subscription_name: "Assinatura Clube Tropical 3 Meses",
@@ -233,7 +234,7 @@ const Client_Subscription_Banner = () => {
     return (
         <div className="Subsctiption_Banner">
             {processingPayment ? (
-                <div className="User_Tab_Card Checkout_Card">
+                <div className="User_Tab_Card Checkout_Card Subscription_Banner_Card">
                     <h1 className="User_Tab_Card_Title Checkout_Card_Title">Assinatura Clube Tropical</h1>
                     <div className="User_No_Orders">
                         <span className="material-icons">loyalty</span>
@@ -241,7 +242,7 @@ const Client_Subscription_Banner = () => {
                     </div>
                 </div>
             ) : (
-                <div className="User_Tab_Card Checkout_Card">
+                <div className="User_Tab_Card Checkout_Card Subscription_Banner_Card">
                     <h1 className="User_Tab_Card_Title">Clube Tropical</h1>
                     <h2 className="Subsctiption_Banner_Subtitle">Que tal ter uma seleção de chocolates deliciosos chegando todo mês na sua casa?</h2>
                     <p className="Subsctiption_Banner_Description">
@@ -296,14 +297,16 @@ const Client_Subscription_Banner = () => {
                         </button>
                     </div>
 
-                    <Image
-                        src="/subscription_imgs/Clube_Tropical_001.png"
-                        alt="Chocolate Box"
-                        width={400}
-                        height={400}
-                        quality={100}
-                        className="Subsctiption_Banner_Image"
-                    />
+                    <div className="Subscription_Banner_Image_Container">
+                        <Image
+                            src="/subscription_imgs/Clube_Tropical_001.png"
+                            alt="Chocolate Box"
+                            width={400}
+                            height={400}
+                            quality={100}
+                            className="Subscription_Banner_Image"
+                        />
+                    </div>
                 </div>
             )}
         </div>

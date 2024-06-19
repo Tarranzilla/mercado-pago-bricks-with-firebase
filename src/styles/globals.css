@@ -518,26 +518,15 @@ body {
 .User_Tab_Card_Wrapper {
     display: flex;
     flex-direction: column;
-    margin-top: 1rem;
+    flex: 1;
+
+    position: relative;
     gap: 0.5rem;
     padding: 1.5rem;
+
+    background-color: var(--text_color);
     border: 1px solid var(--text_color_faded_1);
     border-radius: 1rem;
-
-    position: relative;
-    flex: 1;
-}
-
-.User_Tab_Card {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 1rem;
-    border: 1px solid var(--text_color_faded_2);
-    border-radius: 1rem;
-
-    position: relative;
-    margin-top: 1rem;
 }
 
 .Checkout_Card {
@@ -552,180 +541,11 @@ body {
     margin-top: 1rem;
 }
 
-.User_Tab_Card_Title {
-    position: absolute;
-    font-size: 2rem;
-    top: -1.25rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--bg_color);
-    padding-inline: 1rem;
-    width: max-content;
-}
-
-.User_Tab_Card_SubTitle {
-    position: absolute;
-    font-size: 1.2rem;
-    top: -0.75rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--bg_color);
-    padding-inline: 1rem;
-    width: max-content;
-}
-
-.User_Tab_Address_Resume {
-    display: flex;
-    align-items: flex-start;
-}
-
-.User_Tab_Address_Edit_Control {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.Address_Edit_Control_Item {
-    flex-grow: 1;
-    color: var(--text_color);
-    gap: 0.25rem;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-direction: column;
-}
-
-.Address_Edit_Control_Item > input {
-    padding: 0.5rem;
-    border: 1px solid var(--cinza_neutro);
-    border-radius: 0.5rem;
-    width: 100%;
-}
-
-#address-zip-control-item,
-#address-number-control-item {
-    max-width: 10rem;
-}
-
-.User_Tab_Card_Info {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-}
-
-.User_Tab_Card_Info_Image_Container {
-    min-width: 96px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-
-    border-radius: 0.5rem;
-
-    margin-inline: auto;
-
-    position: relative;
-}
-
-.User_Tab_Card_Info_Image_Container > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0.25rem;
-}
-
-.User_Card_Address_Alert {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    background-color: lightgreen;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-
-    letter-spacing: 0.05rem;
-}
-
-.User_Info_Item_Container {
-    display: flex;
-    gap: 2rem;
-}
-
-.User_Info_Item {
-    display: flex;
-    flex-direction: column;
-}
-
-.User_Info_Item_Label {
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-.User_Info_Item_Detail {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 18ch;
-}
-
-.User_Info_Item_Input {
-    padding: 0.5rem;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    width: 100%;
-}
-
-.User_Tab_Card_Info_Image_Edit_Btn,
-.User_Info_Item_Edit_Btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    background-color: var(--text_color);
-    color: var(--bg_color);
-
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-
-    margin-left: auto;
-}
-
-.User_Tab_Card_Info_Image_Edit_Btn {
-    padding: 0.5rem 0.5rem;
-    margin-left: unset;
-    background-color: var(--text_color);
-}
-
-.User_Info_Item_Edit_Btn_Text {
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05rem;
-    margin-inline: auto;
-}
-
-.User_Info_Item_Edit_Btn_Icon {
-    font-size: 1.25rem;
-}
-
-.User_Tab_Edit_Icon {
-    font-size: 1rem;
-}
-
 .User_Account_Info {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 1rem;
-}
-
-.User_Tab_Card_Info_Items_List {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
 }
 
 .User_Info_Edit_Control {
@@ -854,7 +674,7 @@ body {
 .Order_Item_Text_Headers_Container {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
 .Order_Item_Text_Header {
@@ -867,12 +687,6 @@ body {
     min-width: max-content;
 }
 
-.Subscription_Item_Text_Headers_Container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
 .Order_Item_Text_Header_Item {
     display: flex;
     flex-direction: column;
@@ -883,51 +697,51 @@ body {
 
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    flex-grow: 1;
-}
-
-.Subscription_Item_Text_Header_Item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    background-color: var(--text_color_faded_1);
-    color: var(--bg_color);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     flex-grow: 1;
 }
 
 .User_Order_Status {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    flex-direction: column;
 
     background-color: var(--text_color_faded_1);
     color: var(--bg_color);
 
     border: none;
-    padding: 1rem 1rem;
-    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
 }
 
 .User_Order_Status_State {
     flex-grow: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.25rem;
-    background-color: var(--text_color);
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
 }
 
 .User_Order_Status_State > p,
 .User_Order_Status_State > span {
     color: var(--bg_color);
+}
+
+.User_Order_Status_State_Payment_Link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    margin-left: auto;
+
+    background-color: var(--bg_color);
+    color: var(--text_color);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
 }
 
 .User_Order_Status_Call_Btn {
@@ -1094,6 +908,307 @@ body {
     letter-spacing: 0.05rem;
 }
 
+/* ------ User Tab ------ */
+
+.User_Tab {
+    z-index: 1001;
+}
+
+.UserTab_Content_Scroller {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    overflow-y: scroll;
+
+    padding: 1.5rem 1.5rem;
+
+    border: 1px solid var(--text_color);
+    border-radius: 1rem;
+
+    position: relative;
+}
+
+.UserTab_Content_Scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.User_Tab_Content_Wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    position: relative;
+    gap: 0.5rem;
+    padding: 1.5rem;
+
+    background-color: var(--text_color);
+    border: 1px solid var(--text_color_faded_1);
+    border-radius: 1rem;
+}
+
+.User_Tab_Title {
+    position: absolute;
+    top: -1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding-inline: 1rem;
+    width: max-content;
+
+    font-size: 2rem;
+    background-color: var(--bg_color);
+    border-radius: 2.5rem;
+}
+
+.User_Tab_Close_Btn {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    top: -1rem;
+    right: -1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: var(--bg_color);
+    color: var(--text_color);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50%;
+    cursor: pointer;
+
+    text-decoration: none;
+}
+
+.User_Tab_Card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    margin-top: 1rem;
+    padding: 1rem;
+    padding-top: 1.5rem;
+
+    border: 1px solid var(--bg_color_faded_1);
+    border-radius: 1rem;
+}
+
+.User_Tab_Card_Title {
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding-inline: 1rem;
+    width: max-content;
+
+    font-size: 1.2rem;
+    background-color: var(--bg_color);
+    border-radius: 2.5rem;
+}
+
+.User_Tab_Card_Alert {
+    display: flex;
+    color: lightgreen;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.25rem;
+    border: 1px solid lightgreen;
+    border-radius: 0.5rem;
+}
+
+.User_Tab_Card_Info {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.User_Tab_Card_Info_Image_Container {
+    min-width: 96px;
+    height: 100%;
+    aspect-ratio: 1/1;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    border-radius: 0.5rem;
+    border: 1px solid var(--bg_color);
+
+    position: relative;
+}
+
+.User_Tab_Card_Info_Image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0.25rem;
+    padding: 2rem;
+}
+
+.User_Tab_Card_Info_Items_List {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.User_Info_Item_Container {
+    display: flex;
+    width: 100%;
+    gap: 2rem;
+    color: var(--bg_color);
+}
+
+.User_Info_Item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+}
+
+.User_Info_Item_Label {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.User_Info_Item_Input {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: transparent;
+    color: var(--bg_color);
+    border-radius: 0.5rem;
+    border: 1px solid var(--bg_color);
+    caret-color: var(--bg_color); /* Add this line */
+}
+
+.User_Info_Item_Icon {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    color: var(--bg_color);
+    font-size: 1rem;
+}
+
+.User_Tab_Address_Edit_Control {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    color: var(--bg_color);
+}
+
+.Address_Edit_Control_Item {
+    flex-grow: 1;
+    position: relative;
+}
+
+.Address_Edit_Control_Item > input {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: transparent;
+    color: var(--bg_color);
+    border-radius: 0.5rem;
+    border: 1px solid var(--bg_color);
+    caret-color: var(--bg_color); /* Add this line */
+}
+
+#address-zip-control-item,
+#address-number-control-item {
+    flex-grow: 1;
+}
+
+.User_Subscription_Item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-radius: 1rem;
+    color: var(--bg_color);
+}
+
+.Subscription_Item_Header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.Subscription_Item_Text_Header_Item {
+    flex-grow: 1;
+    border: 1px solid var(--bg_color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.Subscription_Item_Status {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--bg_color);
+    color: var(--text_color);
+}
+
+.Subscription_Status_State {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.Subscription_Status_Alert {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--text_color);
+}
+
+.User_Tab_Card_Alert_Text {
+    letter-spacing: 0.05rem;
+}
+
+.Subscription_Status_State_Payment_Link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+    text-align: center;
+}
+
+.User_Subscription_Call_Btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+}
+
 /* Aba de Login */
 
 #user-tab-no-account-connected {
@@ -1168,7 +1283,11 @@ body {
 /* Assinatura */
 
 .Subsctiption_Banner {
-    min-height: 75vh;
+}
+
+.Subscription_Banner_Card {
+    height: 100%;
+    height: calc(75vh - 2rem);
 }
 
 .Subsctiption_Banner_Subtitle {
@@ -1185,12 +1304,19 @@ body {
     margin-inline: auto;
 }
 
-.Subsctiption_Banner_Image {
+.Subscription_Banner_Image_Container {
+    display: flex;
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+}
+
+.Subscription_Banner_Image {
     border-radius: 1rem;
     object-fit: cover;
     object-position: top;
-    width: 100%;
-    height: auto;
+    width: 100%; /* Add this line */
+    height: 100%; /* Add this line */
 }
 
 /* Lista de Produtos */

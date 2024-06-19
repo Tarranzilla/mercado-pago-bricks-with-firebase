@@ -6,6 +6,8 @@ import { Order } from "@/types/Order";
 
 import { AnimatePresence, motion as m } from "framer-motion";
 
+import Link from "next/link";
+
 import { generate_whatsapp_url_for_more_order_info } from "@/util/WhatsApp";
 
 const businessTelephone = process.env.NEXT_PUBLIC_BUSINESS_MAIN_TELEPHONE;
@@ -69,7 +71,14 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                         <>
                             <div className="User_Order_Status_State">
                                 <p>Aguardando Pagamento</p>
-                                <span className="material-icons">request_quote</span>
+                                <Link
+                                    href={order.order_payment_link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="User_Order_Status_State_Payment_Link"
+                                >
+                                    Link de Pagamento
+                                </Link>
                             </div>
                         </>
                     )}
@@ -81,7 +90,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                     )}
                     {order.status.waiting_payment === true && (
                         <>
-                            <span className="material-icons">request_quote</span> Aguardando Pagamento
+                            <p>Aguardando Pagamento</p> <button className="User_Order_Status_State_Payment_Link">Link de Pagamento</button>
                         </>
                     )}
                     {order.status.in_production === true && (
@@ -201,7 +210,7 @@ const User_Tab_Orders = () => {
     return (
         <>
             <div className="User_Tab_Card">
-                <h1 className="User_Tab_Card_SubTitle">Pedidos Realizados</h1>
+                <h1 className="User_Tab_Card_Title">Pedidos Realizados</h1>
                 <div className="User_Order_List">
                     {/* Lista de Pedidos do Usuário */}
                     {displayedOrders.map((order, index) => {

@@ -4,6 +4,7 @@ import { RootState } from "@/store/store";
 
 import { User as User_Local } from "@/types/User";
 import { setCurrentUser, setCurrentEditedUser, setCurrentUserSubscriptions, setCurrentUserOrders } from "@/store/slices/user_slice";
+import { setUserTabOpen } from "@/store/slices/interface_slice";
 
 // Firebase Client SDK
 import { signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
@@ -46,6 +47,12 @@ if (!businessTelephone) {
 
 const User_Tab_Content = () => {
     const dispatch = useDispatch();
+
+    const userTabOpen = useSelector((state: RootState) => state.interface.isUserTabOpen);
+
+    const setUserTabOpenAction = (value: boolean) => {
+        dispatch(setUserTabOpen(value));
+    };
 
     // Seletores do contexto Redux
     const [isCustomerLoading, setIsCustomerLoading] = useState(false);
@@ -233,11 +240,19 @@ const User_Tab_Content = () => {
             <m.div initial={{ x: -1000 }} animate={{ x: 0 }} exit={{ x: -1000 }} transition={{ duration: 0.5 }} className="User_Tab" key={"User_Tab"}>
                 {/* Wrapper do Conteúdo da Aba do Usuário */}
                 <div
-                    className={isSomeLocalUserInfoEdited ? "UserTab_Content_Wrapper Extra_Bottom_Padding" : "UserTab_Content_Wrapper"}
+                    className={isSomeLocalUserInfoEdited ? "UserTab_Content_Scroller Extra_Bottom_Padding" : "UserTab_Content_Scroller"}
                     ref={scroll_ref}
                 >
-                    <div className="User_Tab_Card_Wrapper">
-                        <h1 className="User_Tab_Card_Title">Perfil do Cliente</h1>
+                    <div className="User_Tab_Content_Wrapper">
+                        <h1 className="User_Tab_Title">Perfil do Cliente</h1>
+                        <button
+                            className="User_Tab_Close_Btn"
+                            onClick={() => {
+                                setUserTabOpenAction(false);
+                            }}
+                        >
+                            <span className="material-icons">close</span>
+                        </button>
                         {isCustomerLoading ? (
                             <div className="User_Tab_Loading">
                                 <div className="User_Tab_Loading_Spinner">Carregando Usuário</div>

@@ -1,6 +1,7 @@
 export type Subscription = {
     subscription_preference_id: string;
     subscription_external_reference: string;
+    subscription_payment_link: string;
 
     subscription_id: string;
     subscription_name: string;

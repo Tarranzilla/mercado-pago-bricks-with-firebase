@@ -114,6 +114,7 @@ const Client_Checkout = () => {
                     const order: Order = {
                         order_preference_id: new_preference.id || "error-generating-id",
                         order_external_reference: new_preference.external_reference || "default_reference",
+                        order_payment_link: new_preference.full_preference.init_point || "default_payment_link",
                         order_items: cartItems,
                         order_date: new Date(),
                         order_type: "mercado-pago",

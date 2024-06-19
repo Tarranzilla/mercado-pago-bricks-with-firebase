@@ -50,8 +50,6 @@ const Client_Cart_Content = () => {
         restDelta: 0.001,
     });
 
-    console.log(scaleX);
-
     return (
         <>
             <div className="UserTab_Content_Wrapper Cart_Content_Wrapper" ref={scroll_ref}>

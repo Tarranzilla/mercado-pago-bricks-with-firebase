@@ -16,8 +16,8 @@ const Brand_Intro = () => {
                     <Image
                         src="/brand_imgs/Icone_TC_512_HQ.png"
                         alt="Chocolate Box"
-                        width={400}
-                        height={400}
+                        width={1080}
+                        height={1080}
                         quality={100}
                         className={!about ? "Intro_Image Active" : "Intro_Image"}
                     />

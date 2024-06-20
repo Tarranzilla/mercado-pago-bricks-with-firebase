@@ -256,7 +256,7 @@ const Client_Checkout = () => {
                                 </div>
                             ) : (
                                 <>
-                                    <div className="Checkout_Card Product_List_Card">
+                                    <div className="Checkout_Card Checkout_Product_List_Card">
                                         <h1 className="Checkout_Card_Title">Itens do Pedido</h1>
 
                                         {emptyCart ? (

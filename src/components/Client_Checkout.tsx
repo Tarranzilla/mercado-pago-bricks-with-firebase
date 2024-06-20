@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import Link from "next/link";
 
-import { setUserTabNeedsUpdate } from "@/store/slices/interface_slice";
+import { setUserTabNeedsUpdate, setUserTabOpen } from "@/store/slices/interface_slice";
 
 import { motion as m, useScroll, useSpring } from "framer-motion";
 
@@ -70,6 +70,10 @@ const Client_Checkout = () => {
 
     const userTabNeedsUpdateAction = () => {
         dispatch(setUserTabNeedsUpdate(true));
+    };
+
+    const setUserTabOpenAction = (open: boolean) => {
+        dispatch(setUserTabOpen(open));
     };
 
     const processPaymentAction = async () => {
@@ -236,12 +240,12 @@ const Client_Checkout = () => {
                     ) : (
                         <>
                             {!customer ? (
-                                <div className="Checkout_Card Margin_Block">
+                                <div className="Checkout_Card Checkout_Card_No_User Margin_Block">
                                     <h1 className="Checkout_Card_Title">Por Favor Conecte-se</h1>
 
-                                    <div className="Checkout_No_Orders">
-                                        <span className="material-icons User_No_Orders_Icon">badge</span>
-                                        <p className="Checkout_No_Orders_Text">
+                                    <div className="Checkout_No_User">
+                                        <span className="material-icons Checkout_No_User_Icon">badge</span>
+                                        <p className="Checkout_No_User_Text">
                                             Você precisa estar conectado na sua conta para fazer um pedido e finalizar a compra.
                                         </p>
                                     </div>
@@ -252,17 +256,17 @@ const Client_Checkout = () => {
                                 </div>
                             ) : (
                                 <>
-                                    <div className="Checkout_Card">
+                                    <div className="Checkout_Card Product_List_Card">
                                         <h1 className="Checkout_Card_Title">Itens do Pedido</h1>
 
                                         {emptyCart ? (
                                             <div className="Checkout_No_Orders">
-                                                <span className="material-icons">list_alt</span>
+                                                <span className="material-icons Checkout_No_Orders_Icon">list_alt</span>
                                                 <p className="Checkout_No_Orders_Text">Nenhum item adicionado ao pedido.</p>
                                             </div>
                                         ) : (
                                             <>
-                                                <div className="User_Order_Product_List">
+                                                <div className="User_Order_Product_List User_Order_Checkout_Product_List">
                                                     <h4>Produtos</h4>
                                                     {cartItems.map((cart_item, index) => {
                                                         return (
@@ -278,9 +282,9 @@ const Client_Checkout = () => {
                                                     })}
                                                 </div>
 
-                                                <div className="User_Order_Total">
-                                                    <h4>Valor do Produtos</h4>
-                                                    <p className="User_Order_Total_Value">
+                                                <div className="User_Order_Total Checkout_Product_List_Total">
+                                                    <h4>Valor dos Produtos</h4>
+                                                    <p className="User_Order_Total_Value Checkout_Product_List_Total_Value">
                                                         R$ {cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)},00
                                                     </p>
                                                 </div>
@@ -308,7 +312,7 @@ const Client_Checkout = () => {
                                                     target="_blank"
                                                 >
                                                     <span className="material-icons">explore</span>
-                                                    Veja o Endereço
+                                                    Confira o Endereço
                                                 </a>
                                                 <input type="radio" name="receive_option" id="receive_option_1" defaultChecked />
                                             </button>
@@ -335,13 +339,18 @@ const Client_Checkout = () => {
                                             )}
 
                                             {customer_has_not_updated_his_address ? (
-                                                <div className="Receive_Option LightGreen">
+                                                <button
+                                                    className="Checkout_Address_Alert"
+                                                    onClick={() => {
+                                                        setUserTabOpenAction(true);
+                                                    }}
+                                                >
                                                     <span className="material-icons">info</span>
                                                     <p>
                                                         Para habilitar a opção de Entrega em Casa, atualize as suas informações pessoais e de entrega
                                                         nas configurações da sua conta.
                                                     </p>
-                                                </div>
+                                                </button>
                                             ) : (
                                                 <></>
                                             )}
@@ -351,7 +360,12 @@ const Client_Checkout = () => {
                                                     <div className="User_Order_Shipping_Address">
                                                         <div className="User_Order_Shipping_Address_Header">
                                                             <h4>Endereço de Entrega</h4>
-                                                            <button className="User_Order_Shipping_Address_Edit_Btn">
+                                                            <button
+                                                                className="User_Order_Shipping_Address_Edit_Btn"
+                                                                onClick={() => {
+                                                                    setUserTabOpenAction(true);
+                                                                }}
+                                                            >
                                                                 <span className="material-icons">edit</span>Alterar
                                                             </button>
                                                         </div>
@@ -376,13 +390,15 @@ const Client_Checkout = () => {
                                                     </div>
                                                     <div className="User_Order_Total User_Shipping_Total">
                                                         <h4>Valor da Entrega</h4>
-                                                        <p className="User_Order_Total_Value">R$ {shipping_cost},00</p>
+                                                        <p className="User_Order_Shipping_Value">R$ {shipping_cost},00</p>
                                                     </div>
                                                 </>
                                             )}
 
                                             <div className="Recieve_Option_Observation">
-                                                <h4>Observações</h4>
+                                                <h4 className="Observation_Title">
+                                                    <span className="material-icons">visibility</span>Observações
+                                                </h4>
                                                 <textarea
                                                     id="receive_option_observation_text_area"
                                                     maxLength={512}
@@ -400,19 +416,25 @@ const Client_Checkout = () => {
                                     <div className="Checkout_Card">
                                         <h1 className="Checkout_Card_Title">Resumo do Pedido</h1>
                                         <div className="Checkout_Order_Summary">
-                                            <div className="User_Order_Total">
-                                                <h4>Valor do Produtos</h4>
-                                                <p className="User_Order_Total_Value">
+                                            <div className="Checkout_Total">
+                                                <h4>
+                                                    <span className="material-icons">category</span>Valor do Produtos
+                                                </h4>
+                                                <p className="Checkout_Total_Value">
                                                     R$ {cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)},00
                                                 </p>
                                             </div>
-                                            <div className="User_Order_Total">
-                                                <h4>Valor da Entrega</h4>
-                                                <p className="User_Order_Total_Value">R$ {shipping_cost},00</p>
+                                            <div className="Checkout_Total">
+                                                <h4>
+                                                    <span className="material-icons">local_shipping</span>Valor da Entrega
+                                                </h4>
+                                                <p className="Checkout_Total_Value">R$ {shipping_cost},00</p>
                                             </div>
-                                            <div className="User_Order_Total">
-                                                <h4>Valor Total</h4>
-                                                <p className="User_Order_Total_Value">
+                                            <div className="Checkout_Total">
+                                                <h4>
+                                                    <span className="material-icons">functions</span> Valor Total
+                                                </h4>
+                                                <p className="Checkout_Total_Value">
                                                     R$ {cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0) + shipping_cost}
                                                     ,00
                                                 </p>
@@ -429,7 +451,11 @@ const Client_Checkout = () => {
                                             )}
 
                                             <div className="Checkout_Footer_Buttons">
-                                                <Link href={"/#inicio"} className="Checkout_Button User_Order_Total_Btn" id="checkout-return-button">
+                                                <Link
+                                                    href={"/#inicio"}
+                                                    className="Cart_Footer_Checkout_Button User_Order_Total_Btn"
+                                                    id="checkout-return-button"
+                                                >
                                                     <span className="material-icons">arrow_back</span>Voltar a Página Inicial
                                                 </Link>
 
@@ -437,8 +463,8 @@ const Client_Checkout = () => {
                                                     id="checkout-payment-button"
                                                     className={
                                                         emptyCart || customer_has_not_updated_his_phone
-                                                            ? "Checkout_Button User_Order_Total_Btn Disabled"
-                                                            : " Checkout_Button User_Order_Total_Btn"
+                                                            ? "Cart_Footer_Checkout_Button User_Order_Total_Btn Disabled"
+                                                            : " Cart_Footer_Checkout_Button User_Order_Total_Btn"
                                                     }
                                                     onClick={() => {
                                                         console.log("Processando Pagamento...");

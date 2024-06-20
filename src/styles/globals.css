@@ -382,6 +382,28 @@ body {
     border-bottom: 1px solid var(--text_color);
 }
 
+.User_Shipping_Total {
+    margin-top: 0;
+    border-top: 1px solid var(--bg_color);
+    border-bottom: 1px solid var(--bg_color);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-inline: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.User_Order_Total_Value {
+    background-color: var(--text_color);
+    color: var(--bg_color);
+    text-align: center;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    min-width: 7rem;
+}
+
 .Admin_Actions_List {
     display: flex;
     flex-direction: column;
@@ -2013,6 +2035,7 @@ body {
     cursor: pointer;
 
     font-size: 1rem;
+    font-weight: 400;
     letter-spacing: 0.05rem;
     font-family: "ProfilePro_WOFF2", sans-serif;
 
@@ -2020,6 +2043,8 @@ body {
 
     text-decoration: none;
     color: var(--bg_color);
+
+    text-decoration: none;
 }
 
 .Cart_Footer_Checkout_Button_Text {
@@ -2046,7 +2071,7 @@ body {
     position: relative;
     gap: 0.5rem;
     padding: 1.5rem;
-    padding-top: 7rem;
+    padding-top: 4.7rem;
 
     background-color: var(--text_color);
     border: 1px solid var(--text_color_faded_1);
@@ -2065,11 +2090,20 @@ body {
     margin-top: 1.5rem;
 
     color: var(--bg_color);
+
+    scroll-snap-align: start;
+    scroll-margin: 7.75rem;
+}
+
+.Checkout_Card_No_User {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
 }
 
 .Checkout_Card_Title {
     position: absolute;
-    top: -1.25rem;
+    top: -0.9rem;
     left: 50%;
     transform: translateX(-50%);
 
@@ -2082,9 +2116,89 @@ body {
     border-radius: 2.5rem;
 }
 
+.Checkout_No_User {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    padding-bottom: 0;
+}
+
+.Checkout_No_User_Icon {
+    font-size: 3rem;
+}
+
+.Checkout_No_User_Text {
+    max-width: 38ch;
+    text-align: center;
+}
+
+.Checkout_Return_Btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
+}
+
+.Checkout_No_Orders {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.Checkout_No_Orders_Icon {
+    font-size: 3rem;
+}
+
+.Checkout_No_Orders_Text {
+}
+
+.Product_List_Card {
+    gap: 0;
+}
+
+.User_Order_Checkout_Product_List {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.User_Order_Checkout_Product {
+}
+
+.Checkout_Product_List_Total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem;
+
+    border-bottom: 1px solid var(--bg_color);
+    padding-bottom: 1rem;
+
+    width: 100%;
+}
+
+.Checkout_Product_List_Total_Value {
+    background-color: var(--bg_color);
+    color: var(--text_color);
+}
+
 .Checkout_Footer_Buttons {
     display: flex;
     gap: 0.5rem;
+    margin-top: 1rem;
 }
 
 #checkout-payment-button {
@@ -2100,39 +2214,25 @@ body {
     font-size: 1.5rem;
 }
 
-.User_Shipping_Total,
-.User_Order_Total {
+.Checkout_Address_Alert {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin: 1rem;
-
-    border-bottom: 1px solid var(--text_color_faded_1);
-    padding-bottom: 1rem;
-}
-
-.User_Shipping_Total {
-    margin-top: 0;
-    border-top: 1px solid var(--text_color_faded_2);
-    padding-top: 1rem;
-    margin-inline: 0;
-}
-
-.User_Order_Total_Value {
-    background-color: var(--text_color);
-    color: var(--bg_color);
-    text-align: center;
-    border: none;
-    padding: 0.75rem 1.25rem;
+    gap: 0.5rem;
+    padding: 1rem;
     border-radius: 0.5rem;
-    min-width: 7rem;
+    background-color: lightgreen;
+    color: var(--text_color);
+    border: none;
+    cursor: pointer;
+    text-align: start;
+    font-size: 1rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
 }
 
 .Checkout_Receive_Options {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin: 1rem;
 }
 
 .Receive_Option {
@@ -2142,29 +2242,40 @@ body {
 
     min-height: 4.5rem;
 
-    background-color: rgba(173, 216, 230, 0.5);
+    background-color: #461e0b;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+    color: var(--bg_color);
     border: none;
     padding: 1rem 1.5rem;
     border-radius: 0.5rem;
 
-    font-size: 1rem;
+    font-size: 1.1rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
 
     cursor: pointer;
 
     transition: background-color 0.25s;
 }
 
+.Receive_Option > input {
+    color: #461e0b;
+    accent-color: #461e0b;
+}
+
 .Receive_Option.Active {
-    background-color: rgba(173, 216, 230, 1);
+    background-color: var(--anchor_hover_color);
+    color: var(--text_color);
 }
 
 .Receive_Option.Disabled {
-    background-color: lightgray;
+    background-color: #986445;
+    color: var(--bg_color);
     cursor: not-allowed;
     opacity: 0.8;
 }
 
-.Receive_Option.Disabled > input {
+.Receive_Option.Disabled > input,
+.Receive_Option.Disabled > label {
     pointer-events: none;
 }
 
@@ -2179,20 +2290,23 @@ body {
 .Recieve_Option_Map_Link {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    justify-content: space-between;
+    gap: 0.75rem;
 
-    background-color: #009ee3;
+    background-color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     border: none;
-    padding: 0.5rem 0.75rem;
+    padding: 0.4rem 0.6rem;
     border-radius: 1rem;
     cursor: pointer;
 
     text-decoration: none;
-    color: black;
+    color: var(--text_color);
     margin-left: 0.5rem;
 
-    font-size: 0.75rem;
-    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
 }
 
 .Recieve_Option_Map_Link > span {
@@ -2207,12 +2321,12 @@ body {
 .User_Order_Shipping_Address {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
 
-    border: 1px solid var(--text_color_faded_1);
+    border: 1px solid var(--bg_color);
     border-radius: 1rem;
     padding: 1rem 1.5rem;
     padding-bottom: 1.5rem;
+    letter-spacing: 0.05rem;
 }
 
 .User_Order_Shipping_Address_Header {
@@ -2226,7 +2340,8 @@ body {
     align-items: center;
     gap: 0.5rem;
 
-    background-color: var(--text_color);
+    background-color: #461e0b;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     color: var(--bg_color);
 
     border: none;
@@ -2234,7 +2349,7 @@ body {
     border-radius: 0.5rem;
     cursor: pointer;
 
-    text-transform: uppercase;
+    font-size: 1rem;
     letter-spacing: 0.05rem;
 }
 
@@ -2246,8 +2361,17 @@ body {
     display: flex;
     gap: 1rem;
     align-items: center;
-    border-top: 1px solid var(--text_color_faded_2);
+    border-top: 1px solid var(--bg_color);
     padding-top: 0.5rem;
+}
+
+.User_Order_Shipping_Value {
+    background-color: var(--bg_color);
+    color: var(--text_color);
+    min-width: 7rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    text-align: center;
 }
 
 .User_Order_Shipping_Info > p {
@@ -2261,15 +2385,50 @@ body {
     flex-direction: column;
     gap: 0.5rem;
     width: 100%;
+    margin-top: 0.5rem;
+}
+
+.Observation_Title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 #receive_option_observation_text_area {
     padding: 1rem;
-    border: 1px solid gray;
+    border: 1px solid var(--bg_color);
     border-radius: 0.5rem;
     width: 100% !important;
     min-height: 9rem;
     max-height: 9rem;
+    background-color: #461e0b;
+    caret-color: var(--bg_color);
+    color: var(--bg_color);
+}
+
+.Checkout_Total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid var(--bg_color);
+}
+
+.Checkout_Total > h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.Checkout_Total_Value {
+    background-color: var(--bg_color);
+    color: var(--text_color);
+    text-align: center;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    min-width: 7rem;
 }
 
 /* Barra de Progresso */
@@ -2320,11 +2479,4 @@ circle {
 
 .Alt_Cursor {
     cursor: help !important;
-}
-
-.Margin_Block {
-    margin-block: auto;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
 }

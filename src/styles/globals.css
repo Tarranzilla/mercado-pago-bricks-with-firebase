@@ -153,12 +153,10 @@ body {
     gap: 1rem;
 
     position: fixed;
-    top: 1rem;
+    top: 2.5rem;
     left: calc(28vw + 2rem);
     right: calc(28vw + 2rem);
     bottom: 1rem;
-
-    transition: left 0.5s ease-out, right 0.5s ease-out;
 }
 
 .Main_Page_Content.expanded {
@@ -195,11 +193,6 @@ body {
     flex: 1;
 }
 
-.Main_Page_Content_Wrapper > * {
-    scroll-margin-block: 1.5rem;
-    scroll-snap-align: start;
-}
-
 .Main_Page_Content_Wrapper::-webkit-scrollbar {
     display: none;
 }
@@ -223,7 +216,7 @@ body {
 
 .Navbar_Main_Container {
     height: 100%;
-    width: calc(44vw - 7rem - 2px);
+    width: calc(44vw - 7rem);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -240,6 +233,7 @@ body {
     font-family: "Cooper_TrueType", sans-serif;
     letter-spacing: 0.15rem;
     font-weight: 400;
+    min-width: max-content;
     position: absolute;
     top: -2rem;
     background-color: var(--bg_color);
@@ -440,13 +434,14 @@ body {
     z-index: 1001;
 
     position: fixed;
-    top: 1rem;
+    top: 2.5rem;
     left: 1rem;
     bottom: 1rem;
 
     width: 28vw;
 }
 
+.Cart_Cover_Image,
 .User_Tab_Cover_Image {
     width: 100%;
     height: 100%;
@@ -1187,6 +1182,9 @@ body {
 
     min-height: 100%;
     position: relative;
+
+    scroll-snap-align: start;
+    scroll-margin: 1rem;
 }
 
 .Brand_Intro > h1 {
@@ -1197,6 +1195,7 @@ body {
     color: var(--bg_color);
     z-index: 2;
     text-shadow: var(--text_color) 0 0 0.5rem;
+    max-width: 20ch;
 }
 
 .Intro_Image_Container {
@@ -1283,9 +1282,11 @@ body {
 
 /* Banner de Assinatura */
 
-.Subsctiption_Banner {
+.Subscription_Banner {
     padding-top: 7rem;
     min-height: 100%;
+
+    min-height: calc(100% + 1.5rem);
 }
 
 .Subscription_Banner_Card {
@@ -1311,6 +1312,9 @@ body {
     padding: 0.25rem 1.5rem;
     background-color: var(--bg_color);
     border-radius: 2.4rem;
+
+    scroll-snap-align: start;
+    scroll-margin: 5.4rem;
 }
 
 .Subsctiption_Banner_Subtitle {
@@ -1400,6 +1404,7 @@ body {
     padding-top: 7rem;
     position: relative;
     min-height: 100%;
+    margin-bottom: 1rem;
 }
 
 .Product_List_Card {
@@ -1409,6 +1414,7 @@ body {
     gap: 1rem;
     padding: 1rem;
     padding-top: 2.5rem;
+    padding-bottom: 1.5rem;
 
     border: 1px solid var(--text_color);
     background-color: var(--bg_color);
@@ -1426,6 +1432,9 @@ body {
     padding: 0.25rem 1.5rem;
     background-color: var(--bg_color);
     border-radius: 2.4rem;
+
+    scroll-snap-align: start;
+    scroll-margin: 5.4rem;
 }
 
 .Product_List_Subtitle {
@@ -1459,7 +1468,7 @@ body {
 
     box-shadow: 0 0 0.25rem rgba(0, 0, 0, 1);
     scroll-snap-align: start;
-    scroll-margin: 6.9rem;
+    scroll-margin: 5.4rem;
 }
 
 .Product_List_Filter_Collapse_Btn {
@@ -1618,6 +1627,7 @@ body {
 
 .Product_List_Item {
     display: flex;
+    flex-direction: row;
     gap: 1rem;
     padding: 1rem;
     border: 1px solid var(--text_color);
@@ -1625,7 +1635,7 @@ body {
     border-radius: 1rem;
 
     scroll-snap-align: start;
-    scroll-margin: 6.9rem;
+    scroll-margin: 5.4rem;
 }
 
 .Product_List_Item_Image_Container {
@@ -1768,7 +1778,7 @@ body {
     z-index: 1001;
 
     position: fixed;
-    top: 1rem;
+    top: 2.5rem;
     right: 1rem;
     bottom: 1rem;
     width: 28vw;
@@ -2096,7 +2106,7 @@ body {
     color: var(--bg_color);
 
     scroll-snap-align: start;
-    scroll-margin: 7.75rem;
+    scroll-margin: 6.25rem;
 }
 
 .Checkout_Card_No_User {
@@ -2259,6 +2269,12 @@ body {
     cursor: pointer;
 
     transition: background-color 0.25s;
+}
+
+.Recieve_Option_Group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .Receive_Option > input {
@@ -2483,4 +2499,244 @@ circle {
 
 .Alt_Cursor {
     cursor: help !important;
+}
+
+@media screen and (max-width: 1480px) {
+    .Main_Page_Content {
+        left: 1rem;
+        right: 1rem;
+    }
+
+    .Navbar {
+        z-index: 10010;
+        width: unset;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .User_Tab_Cover_Image {
+        display: none;
+    }
+    .User_Tab {
+        top: 1rem;
+        right: 1rem;
+        width: calc(100% - 2rem);
+    }
+
+    .Cart {
+        top: 1rem;
+        left: 1rem;
+        width: calc(100% - 2rem);
+    }
+
+    .UserTab_Content_Scroller,
+    .Cart_Content_Scroller {
+        padding: 0;
+    }
+
+    .User_Tab_Title,
+    .Cart_Title {
+        display: none;
+    }
+
+    .User_Tab_Close_Btn,
+    .Cart_Close_Btn {
+        display: none;
+    }
+
+    #General_Information_Card {
+        margin-top: 6rem;
+    }
+
+    .Cart_List {
+        margin-top: 5.4rem;
+    }
+
+    .Intro_Image_Container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .Product_List_Card {
+        max-width: 800px;
+        margin-inline: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .Navbar_Brand_Name {
+        font-size: 2.5rem;
+        top: -1.75rem;
+    }
+
+    .Navbar_Tool_Label {
+        display: none;
+    }
+
+    .Main_Page_Content_Wrapper {
+        padding: 0.5rem;
+    }
+
+    .Brand_Intro > h1 {
+        font-size: 4.2rem;
+        line-height: 3.6rem;
+    }
+
+    .Intro_Image_Container {
+        width: 175%;
+        height: 175%;
+        bottom: 12.5%;
+    }
+
+    .Subscription_Banner {
+        min-height: calc(100% + 0.5rem);
+    }
+
+    .Subsctiption_Banner_Subtitle,
+    .Subsctiption_Banner_Description,
+    .Subscription_Banner_Button,
+    .Subscription_Banner_Warning {
+        margin-inline: 1rem;
+    }
+
+    .User_Tab_Content_Wrapper {
+        padding-inline: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .User_Tab_Card_Info_Image_Container {
+        min-width: 128px;
+    }
+
+    .Product_List_List {
+        margin-inline: 0;
+    }
+
+    .Product_List_Filter_Title {
+        font-size: 1.2rem;
+        text-align: start;
+    }
+
+    .Product_List_Filter_Collapse_Btn {
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+
+    .Product_List_Item {
+        position: relative;
+    }
+
+    .Product_List_Item_Image_Container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        max-width: unset;
+        max-height: unset;
+        top: 0;
+        left: 0;
+        opacity: 0.5;
+        filter: contrast(0.3);
+        border: none;
+    }
+
+    .Product_List_Item_Image {
+        border-radius: 0.75rem;
+    }
+
+    .Product_List_Item.Grid > .Product_List_Item_Image_Container {
+        position: relative;
+        width: 100%;
+        height: unset;
+        top: unset;
+        left: unset;
+        opacity: 1;
+        filter: brightness(1);
+        overflow: hidden;
+        border: 1px solid var(--text_color);
+    }
+
+    .Product_List_Item.Grid > .Product_List_Item_Image_Container > .Product_List_Item_Image {
+        border-radius: 0.5rem;
+    }
+
+    .Product_List_Item.Grid {
+        flex-direction: column;
+    }
+
+    .Product_List_Item_Info {
+        z-index: 2;
+    }
+
+    .Product_List_Item_Info_Footer {
+        flex-direction: column;
+    }
+
+    .Checkout_Content_Wrapper,
+    .Checkout_Card {
+        padding-inline: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .Checkout_Content_Wrapper {
+        padding-inline: 0;
+    }
+
+    .User_Order_Checkout_Product_List,
+    .Checkout_Product_List_Total {
+        margin: 0;
+    }
+
+    .Checkout_Product_List_Total {
+        margin-top: 0.5rem;
+        padding-bottom: 0;
+        border: none;
+    }
+
+    .Receive_Option {
+        font-size: 1rem;
+        padding-block: 0.5rem;
+    }
+
+    .Recieve_Option_Group {
+        gap: 0.25rem;
+    }
+
+    .Recieve_Option_Map_Link {
+        margin: 0;
+        gap: 0.25rem;
+
+        padding-inline: 0.25rem;
+        padding-right: 0.4rem;
+        padding-block: 0.25rem;
+    }
+
+    .User_Order_Shipping_Address {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .User_Order_Shipping_Address_Header {
+        margin-bottom: 1rem;
+    }
+
+    .User_Order_Shipping_Info {
+        gap: 0.25rem;
+    }
+
+    .User_Order_Shipping_Info > p {
+        font-size: 0.9rem;
+    }
+
+    .User_Shipping_Total {
+        padding-block: 0.5rem;
+    }
+
+    .Checkout_Total {
+        padding: 0.5rem;
+    }
+
+    .Checkout_Footer_Buttons {
+        flex-direction: column;
+    }
 }

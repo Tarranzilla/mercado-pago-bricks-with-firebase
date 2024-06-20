@@ -232,7 +232,7 @@ const Client_Subscription_Banner = () => {
     };
 
     return (
-        <div className="Subsctiption_Banner">
+        <div className="Subscription_Banner">
             {processingPayment ? (
                 <div className="Subscription_Banner_Card">
                     <h1 className="Subscription_Banner_Title">Clube Tropical</h1>

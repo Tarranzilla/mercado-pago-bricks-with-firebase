@@ -304,16 +304,19 @@ const Client_Checkout = () => {
                                                 }}
                                             >
                                                 <span className="material-icons">store</span>
-                                                <label htmlFor="receive_option_1">Retirada na Loja</label>
-                                                <a
-                                                    className="Recieve_Option_Map_Link"
-                                                    href="https://www.google.com.br/maps/preview"
-                                                    rel="noopener noreferrer"
-                                                    target="_blank"
-                                                >
-                                                    <span className="material-icons">explore</span>
-                                                    Confira o Endereço
-                                                </a>
+                                                <div className="Recieve_Option_Group">
+                                                    <label htmlFor="receive_option_1">Retirada na Loja</label>
+                                                    <a
+                                                        className="Recieve_Option_Map_Link"
+                                                        href="https://www.google.com.br/maps/preview"
+                                                        rel="noopener noreferrer"
+                                                        target="_blank"
+                                                    >
+                                                        <span className="material-icons">explore</span>
+                                                        Confira o Endereço
+                                                    </a>
+                                                </div>
+
                                                 <input type="radio" name="receive_option" id="receive_option_1" defaultChecked />
                                             </button>
 

@@ -1225,7 +1225,7 @@ body {
 }
 
 .Brand_Intro_Title {
-    font-size: clamp(4rem, 5.2vw, 7rem);
+    font-size: clamp(3rem, 5.2vw, 7rem);
     line-height: clamp(3.6rem, 4.6vw, 6rem);
     letter-spacing: 0.25rem;
     text-align: center;
@@ -1435,10 +1435,10 @@ body {
     width: 100%;
     flex: 1;
     overflow: hidden;
+    border-radius: 1rem;
 }
 
 .Subscription_Banner_Image {
-    border-radius: 1rem;
     object-fit: cover;
     object-position: top;
     width: 100%; /* Add this line */
@@ -1503,7 +1503,7 @@ body {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 40rem;
+    max-width: 50rem;
 
     background-color: var(--text_color);
     color: var(--bg_color);
@@ -2579,50 +2579,16 @@ circle {
         transform: translateX(-50%);
     }
 
-    .User_Tab_Cover_Image {
-        display: none;
-    }
-    .User_Tab {
-        top: 1rem;
-        right: 1rem;
-        width: calc(100% - 2rem);
+    .User_Tab_Content_Wrapper {
+        padding-inline: 1rem;
     }
 
-    .Cart {
-        top: 1rem;
-        left: 1rem;
-        width: calc(100% - 2rem);
-    }
-
-    .UserTab_Content_Scroller,
-    .Cart_Content_Scroller {
-        padding: 0;
-    }
-
-    .User_Tab_Title,
-    .Cart_Title {
-        display: none;
-    }
-
-    .User_Tab_Close_Btn,
-    .Cart_Close_Btn {
-        display: none;
-    }
-
-    #General_Information_Card {
-        margin-top: 6rem;
-    }
-
-    .Cart_List {
-        margin-top: 5.4rem;
+    .Product_List_Card {
     }
 
     .Intro_Image_Container {
         width: 100%;
         height: 100%;
-    }
-
-    .Product_List_Card {
     }
 }
 
@@ -2640,9 +2606,13 @@ circle {
         padding: 0.5rem;
     }
 
-    .Brand_Intro > h1 {
-        font-size: 4.2rem;
-        line-height: 3.6rem;
+    .Brand_Intro {
+        padding-inline: 0;
+    }
+
+    .Brand_Intro_Title {
+        font-size: clamp(2rem, 10vw, 3rem);
+        line-height: clamp(1.8rem, 10vw, 2.8rem);
     }
 
     .Intro_Image_Container {
@@ -2655,16 +2625,48 @@ circle {
         min-height: calc(100% + 0.5rem);
     }
 
-    .Subsctiption_Banner_Subtitle,
-    .Subsctiption_Banner_Description,
-    .Subscription_Banner_Button,
-    .Subscription_Banner_Warning {
-        margin-inline: 1rem;
+    .User_Tab {
+        left: 1rem;
+        right: 1rem;
+        width: calc(100% - 2rem);
+    }
+
+    .Cart {
+        right: 1rem;
+        bottom: 1rem;
+        width: calc(100% - 2rem);
     }
 
     .User_Tab_Content_Wrapper {
         padding-inline: 0.5rem;
         padding-bottom: 0.5rem;
+    }
+
+    .User_Tab_Title,
+    .Cart_Title {
+        display: none;
+    }
+
+    .User_Tab_Close_Btn,
+    .Cart_Close_Btn {
+        display: none;
+    }
+
+    .User_Tab_Cover_Image {
+        display: none;
+    }
+
+    .UserTab_Content_Scroller,
+    .Cart_Content_Scroller {
+        padding: 0;
+    }
+
+    #General_Information_Card {
+        margin-top: 6rem;
+    }
+
+    .Cart_List {
+        margin-top: 5.4rem;
     }
 
     .User_Tab_Card_Info_Image_Container {

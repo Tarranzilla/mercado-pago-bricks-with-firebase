@@ -6,10 +6,20 @@ import { setUserTabOpen, setCartOpen, toggleColorMode } from "@/store/slices/int
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
+import { useMediaQuery } from "react-responsive";
+
 import { motion as m, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
     const dispatch = useDispatch();
+
+    const isMediumScreen = useMediaQuery({
+        query: "(max-width: 1480px)",
+    });
+
+    const isSmallScreen = useMediaQuery({
+        query: "(max-width: 768px)",
+    });
 
     const colorMode = useSelector((state: RootState) => state.interface.colorMode);
 
@@ -26,18 +36,24 @@ const Navbar = () => {
 
     const toggleUserTab = () => {
         dispatch(setUserTabOpen(!userTabOpen));
+        if (isMediumScreen) {
+            dispatch(setCartOpen(false));
+        }
     };
 
     const toggleCart = () => {
         dispatch(setCartOpen(!cartOpen));
+        if (isMediumScreen) {
+            dispatch(setUserTabOpen(false));
+        }
     };
 
     let navbarClass = "Navbar";
-    if (userTabOpen && !cartOpen) {
+    if (userTabOpen && !cartOpen && !isSmallScreen) {
         navbarClass += " Right";
-    } else if (cartOpen && !userTabOpen) {
+    } else if (cartOpen && !userTabOpen && !isSmallScreen) {
         navbarClass += " Left";
-    } else if (userTabOpen && cartOpen) {
+    } else if (userTabOpen && cartOpen && !isSmallScreen) {
         navbarClass = "Navbar";
     }
 

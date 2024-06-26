@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import Link from "next/link";
 
-import { setUserTabNeedsUpdate, setUserTabOpen } from "@/store/slices/interface_slice";
+import { setUserTabNeedsUpdate, setUserTabOpen, setCartOpen } from "@/store/slices/interface_slice";
 
 import { motion as m, useScroll, useSpring } from "framer-motion";
 
@@ -74,6 +74,10 @@ const Client_Checkout = () => {
 
     const setUserTabOpenAction = (open: boolean) => {
         dispatch(setUserTabOpen(open));
+    };
+
+    const setCartOpenAction = (open: boolean) => {
+        dispatch(setCartOpen(open));
     };
 
     const processPaymentAction = async () => {
@@ -224,11 +228,15 @@ const Client_Checkout = () => {
         });
     };
 
+    useEffect(() => {
+        setCartOpenAction(false);
+        setCartOpenAction(false);
+    }, []);
+
     return (
         <>
             <div className="Checkout">
                 <div className="Checkout_Content_Wrapper">
-                    <h1 className="User_Tab_Card_Title">Finalização da Compra</h1>
                     {processingPayment ? (
                         <div className="Checkout_Card">
                             <h1 className="Checkout_Card_Title">Finalizando Compra</h1>

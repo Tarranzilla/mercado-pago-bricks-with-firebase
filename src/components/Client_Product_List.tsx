@@ -231,7 +231,10 @@ const Client_Product_List = () => {
                                                     className="Product_List_Item_AddToCart_Btn"
                                                     onClick={() => {
                                                         addToCartAction(product);
-                                                        setCartOpenAction(true);
+
+                                                        if (!cartItems.find((item) => item.product.id === product.id)) {
+                                                            setCartOpenAction(true);
+                                                        }
                                                     }}
                                                 >
                                                     <span className="material-icons User_Tab_Edit_Icon">add_shopping_cart</span>

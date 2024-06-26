@@ -6,6 +6,8 @@ import { RootState } from "@/store/store";
 
 import { AnimatePresence, motion as m } from "framer-motion";
 
+import { useMediaQuery } from "react-responsive";
+
 import Brand_About from "./Brand_About";
 
 const Brand_Intro = () => {
@@ -14,8 +16,12 @@ const Brand_Intro = () => {
     const isCartOpen = useSelector((state: RootState) => state.interface.isCartOpen);
     const isUserTabOpen = useSelector((state: RootState) => state.interface.isUserTabOpen);
 
+    const isSmallScreen = useMediaQuery({
+        query: "(max-width: 1480px)",
+    });
+
     let brandIntroTitleClass = "Brand_Intro_Title";
-    if (!isCartOpen && !isUserTabOpen) {
+    if (!isCartOpen && !isUserTabOpen && !isSmallScreen) {
         brandIntroTitleClass += " Expanded";
     }
 

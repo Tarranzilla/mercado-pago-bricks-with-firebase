@@ -61,7 +61,7 @@ const Client_Cart_Content = () => {
 
     return (
         <>
-            <m.div initial={{ x: 1000 }} animate={{ x: 0 }} exit={{ x: 1000 }} transition={{ duration: 0.5 }} className="Cart" key={"Cart"}>
+            <m.div initial={{ x: "100vw" }} animate={{ x: 0 }} exit={{ x: "100vw" }} transition={{ duration: 0.5 }} className="Cart" key={"Cart"}>
                 <div className="Cart_Content_Scroller" ref={scroll_ref}>
                     <div className="User_Tab_Content_Wrapper">
                         <h1 className="Cart_Title">Carrinho</h1>

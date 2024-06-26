@@ -13,6 +13,8 @@ import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { getFirestore, doc, setDoc, getDoc, getDocs, DocumentData, Timestamp, collection, query, where } from "firebase/firestore";
 import { useFirebase } from "@/components/Firebase_Context";
 
+import { useMediaQuery } from "react-responsive";
+
 // Axios para requisições HTTP
 import axios from "axios";
 
@@ -47,6 +49,10 @@ if (!businessTelephone) {
 
 const User_Tab_Content = () => {
     const dispatch = useDispatch();
+
+    const isSmallScreen = useMediaQuery({
+        query: "(max-width: 1480px)",
+    });
 
     const userTabOpen = useSelector((state: RootState) => state.interface.isUserTabOpen);
 
@@ -237,7 +243,14 @@ const User_Tab_Content = () => {
 
     return (
         <>
-            <m.div initial={{ x: -1000 }} animate={{ x: 0 }} exit={{ x: -1000 }} transition={{ duration: 0.5 }} className="User_Tab" key={"User_Tab"}>
+            <m.div
+                initial={{ x: "-100vw" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100vw" }}
+                transition={{ duration: 0.5 }}
+                className="User_Tab"
+                key={"User_Tab"}
+            >
                 {/* Wrapper do Conteúdo da Aba do Usuário */}
                 <div
                     className={isSomeLocalUserInfoEdited ? "UserTab_Content_Scroller Extra_Bottom_Padding" : "UserTab_Content_Scroller"}

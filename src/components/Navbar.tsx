@@ -32,6 +32,15 @@ const Navbar = () => {
         dispatch(setCartOpen(!cartOpen));
     };
 
+    let navbarClass = "Navbar";
+    if (userTabOpen && !cartOpen) {
+        navbarClass += " Right";
+    } else if (cartOpen && !userTabOpen) {
+        navbarClass += " Left";
+    } else if (userTabOpen && cartOpen) {
+        navbarClass = "Navbar";
+    }
+
     useEffect(() => {
         // console.log(colorMode);
         if (colorMode === "light") {
@@ -42,7 +51,7 @@ const Navbar = () => {
     }, [colorMode]);
 
     return (
-        <nav className="Navbar">
+        <nav className={navbarClass}>
             <div className="Navbar_Main_Container">
                 <h1 className="Navbar_Brand_Name">tropical cacau</h1>
                 <div className="Navbar_Tools">

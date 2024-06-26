@@ -44,7 +44,7 @@ const Client_Product_List = () => {
     const [activeProducts, setActiveProducts] = useState<Product[]>([]);
     const [sortedProducts, setSortedProducts] = useState<Product[]>([]);
 
-    const [activeLayout, setActiveLayout] = useState("list"); // grid, list,
+    const [activeLayout, setActiveLayout] = useState("grid"); // grid, list,
 
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
 
@@ -90,7 +90,7 @@ const Client_Product_List = () => {
         <div className="Product_List">
             <div className="Product_List_Card">
                 <h1 className="Product_List_Title">Loja de Chocolates</h1>
-                <h2 className="Product_List_Subtitle">Nossos chocolates são feitos com ingredientes frescos e cuidadosamente selecionados!</h2>
+                <h2 className="Product_List_Subtitle">Feitos com ingredientes frescos e cuidadosamente selecionados!</h2>
                 <p className="Product_List_Description">
                     A cada estação buscamos desenvolver novos sabores capazes de refletir as épocas festivas e os ingredientes disponíveis.
                 </p>

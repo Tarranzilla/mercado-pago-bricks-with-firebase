@@ -157,6 +157,8 @@ body {
     left: calc(28vw + 2rem);
     right: calc(28vw + 2rem);
     bottom: 1rem;
+
+    transition: left 0.5s ease-in-out, right 0.5s ease-in-out;
 }
 
 .Main_Page_Content.expanded {
@@ -203,20 +205,33 @@ body {
     z-index: 1000;
     position: fixed;
     top: 2.5rem;
-    left: 0;
+    left: 50%; /* Center the navbar horizontally */
+    transform: translateX(-50%);
 
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
 
     padding: 1rem;
     padding-top: 0;
+
+    transition: left 0.5s ease-in-out;
 }
+
+.Navbar.Left {
+    left: calc(36vw - 0.5rem);
+    transform: translateX(-50%);
+}
+
+.Navbar.Right {
+    left: calc(100vw - (36vw - 0.5rem));
+    transform: translateX(-50%);
+}
+
+/* width: calc(44vw - 7rem); */
 
 .Navbar_Main_Container {
     height: 100%;
-    width: calc(44vw - 7rem);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -439,6 +454,28 @@ body {
     bottom: 1rem;
 
     width: 28vw;
+}
+
+.User_Tab_Cover_Image_Button {
+    z-index: 1001;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    text-decoration: none;
 }
 
 .Cart_Cover_Image,
@@ -1187,15 +1224,22 @@ body {
     scroll-margin: 1rem;
 }
 
-.Brand_Intro > h1 {
-    font-size: 8rem;
-    line-height: 6.4rem;
+.Brand_Intro_Title {
+    font-size: clamp(4rem, 5.2vw, 7rem);
+    line-height: clamp(3.6rem, 4.6vw, 6rem);
     letter-spacing: 0.25rem;
     text-align: center;
     color: var(--bg_color);
     z-index: 2;
     text-shadow: var(--text_color) 0 0 0.5rem;
     max-width: 20ch;
+
+    transition: font-size 0.5s ease-in-out, line-height 0.5s ease-in-out;
+}
+
+.Brand_Intro_Title.Expanded {
+    font-size: clamp(4rem, 9vw, 9rem);
+    line-height: clamp(3.6rem, 8vw, 8rem);
 }
 
 .Intro_Image_Container {
@@ -1318,16 +1362,19 @@ body {
 }
 
 .Subsctiption_Banner_Subtitle {
-    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 3vw, 3rem);
+    line-height: clamp(1.5rem, 3vw, 3rem);
     text-align: center;
     max-width: 40ch;
+    padding-inline: 2rem;
     margin-inline: auto;
 }
 
 .Subsctiption_Banner_Description {
-    font-size: 1.2rem;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
     text-align: center;
-    max-width: 60ch;
+    max-width: 80ch;
+    padding-inline: 2rem;
     margin-inline: auto;
 }
 
@@ -1335,7 +1382,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    max-width: 30rem;
+    max-width: 36rem;
     margin-top: 0.5rem;
 }
 
@@ -1350,7 +1397,7 @@ body {
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
 
     border: none;
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     border-radius: 0.5rem;
     cursor: pointer;
 
@@ -1364,14 +1411,14 @@ body {
 
 .Subscription_Banner_Button_Text {
     font-family: "ProfilePro_WOFF2", sans-serif;
-    font-size: 1rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
 }
 
 .Subscription_Banner_Warning {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 1rem;
+    padding: 1rem 1.5rem;
     gap: 1rem;
     border-radius: 0.5rem;
     border: none;
@@ -1379,7 +1426,7 @@ body {
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     color: var(--text_color);
     font-family: "ProfilePro_WOFF2", sans-serif;
-    font-size: 1rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
     cursor: pointer;
 }
 
@@ -1403,14 +1450,13 @@ body {
 .Product_List {
     padding-top: 7rem;
     position: relative;
-    min-height: 100%;
-    margin-bottom: 1rem;
 }
 
 .Product_List_Card {
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex: 1;
     gap: 1rem;
     padding: 1rem;
     padding-top: 2.5rem;
@@ -1438,14 +1484,15 @@ body {
 }
 
 .Product_List_Subtitle {
-    font-size: 1.5rem;
+    font-size: clamp(1.5rem, 3vw, 3rem);
+    line-height: clamp(1.5rem, 3vw, 3rem);
     text-align: center;
-    max-width: 40ch;
+    max-width: 30ch;
     margin-inline: auto;
 }
 
 .Product_List_Description {
-    font-size: 1.2rem;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
     text-align: center;
     max-width: 60ch;
     margin-inline: auto;
@@ -1456,6 +1503,7 @@ body {
     flex-direction: column;
     align-items: center;
     width: 100%;
+    max-width: 40rem;
 
     background-color: var(--text_color);
     color: var(--bg_color);
@@ -1612,6 +1660,8 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 2rem;
+    padding-block: 5rem;
+    margin-block: auto;
 }
 
 .No_Products > span {
@@ -1620,7 +1670,9 @@ body {
 
 .Product_List_List {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem;
     margin-inline: 0.5rem;
 }
@@ -1636,6 +1688,9 @@ body {
 
     scroll-snap-align: start;
     scroll-margin: 5.4rem;
+    flex-grow: 1;
+    flex-basis: 30rem;
+    max-width: 42rem;
 }
 
 .Product_List_Item_Image_Container {
@@ -1651,8 +1706,13 @@ body {
     flex-shrink: 0;
 }
 
+.Product_List_Item.Grid {
+    flex-basis: 38rem;
+}
+
 .Product_List_Item.Grid > .Product_List_Item_Image_Container {
-    max-width: 320px;
+    width: 100%;
+    max-width: 300px;
 }
 
 .Product_List_Item_Image {
@@ -1695,10 +1755,12 @@ body {
 }
 
 .Product_List_Item_Subtitle {
+    max-width: 50ch;
 }
 
 .Product_List_Item_Info_Footer {
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
     margin-top: auto;
 }
@@ -1711,6 +1773,7 @@ body {
     display: flex;
     gap: 0.5rem;
     flex: 1;
+    flex-basis: content;
 }
 
 .Product_List_Item_CartQtty_Indicator {
@@ -1762,7 +1825,6 @@ body {
     cursor: pointer;
     width: 100%;
     text-align: center;
-    min-width: max-content;
 
     transition: min-width 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
 }
@@ -2075,6 +2137,9 @@ body {
 
 .Checkout {
     flex: 1;
+    width: 100%;
+    max-width: 800px;
+    margin-inline: auto;
 }
 
 .Checkout_Content_Wrapper {
@@ -2558,8 +2623,6 @@ circle {
     }
 
     .Product_List_Card {
-        max-width: 800px;
-        margin-inline: auto;
     }
 }
 

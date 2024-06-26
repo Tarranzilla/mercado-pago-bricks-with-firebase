@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { set } from "firebase/database";
 
 // Tipo para a Lógica da Interface
 type InterfaceState = {
@@ -16,6 +17,7 @@ type InterfaceState = {
     isSearchOpen: boolean;
 
     isCartOpen: boolean;
+    isUserTabCoverImageOpen: boolean;
     isCartHelperOpen: boolean;
 
     isUserTabOpen: boolean;
@@ -41,6 +43,7 @@ const initialInterfaceState: InterfaceState = {
     isCartOpen: false,
     isCartHelperOpen: false,
     isUserTabOpen: false,
+    isUserTabCoverImageOpen: true,
     userTabNeedsUpdate: false,
     isControlPanelOpen: false,
 };
@@ -107,6 +110,10 @@ const InterfaceSlice = createSlice({
             state.isUserTabOpen = action.payload;
         },
 
+        setUserTabCoverImageOpen: (state, action: PayloadAction<boolean>) => {
+            state.isUserTabCoverImageOpen = action.payload;
+        },
+
         setControlPanelOpen: (state, action: PayloadAction<boolean>) => {
             state.isControlPanelOpen = action.payload;
         },
@@ -133,6 +140,7 @@ export const {
     toggleUserTabOpen,
     setUserTabNeedsUpdate,
     setUserTabOpen,
+    setUserTabCoverImageOpen,
     setControlPanelOpen,
 } = InterfaceSlice.actions;
 

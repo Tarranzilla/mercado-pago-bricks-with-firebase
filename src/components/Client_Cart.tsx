@@ -28,12 +28,16 @@ const Client_Cart = () => {
 
     return (
         <>
-            <AnimatePresence>
-                {isCartOpen ? (
-                    <Client_Cart_Content key={"Client_Cart_Content"} />
-                ) : (
-                    <>
-                        {isSmallScreen ? (
+            <AnimatePresence>{isCartOpen ? <Client_Cart_Content key={"Client_Cart_Content"} /> : <></>}</AnimatePresence>
+        </>
+    );
+};
+
+export default Client_Cart;
+
+/*
+
+{isSmallScreen ? (
                             <></>
                         ) : (
                             <m.div
@@ -47,11 +51,5 @@ const Client_Cart = () => {
                                 <Image src="/brand_imgs/arte_minas.png" alt="Arte" width={400} height={800} className={"Cart_Cover_Image"} />
                             </m.div>
                         )}
-                    </>
-                )}
-            </AnimatePresence>
-        </>
-    );
-};
 
-export default Client_Cart;
+*/

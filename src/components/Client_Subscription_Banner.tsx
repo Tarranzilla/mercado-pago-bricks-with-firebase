@@ -303,8 +303,8 @@ const Client_Subscription_Banner = () => {
                         <Image
                             src="/subscription_imgs/Clube_Tropical_001.png"
                             alt="Chocolate Box"
-                            width={400}
-                            height={400}
+                            width={1600}
+                            height={1600}
                             quality={100}
                             className="Subscription_Banner_Image"
                         />

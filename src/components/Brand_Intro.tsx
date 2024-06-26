@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { useState } from "react";
 
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+
 import { AnimatePresence, motion as m } from "framer-motion";
 
 import Brand_About from "./Brand_About";
@@ -8,10 +11,18 @@ import Brand_About from "./Brand_About";
 const Brand_Intro = () => {
     const [about, setAbout] = useState(null || 0);
 
+    const isCartOpen = useSelector((state: RootState) => state.interface.isCartOpen);
+    const isUserTabOpen = useSelector((state: RootState) => state.interface.isUserTabOpen);
+
+    let brandIntroTitleClass = "Brand_Intro_Title";
+    if (!isCartOpen && !isUserTabOpen) {
+        brandIntroTitleClass += " Expanded";
+    }
+
     return (
         <>
             <div className="Brand_Intro">
-                <h1>Deliciosos Chocolates Orgânicos</h1>
+                <h1 className={brandIntroTitleClass}>O Brilho do Sol Manifestado em Sabor</h1>
                 <div className={about ? "Intro_Image_Container Active" : "Intro_Image_Container"}>
                     <Image
                         src="/brand_imgs/Icone_TC_512_HQ.png"

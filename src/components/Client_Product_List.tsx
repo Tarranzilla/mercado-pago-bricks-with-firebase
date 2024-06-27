@@ -39,12 +39,16 @@ const Client_Product_List = () => {
     // all, barras clásssicas, discos, bombons, dia dos pais, dia dos namorados, páscoa,
     const categories = ["Todos", "Barras Clássicas", "Barras Especiais", "Discos", "Bombons", "Dia dos Pais", "Dia dos Namorados", "Páscoa"];
 
-    const [activeCategory, setActiveCategory] = useState("Todos");
+    const [activeCategory, setActiveCategory] = useState("Barras Clássicas");
     const [activePriceFilter, setActivePriceFilter] = useState("all"); // all, asc, desc
     const [activeProducts, setActiveProducts] = useState<Product[]>([]);
     const [sortedProducts, setSortedProducts] = useState<Product[]>([]);
 
-    const [activeLayout, setActiveLayout] = useState("grid"); // grid, list, wide
+    const [activeLayout, setActiveLayout] = useState("Wide"); // grid, list, wide
+    let shrinked = "";
+    if (!isFilterCollapsed) {
+        shrinked = "Shrinked";
+    }
 
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
 
@@ -94,11 +98,6 @@ const Client_Product_List = () => {
                 <p className="Product_List_Description">
                     A cada estação buscamos desenvolver novos formatos e sabores capazes de refletir as épocas festivas e os ingredientes disponíveis.
                 </p>
-                <div className="Product_List_Card_Intro">
-                    <div className="Product_List_Banner">
-                        <img className="Product_List_Banner_Image" src="product_gifs/Kit1.gif" alt="Chocolate" width={1280} height={720} />
-                    </div>
-                </div>
 
                 <div className="Product_List_Filter">
                     <button
@@ -167,12 +166,21 @@ const Client_Product_List = () => {
                                     </select>
 
                                     <button
-                                        className={activeLayout === "Small" ? "Filter_Display_Mode_Btn Active" : "Filter_Display_Mode_Btn"}
+                                        className={activeLayout === "Wide" ? "Filter_Display_Mode_Btn Active" : "Filter_Display_Mode_Btn"}
                                         onClick={() => {
-                                            setActiveLayout("Small");
+                                            setActiveLayout("Wide");
                                         }}
                                     >
-                                        <span className="material-icons">grid_view</span>
+                                        <span className="material-icons">panorama_wide_angle</span>
+                                    </button>
+
+                                    <button
+                                        className={activeLayout === "Grid" ? "Filter_Display_Mode_Btn Active" : "Filter_Display_Mode_Btn"}
+                                        onClick={() => {
+                                            setActiveLayout("Grid");
+                                        }}
+                                    >
+                                        <span className="material-icons">view_agenda</span>
                                     </button>
 
                                     <button
@@ -185,20 +193,12 @@ const Client_Product_List = () => {
                                     </button>
 
                                     <button
-                                        className={activeLayout === "Grid" ? "Filter_Display_Mode_Btn Active" : "Filter_Display_Mode_Btn"}
+                                        className={activeLayout === "Small" ? "Filter_Display_Mode_Btn Active" : "Filter_Display_Mode_Btn"}
                                         onClick={() => {
-                                            setActiveLayout("Grid");
+                                            setActiveLayout("Small");
                                         }}
                                     >
-                                        <span className="material-icons">view_agenda</span>
-                                    </button>
-                                    <button
-                                        className={activeLayout === "Wide" ? "Filter_Display_Mode_Btn Active" : "Filter_Display_Mode_Btn"}
-                                        onClick={() => {
-                                            setActiveLayout("Wide");
-                                        }}
-                                    >
-                                        <span className="material-icons">panorama_wide_angle</span>
+                                        <span className="material-icons">grid_view</span>
                                     </button>
                                 </m.div>
                             </m.div>
@@ -209,7 +209,7 @@ const Client_Product_List = () => {
                 {activeProducts.length > 0 ? (
                     <div className={`Product_List_List ${activeLayout}`}>
                         {activeProducts.map((product) => (
-                            <m.div layout key={product.id} className={`Product_List_Item ${activeLayout}`}>
+                            <m.div layout key={product.id} className={`Product_List_Item ${activeLayout} ${shrinked}`}>
                                 <m.div layout className="Product_List_Item_Image_Container">
                                     {product.images && product.images.length > 0 && (
                                         <m.img

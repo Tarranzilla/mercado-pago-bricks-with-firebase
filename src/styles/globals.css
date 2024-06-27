@@ -1705,6 +1705,8 @@ body {
     justify-content: center;
     gap: 1rem;
     margin-inline: 0.5rem;
+    scroll-snap-align: start;
+    scroll-margin: 5.4rem;
 }
 
 .Product_List_List.Wide {
@@ -1760,6 +1762,7 @@ body {
     height: 50vh;
     scroll-snap-align: start;
     scroll-margin: 0.5rem;
+    position: relative;
 }
 
 .Product_List_Item.Grid {
@@ -1772,8 +1775,27 @@ body {
 }
 
 .Product_List_Item.Wide > .Product_List_Item_Image_Container {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 300px;
+    height: 100%;
+    object-fit: cover;
+    max-width: unset;
+    border: none;
+}
+
+.Product_List_Item.Wide > .Product_List_Item_Image_Container > .Product_List_Item_Image {
+    border-radius: 0.75rem;
+}
+
+.Product_List_Item.Wide > .Product_List_Item_Info > .Product_List_Item_Info_Footer {
+    flex-direction: row;
+}
+
+.Product_List_Item.Wide > .Product_List_Item_Info > .Product_List_Item_Info_Footer > .Product_List_Item_AddToCart_Btn_Container {
+    flex-basis: unset;
+    flex: 1;
 }
 
 .Product_List_Item.Small {
@@ -2818,6 +2840,10 @@ circle {
     }
 
     .Product_List_Item.Grid {
+        flex-direction: column;
+    }
+
+    .Product_List_Item.Wide > .Product_List_Item_Info > .Product_List_Item_Info_Footer {
         flex-direction: column;
     }
 

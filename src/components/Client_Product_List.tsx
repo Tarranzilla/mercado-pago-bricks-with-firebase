@@ -90,16 +90,14 @@ const Client_Product_List = () => {
         <div className="Product_List">
             <div className="Product_List_Card">
                 <h1 className="Product_List_Title">Loja de Chocolates</h1>
-
+                <h2 className="Product_List_Subtitle">Feitos com ingredientes frescos e cuidadosamente selecionados!</h2>
+                <p className="Product_List_Description">
+                    A cada estação buscamos desenvolver novos sabores capazes de refletir as épocas festivas e os ingredientes disponíveis.
+                </p>
                 <div className="Product_List_Card_Intro">
                     <div className="Product_List_Banner">
                         <img className="Product_List_Banner_Image" src="product_gifs/Kit1.gif" alt="Chocolate" width={1280} height={720} />
                     </div>
-
-                    <h2 className="Product_List_Subtitle">Feitos com ingredientes frescos e cuidadosamente selecionados!</h2>
-                    <p className="Product_List_Description">
-                        A cada estação buscamos desenvolver novos sabores capazes de refletir as épocas festivas e os ingredientes disponíveis.
-                    </p>
                 </div>
 
                 <div className="Product_List_Filter">

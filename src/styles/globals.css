@@ -1241,6 +1241,47 @@ body {
     line-height: clamp(3.6rem, 8vw, 8rem);
 }
 
+.Brand_Intro_Call_To_Action {
+    z-index: 3;
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    color: var(--bg_color);
+    padding-inline: 2rem;
+
+    animation: Pulse 4s infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    transform-origin: bottom;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    opacity: 0.5;
+}
+
+@keyframes Pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.Brand_Intro_Call_To_Action > h2 {
+    font-weight: 400;
+    line-height: 1.4rem;
+    letter-spacing: 0.125rem;
+}
+
 .Intro_Image_Container {
     width: 250%;
     height: 250%;
@@ -2791,6 +2832,14 @@ circle {
         min-height: calc(100% + 0.5rem);
     }
 
+    .Subsctiption_Banner_Subtitle {
+        padding-inline: 1rem;
+    }
+
+    .Subsctiption_Banner_Description {
+        padding-inline: 1rem;
+    }
+
     .User_Tab {
         left: 1rem;
         right: 1rem;
@@ -2874,8 +2923,6 @@ circle {
         max-height: unset;
         top: 0;
         left: 0;
-        opacity: 0.5;
-        filter: contrast(0.3);
         border: none;
     }
 
@@ -2901,6 +2948,16 @@ circle {
 
     .Product_List_Item.Grid {
         flex-direction: column;
+    }
+
+    .Product_List_Item.Wide > .Product_List_Item_Image_Container::before {
+        height: 100%;
+    }
+
+    .Product_List_Item.Wide > .Product_List_Item_Info > .Product_List_Item_Info_Header > .Product_List_Item_Title {
+        font-size: 1.6rem;
+        line-height: 1.6rem;
+        color: var(--bg_color);
     }
 
     .Product_List_Item.Wide > .Product_List_Item_Info > .Product_List_Item_Info_Footer {

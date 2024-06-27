@@ -243,7 +243,9 @@ const Client_Subscription_Banner = () => {
                 </div>
             ) : (
                 <div className="Subscription_Banner_Card">
-                    <h1 className="Subscription_Banner_Title">Clube Tropical</h1>
+                    <h1 className="Subscription_Banner_Title" id="clube-tropical">
+                        Clube Tropical
+                    </h1>
                     <h2 className="Subsctiption_Banner_Subtitle">Que tal ter uma seleção de chocolates deliciosos chegando todo mês na sua casa?</h2>
                     <p className="Subsctiption_Banner_Description">
                         Membros do Clube Tropical recebem mensalmente uma caixa com 6 chocolates especiais, feitos com cacau de origem única - E

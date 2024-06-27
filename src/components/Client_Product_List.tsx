@@ -92,7 +92,7 @@ const Client_Product_List = () => {
                 <h1 className="Product_List_Title">Loja de Chocolates</h1>
                 <h2 className="Product_List_Subtitle">Feitos com ingredientes frescos e cuidadosamente selecionados!</h2>
                 <p className="Product_List_Description">
-                    A cada estação buscamos desenvolver novos sabores capazes de refletir as épocas festivas e os ingredientes disponíveis.
+                    A cada estação buscamos desenvolver novos formatos e sabores capazes de refletir as épocas festivas e os ingredientes disponíveis.
                 </p>
                 <div className="Product_List_Card_Intro">
                     <div className="Product_List_Banner">

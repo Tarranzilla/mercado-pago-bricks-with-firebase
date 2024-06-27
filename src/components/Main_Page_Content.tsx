@@ -47,7 +47,7 @@ const Main_Page_Content: React.FC<Main_Page_ContentProps> = ({ children }) => {
 
     return (
         <div className={MainPageContentclassName}>
-            <main className="Main_Page_Content_Wrapper" ref={scroll_ref}>
+            <main className="Main_Page_Content_Wrapper" id="main_page_content_wrapper" ref={scroll_ref}>
                 {children}
             </main>
 

@@ -10,6 +10,8 @@ import { useMediaQuery } from "react-responsive";
 
 import Brand_About from "./Brand_About";
 
+import Link from "next/link";
+
 const Brand_Intro = () => {
     const [about, setAbout] = useState(null || 0);
 
@@ -25,10 +27,26 @@ const Brand_Intro = () => {
         brandIntroTitleClass += " Expanded";
     }
 
+    const scrollToAnchor = () => {
+        const anchor = document.querySelector("#clube-tropical");
+        if (anchor) {
+            anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    };
+
     return (
         <>
             <div className="Brand_Intro">
                 <h1 className={brandIntroTitleClass}>O Brilho do Sol Manifestado em Sabor</h1>
+
+                <div className="Brand_Intro_Call_To_Action">
+                    <h2>Surpreenda-se com Nossos Chocolates</h2>
+                    <div style={{ width: "100%", paddingInline: "0.5rem", height: "2rem", position: "relative" }} onClick={scrollToAnchor}>
+                        <svg width="100%" height="100%" viewBox="0 0 100 1000" preserveAspectRatio="none">
+                            <polygon points="0,0 100,0 50,1000" fill="currentColor" />
+                        </svg>
+                    </div>
+                </div>
                 <div className={about ? "Intro_Image_Container Active" : "Intro_Image_Container"}>
                     <Image
                         src="/brand_imgs/Icone_TC_512_HQ.png"

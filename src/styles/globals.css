@@ -1426,6 +1426,7 @@ body {
     gap: 0.5rem;
     max-width: 36rem;
     margin-top: 0.5rem;
+    padding-inline: 0.5rem;
 }
 
 .Subscription_Banner_Button {
@@ -2938,7 +2939,7 @@ circle {
 
     .Navbar {
         top: 2rem;
-        padding-inline: 1rem;
+        padding: 0;
     }
 
     .Navbar_Brand_Name {
@@ -2970,7 +2971,11 @@ circle {
     }
 
     .Subscription_Banner {
-        min-height: calc(100% + 0.5rem);
+        min-height: calc(100% - 1.25rem);
+    }
+
+    .Subscription_Banner_Title {
+        scroll-margin: 7rem;
     }
 
     .Subsctiption_Banner_Subtitle {
@@ -2982,15 +2987,20 @@ circle {
     }
 
     .User_Tab {
-        left: 1rem;
-        right: 1rem;
-        width: calc(100% - 2rem);
+        top: 0.5rem;
+        left: 0.5rem;
+        right: 0.5rem;
+        bottom: 0.5rem;
+        width: calc(100% - 1rem);
+        gap: 0.5rem;
     }
 
     .Cart {
-        right: 1rem;
-        bottom: 1rem;
-        width: calc(100% - 2rem);
+        top: 0.5rem;
+        right: 0.5rem;
+        bottom: 0.5rem;
+        width: calc(100% - 1rem);
+        gap: 0.5rem;
     }
 
     .User_Tab_Content_Wrapper {
@@ -3029,8 +3039,13 @@ circle {
         min-width: 128px;
     }
 
+    .Product_List_Title {
+        scroll-margin: 7rem;
+    }
+
     .Product_List_Card {
         padding-inline: 0.5rem;
+        padding-bottom: 0.5rem;
     }
 
     .Product_List_List {
@@ -3041,10 +3056,10 @@ circle {
     }
 
     .Product_List_Filter {
-        position: sticky;
-        top: 5rem;
-        scroll-snap-align: none;
+        scroll-margin: 7rem;
         z-index: 3;
+        min-height: 2.4rem;
+        padding-left: 1rem;
     }
 
     .Product_List_Filter_Title {
@@ -3059,7 +3074,15 @@ circle {
 
     .Product_List_Item {
         position: relative;
-        scroll-margin: 10rem;
+        scroll-margin: 7rem;
+    }
+
+    .Product_List_Item.Wide {
+        height: 69.75vh;
+    }
+
+    .Product_List_Item.Wide.Shrinked {
+        height: 41vh;
     }
 
     .Product_List_Item_Image_Container {
@@ -3186,5 +3209,12 @@ circle {
 
     .Checkout_Footer_Buttons {
         flex-direction: column;
+    }
+    .About_Us_Title {
+        scroll-margin: 7rem;
+    }
+
+    .About_Us_Card {
+        height: calc(100% - 1.25rem);
     }
 }

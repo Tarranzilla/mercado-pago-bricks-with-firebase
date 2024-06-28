@@ -3050,11 +3050,11 @@ circle {
     }
 
     #General_Information_Card {
-        margin-top: 6rem;
+        margin-top: 6.5rem;
     }
 
     .Cart_List {
-        margin-top: 5.4rem;
+        margin-top: 6rem;
     }
 
     .User_Tab_Card_Info_Image_Container {
@@ -3184,8 +3184,13 @@ circle {
         padding-bottom: 0.5rem;
     }
 
+    .Checkout_Card {
+        scroll-margin: 8.25rem;
+    }
+
     .Checkout_Content_Wrapper {
         padding-inline: 0;
+        padding-top: 6.125rem;
     }
 
     .User_Order_Checkout_Product_List,
@@ -3265,5 +3270,18 @@ circle {
     .Contact_Card,
     .About_Us_Card {
         height: calc(100% - 1rem);
+    }
+
+    .About_Us_Card {
+        text-align: center;
+    }
+
+    .About_Us_Description {
+        font-size: 1.125rem;
+        overflow-y: auto;
+    }
+
+    .About_Us_Description_Image_Container > img {
+        object-position: top;
     }
 }

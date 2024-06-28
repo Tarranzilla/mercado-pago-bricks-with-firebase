@@ -181,6 +181,7 @@ body {
     flex-direction: column;
     gap: 2rem;
 
+    overflow-x: hidden;
     overflow-y: auto;
     scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
@@ -237,8 +238,6 @@ body {
     align-items: center;
     position: relative;
     border-radius: 1rem;
-    padding-top: 1px;
-    padding-bottom: 1rem;
 
     color: var(--bg_color);
 }
@@ -1763,6 +1762,7 @@ body {
     padding-bottom: 0.5rem;
     margin-top: -1rem;
 
+    scroll-snap-align: none;
     scroll-snap-type: x mandatory;
 }
 
@@ -1816,7 +1816,7 @@ body {
     flex-basis: 100%;
     height: 72vh;
     scroll-snap-align: start;
-    scroll-margin: 0.5rem;
+    scroll-margin: 0;
     position: relative;
     transform-origin: bottom;
 }
@@ -2938,14 +2938,25 @@ circle {
     }
 
     .Navbar {
-        top: 2rem;
+        top: 2.5rem;
         padding: 0;
     }
 
     .Navbar_Brand_Name {
         font-size: 2.5rem;
-        top: -1.75rem;
-        padding-inline: 1.75rem;
+        top: -1.5rem;
+        height: 3.5rem;
+        width: calc(100vw - 2rem);
+        padding-inline: 1.5rem;
+    }
+
+    .Navbar_Tools {
+        padding-top: 2.5rem;
+        height: 5rem;
+    }
+
+    .Navbar_Tool {
+        height: 2rem;
     }
 
     .Navbar_Tool_Label {
@@ -2971,11 +2982,18 @@ circle {
     }
 
     .Subscription_Banner {
-        min-height: calc(100% - 1.25rem);
+        min-height: calc(100% - 1rem);
+        padding-top: 7.5rem;
     }
 
     .Subscription_Banner_Title {
-        scroll-margin: 7rem;
+        scroll-margin: 7.5rem;
+        height: 3rem;
+        top: -1.5rem;
+    }
+
+    .Subscription_Banner_Card {
+        border-radius: 0.75rem;
     }
 
     .Subsctiption_Banner_Subtitle {
@@ -2984,6 +3002,10 @@ circle {
 
     .Subsctiption_Banner_Description {
         padding-inline: 1rem;
+    }
+
+    .Subscription_Banner_Image_Container {
+        border-radius: 0.75rem;
     }
 
     .User_Tab {
@@ -3039,13 +3061,20 @@ circle {
         min-width: 128px;
     }
 
+    .Product_List {
+        padding-top: 7.5rem;
+    }
+
     .Product_List_Title {
-        scroll-margin: 7rem;
+        scroll-margin: 7.5rem;
+        height: 3rem;
+        top: -1.5rem;
     }
 
     .Product_List_Card {
         padding-inline: 0.5rem;
         padding-bottom: 0.5rem;
+        border-radius: 0.75rem;
     }
 
     .Product_List_List {
@@ -3053,12 +3082,14 @@ circle {
     }
 
     .Product_List_List.Wide {
+        padding-top: 0;
+        margin-top: -0.5rem;
     }
 
     .Product_List_Filter {
-        scroll-margin: 7rem;
+        scroll-margin: 7.5rem;
         z-index: 3;
-        min-height: 2.4rem;
+        min-height: 2.5rem;
         padding-left: 1rem;
     }
 
@@ -3078,11 +3109,11 @@ circle {
     }
 
     .Product_List_Item.Wide {
-        height: 69.75vh;
+        height: calc(100vh - 7.5rem - 7.25rem);
     }
 
     .Product_List_Item.Wide.Shrinked {
-        height: 41vh;
+        height: 48vh;
     }
 
     .Product_List_Item_Image_Container {
@@ -3095,6 +3126,10 @@ circle {
         top: 0;
         left: 0;
         border: none;
+    }
+
+    .Product_List_Item.Wide > .Product_List_Item_Image_Container::before {
+        border-radius: 0.75rem;
     }
 
     .Product_List_Item_Image {
@@ -3210,11 +3245,25 @@ circle {
     .Checkout_Footer_Buttons {
         flex-direction: column;
     }
-    .About_Us_Title {
-        scroll-margin: 7rem;
+
+    .Contact,
+    .About_Us {
+        padding-top: 7.5rem;
     }
 
+    .Contact {
+        padding-top: 7.5rem;
+    }
+
+    .Contact_Title,
+    .About_Us_Title {
+        scroll-margin: 7.5rem;
+        height: 3rem;
+        top: -1.5rem;
+    }
+
+    .Contact_Card,
     .About_Us_Card {
-        height: calc(100% - 1.25rem);
+        height: calc(100% - 1rem);
     }
 }

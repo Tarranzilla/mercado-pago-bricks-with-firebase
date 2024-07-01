@@ -9,6 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@googlemaps/js-api-loader": "^1.16.6",
         "@material-design-icons/font": "^0.14.13",
         "@mercadopago/sdk-react": "^0.0.19",
         "@reduxjs/toolkit": "^2.2.5",
@@ -26,6 +27,7 @@
         "uuid": "^9.0.1"
     },
     "devDependencies": {
+        "@types/google.maps": "^3.55.11",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",

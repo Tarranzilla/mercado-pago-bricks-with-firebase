@@ -244,6 +244,7 @@ body {
 
 .Navbar_Brand_Name {
     font-size: 2.8rem;
+    height: 4rem;
     font-family: "Cooper_TrueType", sans-serif;
     letter-spacing: 0.15rem;
     font-weight: 400;
@@ -259,6 +260,10 @@ body {
 
     border: 1px solid var(--text_color);
     z-index: 1001;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .Navbar_Tools {
@@ -274,6 +279,7 @@ body {
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     outline: 1px solid var(--text_color);
     outline-offset: -1px;
+    height: 5rem;
 }
 
 .Navbar_Tool {
@@ -281,6 +287,7 @@ body {
     align-items: center;
     cursor: pointer;
     padding: 0.25rem 1rem;
+    height: 2rem;
 
     background-color: #461e0b;
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
@@ -1390,16 +1397,21 @@ body {
 
 .Subscription_Banner_Title {
     font-size: 2rem;
+    height: 3rem;
     text-align: center;
     position: absolute;
-    top: -1.6rem;
+    top: -1.5rem;
     border: 1px solid var(--text_color);
     padding: 0.25rem 1.5rem;
     background-color: var(--bg_color);
     border-radius: 2.4rem;
 
     scroll-snap-align: start;
-    scroll-margin: 5.4rem;
+    scroll-margin: 5.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .Subsctiption_Banner_Subtitle {
@@ -1513,6 +1525,8 @@ body {
     width: 100%;
     max-width: 800px;
     margin-inline: auto;
+
+    box-shadow: 0 2px 0.5rem rgba(0, 0, 0, 0.5);
 }
 
 .Product_List_Card_Intro {
@@ -1524,16 +1538,20 @@ body {
 
 .Product_List_Title {
     font-size: 2rem;
+    height: 3rem;
     text-align: center;
     position: absolute;
-    top: -1.6rem;
+    top: -1.5rem;
     border: 1px solid var(--text_color);
     padding: 0.25rem 1.5rem;
     background-color: var(--bg_color);
     border-radius: 2.4rem;
 
     scroll-snap-align: start;
-    scroll-margin: 5.4rem;
+    scroll-margin: 5.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .Product_List_Subtitle {
@@ -1586,7 +1604,8 @@ body {
 
     box-shadow: 0 0 0.25rem rgba(0, 0, 0, 1);
     scroll-snap-align: start;
-    scroll-margin: 5.4rem;
+    scroll-margin: 5.5rem;
+    min-height: 2.85rem;
 }
 
 .Product_List_Filter_Collapse_Btn {
@@ -1759,11 +1778,12 @@ body {
     overflow-x: scroll;
     overflow-y: hidden;
     padding: 0.25rem;
-    padding-bottom: 0.5rem;
+    padding-block: 0.5rem;
     margin-top: -1rem;
 
     scroll-snap-align: none;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: none;
+    cursor: grab;
 }
 
 .Product_List_List.Wide::-webkit-scrollbar {
@@ -1814,7 +1834,7 @@ body {
     flex-shrink: 0;
     background-color: var(--bg_color);
     flex-basis: 100%;
-    height: 72vh;
+    height: calc(100vh - 16.35rem);
     scroll-snap-align: start;
     scroll-margin: 0;
     position: relative;
@@ -1822,7 +1842,7 @@ body {
 }
 
 .Product_List_Item.Wide.Shrinked {
-    height: 58vh;
+    height: calc(100vh - 16.35rem - 8.5rem);
 }
 
 .Product_List_Item.Grid {
@@ -1853,7 +1873,7 @@ body {
     width: calc(100% - 0.5rem);
     height: 50%;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
-    border-radius: 1rem;
+    border-radius: 0.75rem;
 }
 
 .Product_List_Item.Wide > .Product_List_Item_Image_Container > .Product_List_Item_Image {
@@ -2742,21 +2762,26 @@ body {
 
 .About_Us {
     padding-top: 7rem;
-    min-height: 100%;
+    min-height: calc(100% + 1.5rem);
 }
 
 .About_Us_Title {
     font-size: 2rem;
+    height: 3rem;
     text-align: center;
     position: absolute;
-    top: -1.6rem;
+    top: -1.5rem;
     border: 1px solid var(--text_color);
     padding: 0.25rem 1.5rem;
     background-color: var(--bg_color);
     border-radius: 2.4rem;
 
     scroll-snap-align: start;
-    scroll-margin: 5.4rem;
+    scroll-margin: 5.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .About_Us_Card {
@@ -2785,9 +2810,17 @@ body {
 .About_Us_Description {
     display: flex;
     flex-direction: column;
+    text-align: center;
     gap: 0.5rem;
     width: 100%;
-    font-size: 1.4rem;
+}
+
+.About_Us_Description > p > strong {
+    font-size: clamp(1.4rem, 2vw, 2rem);
+}
+
+.About_Us_Description > p {
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
 }
 
 .About_Us_Description_Image_Container {
@@ -2803,6 +2836,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top;
     border-radius: 1rem;
     mix-blend-mode: multiply;
 }
@@ -2823,21 +2857,25 @@ body {
 
 .Contact {
     padding-top: 7rem;
-    min-height: 100%;
+    min-height: calc(100% + 1.5rem);
 }
 
 .Contact_Title {
     font-size: 2rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     position: absolute;
-    top: -1.6rem;
+    top: -1.5rem;
     border: 1px solid var(--text_color);
     padding: 0.25rem 1.5rem;
     background-color: var(--bg_color);
     border-radius: 2.4rem;
 
     scroll-snap-align: start;
-    scroll-margin: 5.4rem;
+    scroll-margin: 5.5rem;
 }
 
 .Contact_Card {
@@ -2855,6 +2893,103 @@ body {
 
     position: relative;
     height: 100%;
+}
+
+.Contact_Subtitle {
+    font-size: clamp(1.5rem, 3vw, 3rem);
+    line-height: clamp(1.5rem, 3vw, 3rem);
+    max-width: 20ch;
+    text-align: center;
+    margin-inline: auto;
+}
+
+.Contact_Description {
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    text-align: center;
+    max-width: 60ch;
+    margin-inline: auto;
+}
+
+.Contact_Content_Wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    gap: 1rem;
+}
+
+.Contact_Map {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    border-radius: 1rem;
+
+    border: 1px solid var(--text_color);
+
+    padding: 0.25rem;
+}
+
+.Map {
+    border-radius: 0.75rem;
+    border: 1px solid var(--text_color);
+}
+
+.Map_Placeholder {
+    background-color: lightblue;
+    width: 100%;
+    height: 100%;
+}
+
+.Contact_Content {
+    display: flex;
+    flex-direction: row;
+
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 80ch;
+    margin-inline: auto;
+}
+
+.Contact_Content_Item {
+    min-width: 40%;
+    flex: 1;
+    text-align: center;
+}
+
+.Contact_Content_Item > h3 {
+    font-size: clamp(1.4rem, 2vw, 1.6rem);
+}
+
+.Contact_Content_Item > p {
+    font-size: clamp(1.2rem, 1.4vw, 1.2rem);
+    max-width: 25ch;
+    margin-inline: auto;
+}
+
+.Contact_Open_Map_Btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    font-size: 1rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    letter-spacing: 0.05rem;
+
+    margin-top: 0.5rem;
+    margin-inline: auto;
+
+    display: none;
 }
 
 /* Barra de Progresso */
@@ -3254,6 +3389,7 @@ circle {
     .Contact,
     .About_Us {
         padding-top: 7.5rem;
+        min-height: calc(100%);
     }
 
     .Contact {
@@ -3270,6 +3406,7 @@ circle {
     .Contact_Card,
     .About_Us_Card {
         height: calc(100% - 1rem);
+        border-radius: 0.75rem;
     }
 
     .About_Us_Card {
@@ -3284,4 +3421,32 @@ circle {
     .About_Us_Description_Image_Container > img {
         object-position: top;
     }
+
+    .Contact_Content {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        margin-block: auto;
+    }
+
+    .Contact_Map {
+        display: none;
+    }
+
+    .Contact_Open_Map_Btn {
+        display: flex;
+    }
+}
+
+.triangle {
+    --r: 20px; /* border radius */
+
+    width: 180px;
+    aspect-ratio: 1 / cos(30deg);
+    --_g: calc(tan(60deg) * var(--r)) top var(--r), #000 98%, #0000 101%;
+    -webkit-mask: conic-gradient(from 150deg at 50% calc(3 * var(--r) / 2 - 100%), #000 60deg, #0000 0) 0 0/100% calc(100% - 3 * var(--r) / 2)
+            no-repeat,
+        radial-gradient(var(--r) at 50% calc(100% - 2 * var(--r)), #000 98%, #0000 101%), radial-gradient(var(--r) at left var(--_g)),
+        radial-gradient(var(--r) at right var(--_g));
+    clip-path: polygon(50% 100%, 100% 0, 0 0);
+    background: linear-gradient(45deg, #fa6900, #c02942);
 }

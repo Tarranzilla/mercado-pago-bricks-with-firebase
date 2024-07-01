@@ -15,13 +15,9 @@ const Client_About_Us = () => {
                             </strong>
                         </p>
                         <p>
-                            A marca nasceu com a proposta de resgatar a tradição do chocolate artesanal e valorizar o cacau brasileiro. Desde os
-                            ingredientes cuidadosamente selecionados, até a produção artesanal em nossa própria fábrica na região de Curitiba - Cada
-                            etapa do processo é feita com paixão e responsabilidade.
-                        </p>
-                        <p>
-                            Buscamos oferecer ao mundo o melhor do chocolate brasileiro por meio de uma cadeia produtiva justa e sustentável - Que
-                            seja capaz de valorizar o trabalho das pessoas envolvidas e promover desenvolvimento econômico e social.
+                            Propomos o resgate da tradição do chocolate artesanal e valorização do cacau brasileiro - Desde os ingredientes
+                            cuidadosamente selecionados, até a produção de baixa escala em nossa própria fábrica na região de Curitiba - Cada etapa do
+                            processo é feita com paixão e responsabilidade.
                         </p>
 
                         <div className="About_Us_Description_Image_Container">

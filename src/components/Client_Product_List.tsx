@@ -60,6 +60,38 @@ const Client_Product_List = () => {
         dispatch(addCartItem({ product: product }));
     };
 
+    // Ref for the Product_List_List container
+    const productListRef = useRef<HTMLDivElement>(null);
+    // State to track dragging
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+
+    const startDragging = (e: any) => {
+        e.preventDefault();
+        if (activeLayout === "Wide") {
+            if (productListRef.current) {
+                setIsDragging(true);
+                setStartX(e.pageX - productListRef.current.offsetLeft);
+                setScrollLeft(productListRef.current.scrollLeft);
+            }
+        }
+    };
+
+    const stopDragging = () => {
+        setIsDragging(false);
+    };
+
+    const onDrag = (e: any) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        if (activeLayout !== "Wide") return;
+        if (!productListRef.current) return;
+        const x = e.pageX - productListRef.current.offsetLeft;
+        const walk = (x - startX) * 3; // The number 2 determines the scroll speed
+        productListRef.current.scrollLeft = scrollLeft - walk;
+    };
+
     useEffect(() => {
         axios.get(NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS).then((response) => {
             setProducts(response.data);
@@ -134,6 +166,9 @@ const Client_Product_List = () => {
                                                 key={category}
                                                 onClick={() => {
                                                     setActiveCategory(category);
+                                                    if (activeLayout === "Wide") {
+                                                        productListRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+                                                    }
                                                 }}
                                             >
                                                 {category}
@@ -207,7 +242,14 @@ const Client_Product_List = () => {
                 </div>
 
                 {activeProducts.length > 0 ? (
-                    <div className={`Product_List_List ${activeLayout}`}>
+                    <div
+                        className={`Product_List_List ${activeLayout}`}
+                        ref={productListRef}
+                        onMouseDown={startDragging}
+                        onMouseLeave={stopDragging}
+                        onMouseUp={stopDragging}
+                        onMouseMove={onDrag}
+                    >
                         {activeProducts.map((product) => (
                             <m.div layout key={product.id} className={`Product_List_Item ${activeLayout} ${shrinked}`}>
                                 <m.div layout className="Product_List_Item_Image_Container">

@@ -41,12 +41,16 @@ const Brand_Intro = () => {
 
                 <div className="Brand_Intro_Call_To_Action">
                     <h2>Surpreenda-se com Nossos Chocolates</h2>
-                    <div style={{ width: "100%", paddingInline: "0.5rem", height: "2rem", position: "relative" }} onClick={scrollToAnchor}>
-                        <svg width="100%" height="100%" viewBox="0 0 100 1000" preserveAspectRatio="none">
-                            <polygon points="0,0 100,0 50,1000" fill="currentColor" />
+                    <div style={{ width: "100%", height: "2rem", position: "relative" }} onClick={scrollToAnchor}>
+                        <svg width="100%" height="42" viewBox="0 0 478 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M473.474 0H4.52625C-0.436703 0 -0.958755 7.24735 3.95295 7.9587L238.427 41.917C238.807 41.972 239.193 41.972 239.573 41.917L474.047 7.9587C478.959 7.24735 478.437 0 473.474 0Z"
+                                fill="white"
+                            />
                         </svg>
                     </div>
                 </div>
+
                 <div className={about ? "Intro_Image_Container Active" : "Intro_Image_Container"}>
                     <Image
                         src="/brand_imgs/Icone_TC_512_HQ.png"

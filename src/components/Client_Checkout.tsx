@@ -48,17 +48,28 @@ const Client_Checkout = () => {
 
     const [processingPayment, setProcessingPayment] = useState<boolean>(false);
 
-    const customer_has_not_updated_his_phone = customer?.telephone === "Nenhum Número de Telefone Definido";
+    const customer_has_not_updated_his_phone = customer?.telephone === "Nenhum Número de Telefone Definido" || customer?.telephone === "";
+    console.log("Customer =>", customer);
+    console.log("Customer telephone =>", customer?.telephone);
+    console.log("Customer has not updated his phone =>", customer_has_not_updated_his_phone);
 
     const customer_has_not_updated_his_address =
         customer?.name === "Nenhum Nome Definido" ||
+        customer?.name === "" ||
         customer?.email === "Nenhum Email Definido" ||
+        customer?.email === "" ||
         customer?.telephone === "Nenhum Número de Telefone Definido" ||
+        customer?.telephone === "" ||
         customer?.address?.street === "Nenhuma Rua Definida" ||
+        customer?.address?.street === "" ||
         customer?.address?.number === "Nenhum Número Definido" ||
+        customer?.address?.number === "" ||
         customer?.address?.city === "Nenhuma Cidade Definida" ||
+        customer?.address?.city === "" ||
         customer?.address?.state === "Nenhum Estado Definido" ||
-        customer?.address?.zip === "Nenhum Código Postal Definido";
+        customer?.address?.state === "" ||
+        customer?.address?.zip === "Nenhum Código Postal Definido" ||
+        customer?.address?.zip === "";
 
     // customer?.address?.complement === "Nenhum Complemento Definido" ||
 
@@ -452,7 +463,12 @@ const Client_Checkout = () => {
                                             </div>
 
                                             {customer_has_not_updated_his_phone && (
-                                                <div className="Receive_Option LightGreen Margin_Bottom">
+                                                <div
+                                                    className="Checkout_Address_Alert Checkout_Payment_Alert"
+                                                    onClick={() => {
+                                                        setUserTabOpenAction(true);
+                                                    }}
+                                                >
                                                     <span className="material-icons">info</span>
                                                     <p>
                                                         Para prosseguir ao pagamento você precisa adicionar pelomenos o seu número de telefone nas
@@ -484,7 +500,11 @@ const Client_Checkout = () => {
                                                         }
                                                     }}
                                                 >
-                                                    {emptyCart ? "Para prosseguir ao pagamento adicione itens ao pedido" : "Prosseguir ao Pagamento"}
+                                                    {emptyCart && <>Para prosseguir ao pagamento adicione itens ao pedido</>}
+                                                    {customer_has_not_updated_his_phone && (
+                                                        <>Adicione um telefone na sua conta para finalizar o pedido</>
+                                                    )}
+                                                    {!emptyCart && !customer_has_not_updated_his_phone && <>Prosseguir ao Pagamento</>}
                                                     <span className="material-icons">payment</span>
                                                 </button>
                                             </div>

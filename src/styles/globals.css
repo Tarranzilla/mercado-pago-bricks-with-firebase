@@ -145,6 +145,16 @@ body {
     align-items: center;
 }
 
+a,
+button {
+    transition: scale 0.3s ease-in-out;
+}
+
+a:hover,
+button:hover {
+    scale: 1.025;
+}
+
 /* ------ Main Page Content ------ */
 
 .Main_Page_Content {
@@ -977,7 +987,8 @@ body {
     justify-content: center;
     gap: 0.5rem;
 
-    background-color: var(--text_color);
+    background-color: #461e0b;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
@@ -2017,6 +2028,7 @@ body {
     flex-shrink: 0;
 
     background-color: var(--anchor_hover_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     color: var(--text_color);
     font-size: 1.4rem;
     font-weight: 600;
@@ -2550,6 +2562,10 @@ body {
     font-family: "ProfilePro_WOFF2", sans-serif;
 }
 
+.Checkout_Payment_Alert {
+    margin-top: 1rem;
+}
+
 .Checkout_Receive_Options {
     display: flex;
     flex-direction: column;
@@ -2582,6 +2598,13 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+}
+
+.Receive_Option > label,
+.Recieve_Option_Group > label {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
 }
 
 .Receive_Option > input {
@@ -2678,6 +2701,7 @@ body {
 
     font-size: 1rem;
     letter-spacing: 0.05rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
 }
 
 .User_Order_Shipping_Address_Edit_Btn > span {
@@ -3248,7 +3272,7 @@ circle {
     }
 
     .Product_List_Item.Wide.Shrinked {
-        height: 48vh;
+        height: calc(100vh - 16.35rem - 11.25rem);
     }
 
     .Product_List_Item_Image_Container {
@@ -3321,11 +3345,13 @@ circle {
 
     .Checkout_Card {
         scroll-margin: 8.25rem;
+        border-radius: 0.75rem;
     }
 
     .Checkout_Content_Wrapper {
         padding-inline: 0;
         padding-top: 6.125rem;
+        padding-bottom: 0;
     }
 
     .User_Order_Checkout_Product_List,
@@ -3359,7 +3385,10 @@ circle {
 
     .User_Order_Shipping_Address {
         padding: 0.5rem;
+        padding-bottom: 2rem;
         border-radius: 0.5rem;
+        font-size: 1.1rem;
+        letter-spacing: 0.05rem;
     }
 
     .User_Order_Shipping_Address_Header {
@@ -3372,6 +3401,10 @@ circle {
 
     .User_Order_Shipping_Info > p {
         font-size: 0.9rem;
+    }
+
+    .User_Order_Shipping_Info > span {
+        font-size: 1.4rem;
     }
 
     .User_Shipping_Total {

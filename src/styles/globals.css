@@ -442,14 +442,15 @@ button:hover {
     justify-content: center;
     gap: 0.5rem;
 
-    background-color: lightblue;
+    background-color: #461e0b;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
 
     text-decoration: none;
-    color: black;
+    color: var(--bg_color);
 }
 
 .Control_Panel_Link_Btn_Text {
@@ -977,6 +978,7 @@ button:hover {
 }
 
 .User_Order_Extra_Info {
+    margin-top: auto;
     display: flex;
     flex-direction: column;
 }
@@ -3014,6 +3016,177 @@ button:hover {
     margin-inline: auto;
 
     display: none;
+}
+
+/* Controle de Pedidos / Order Control */
+
+.Order_Control_Card {
+    margin-top: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    padding-top: 2rem;
+    border: 1px solid var(--bg_color);
+    border-radius: 1rem;
+    color: var(--bg_color);
+
+    position: relative;
+
+    max-width: 1000px;
+    margin-inline: auto;
+}
+
+.Order_Control_Title {
+    font-size: 2rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: -1.5rem;
+
+    padding-inline: 1.5rem;
+
+    background-color: var(--bg_color);
+    border-radius: 1.5rem;
+    border: 1px solid var(--text_color);
+    color: var(--text_color);
+}
+
+.Order_Control_List {
+    color: var(--bg_color);
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.Order_Control_Item {
+    flex: 1;
+    flex-basis: 360px;
+}
+
+.User_Order_Change_Status_Btn_Text {
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    font-size: 1rem;
+}
+
+.User_Order_Control_Shipping_Info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2 5rem;
+    margin-inline: 1rem;
+    margin-bottom: 1rem;
+    border-top: 1px solid var(--bg_color);
+    padding-top: 1rem;
+}
+
+.Order_Control_Filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+
+    margin-top: 1rem;
+
+    border: 1px solid var(--bg_color);
+    border-radius: 1rem;
+    padding: 2rem;
+
+    position: relative;
+}
+
+.Order_Control_Filter_Title {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 1;
+    background-color: var(--bg_color);
+    color: var(--text_color);
+    border-radius: 1.5rem;
+    padding-inline: 1.5rem;
+
+    height: 100%;
+
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    height: 2rem;
+}
+
+.Order_Control_Filter_Buttons {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.Order_Control_Filter_Inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    flex: 1;
+}
+
+.Order_Control_Filter_Options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
+    max-width: 40rem;
+    min-width: 30rem;
+}
+
+.Order_Control_Filter_Option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #461e0b;
+    border: none;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+    color: var(--bg_color);
+    cursor: pointer;
+}
+
+.Order_Control_Filter_Option.Active {
+    background-color: var(--anchor_hover_color);
+    color: var(--text_color);
+}
+
+.Order_Control_Filter_Item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.Order_Control_Filter_Item > h4 {
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.Order_Control_Filter_Item > input {
+    min-width: 20rem;
+    max-width: 40rem;
+    background-color: #461e0b;
+    color: var(--bg_color);
+    border: 1px solid var(--bg_color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
 }
 
 /* Barra de Progresso */

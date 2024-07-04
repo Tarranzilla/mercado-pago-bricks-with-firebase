@@ -151,7 +151,7 @@ const Client_Checkout = () => {
 
                         status: {
                             confirmed_by_admin: false,
-                            waiting_payment: false,
+                            waiting_payment: true,
                             in_production: false,
                             waiting_for_retrieval: false,
                             retrieved: false,

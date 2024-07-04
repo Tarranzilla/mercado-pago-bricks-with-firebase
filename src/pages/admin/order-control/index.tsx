@@ -19,16 +19,27 @@ if (!businessTelephone) {
     throw new Error("BUSINESS_MAIN_TELEPHONE environment variable is not defined");
 }
 
+// const { userId, orderId, editedOrder }: { userId: string; orderId: string; editedOrder: Order } = req.body;
+const UPDATE_SPECIFIC_ORDER_API = process.env.NEXT_PUBLIC_PATH_API_UPDATE_SPECIFIC_ORDER;
+
+if (!UPDATE_SPECIFIC_ORDER_API) {
+    throw new Error("NEXT_PUBLIC_PATH_API_UPDATE_SPECIFIC_ORDER environment variable is not defined");
+}
+
 // Propriedades do Componente de Pedido
 export type OrderItemProps = {
     order: Order;
     index: number;
     order_number: string;
+    updateOrder: (updatedOrder: Order) => void;
 };
 
 // Componente de Pedido
-export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number }) => {
+export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number, updateOrder }) => {
+    const user = useSelector((state: RootState) => state.user);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedOrder, setEditedOrder] = useState<Order>(order);
 
     return (
         <div className="User_Order_Item Order_Control_Item" key={index}>
@@ -173,11 +184,250 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
             >
                 <span className="material-icons">support_agent</span> Entrar em Contato com o Cliente
             </a>
+            {!isEditing && (
+                <button
+                    className="User_Order_Status_Call_Btn User_Order_Change_Status_Btn"
+                    onClick={() => {
+                        setIsEditing(true);
+                    }}
+                >
+                    <span className="material-icons">published_with_changes</span>
+                    <p className="User_Order_Change_Status_Btn_Text">Alterar Status do Pedido</p>
+                </button>
+            )}
 
-            <button className="User_Order_Status_Call_Btn User_Order_Change_Status_Btn">
-                <span className="material-icons">published_with_changes</span>
-                <p className="User_Order_Change_Status_Btn_Text">Alterar Status do Pedido</p>
-            </button>
+            {isEditing && (
+                <div className="User_Order_Edit_Status">
+                    <h4>Alterar Status do Pedido</h4>
+                    <div className="User_Order_Edit_Status_Options">
+                        <button
+                            className={`User_Order_Edit_Status_Option ${editedOrder.status.waiting_payment ? "Active" : ""} ${
+                                order.status.waiting_payment ? "Actual" : ""
+                            }`}
+                            onClick={() => {
+                                setEditedOrder((currentOrder) => ({
+                                    ...currentOrder,
+                                    status: {
+                                        ...currentOrder.status,
+                                        confirmed_by_admin: false,
+                                        waiting_payment: true,
+                                        in_production: false,
+                                        waiting_for_retrieval: false,
+                                        retrieved: false,
+                                        waiting_for_delivery: false,
+                                        delivered: false,
+                                        cancelled: false,
+                                    },
+                                }));
+                            }}
+                        >
+                            Aguardando Pagamento
+                        </button>
+                        <button
+                            className={`User_Order_Edit_Status_Option ${editedOrder.status.confirmed_by_admin ? "Active" : ""} ${
+                                order.status.confirmed_by_admin ? "Actual" : ""
+                            }`}
+                            onClick={() => {
+                                setEditedOrder((currentOrder) => ({
+                                    ...currentOrder,
+                                    status: {
+                                        ...currentOrder.status,
+                                        confirmed_by_admin: true,
+                                        waiting_payment: false,
+                                        in_production: false,
+                                        waiting_for_retrieval: false,
+                                        retrieved: false,
+                                        waiting_for_delivery: false,
+                                        delivered: false,
+                                        cancelled: false,
+                                    },
+                                }));
+                            }}
+                        >
+                            Confirmado
+                        </button>
+                        <button
+                            className={`User_Order_Edit_Status_Option ${editedOrder.status.in_production ? "Active" : ""} ${
+                                order.status.in_production ? "Actual" : ""
+                            }`}
+                            onClick={() => {
+                                setEditedOrder((currentOrder) => ({
+                                    ...currentOrder,
+                                    status: {
+                                        ...currentOrder.status,
+                                        confirmed_by_admin: false,
+                                        waiting_payment: false,
+                                        in_production: true,
+                                        waiting_for_retrieval: false,
+                                        retrieved: false,
+                                        waiting_for_delivery: false,
+                                        delivered: false,
+                                        cancelled: false,
+                                    },
+                                }));
+                            }}
+                        >
+                            Em Produção
+                        </button>
+                        <button
+                            className={`User_Order_Edit_Status_Option ${editedOrder.status.waiting_for_retrieval ? "Active" : ""} ${
+                                order.status.waiting_for_retrieval ? "Actual" : ""
+                            }`}
+                            onClick={() => {
+                                setEditedOrder((currentOrder) => ({
+                                    ...currentOrder,
+                                    status: {
+                                        ...currentOrder.status,
+                                        confirmed_by_admin: false,
+                                        waiting_payment: false,
+                                        in_production: false,
+                                        waiting_for_retrieval: true,
+                                        retrieved: false,
+                                        waiting_for_delivery: false,
+                                        delivered: false,
+                                        cancelled: false,
+                                    },
+                                }));
+                            }}
+                        >
+                            Aguardando Retirada
+                        </button>
+                        <button
+                            className={`User_Order_Edit_Status_Option ${editedOrder.status.retrieved ? "Active" : ""} ${
+                                order.status.retrieved ? "Actual" : ""
+                            }`}
+                            onClick={() => {
+                                setEditedOrder((currentOrder) => ({
+                                    ...currentOrder,
+                                    status: {
+                                        ...currentOrder.status,
+                                        confirmed_by_admin: false,
+                                        waiting_payment: false,
+                                        in_production: false,
+                                        waiting_for_retrieval: false,
+                                        retrieved: true,
+                                        waiting_for_delivery: false,
+                                        delivered: false,
+                                        cancelled: false,
+                                    },
+                                }));
+                            }}
+                        >
+                            Retirado no Balcão
+                        </button>
+                        <button
+                            className={`User_Order_Edit_Status_Option ${editedOrder.status.waiting_for_delivery ? "Active" : ""} ${
+                                order.status.waiting_for_delivery ? "Actual" : ""
+                            }`}
+                            onClick={() => {
+                                setEditedOrder((currentOrder) => ({
+                                    ...currentOrder,
+                                    status: {
+                                        ...currentOrder.status,
+                                        confirmed_by_admin: false,
+                                        waiting_payment: false,
+                                        in_production: false,
+                                        waiting_for_retrieval: false,
+                                        retrieved: false,
+                                        waiting_for_delivery: true,
+                                        delivered: false,
+                                        cancelled: false,
+                                    },
+                                }));
+                            }}
+                        >
+                            Aguardando Entrega
+                        </button>
+                        <button
+                            className={`User_Order_Edit_Status_Option ${editedOrder.status.delivered ? "Active" : ""} ${
+                                order.status.delivered ? "Actual" : ""
+                            }`}
+                            onClick={() => {
+                                setEditedOrder((currentOrder) => ({
+                                    ...currentOrder,
+                                    status: {
+                                        ...currentOrder.status,
+                                        confirmed_by_admin: false,
+                                        waiting_payment: false,
+                                        in_production: false,
+                                        waiting_for_retrieval: false,
+                                        retrieved: false,
+                                        waiting_for_delivery: false,
+                                        delivered: true,
+                                        cancelled: false,
+                                    },
+                                }));
+                            }}
+                        >
+                            Entregue
+                        </button>
+                        <button
+                            className={`User_Order_Edit_Status_Option ${editedOrder.status.cancelled ? "Active" : ""} ${
+                                order.status.cancelled ? "Actual" : ""
+                            }`}
+                            onClick={() => {
+                                setEditedOrder((currentOrder) => ({
+                                    ...currentOrder,
+                                    status: {
+                                        ...currentOrder.status,
+                                        confirmed_by_admin: false,
+                                        waiting_payment: false,
+                                        in_production: false,
+                                        waiting_for_retrieval: false,
+                                        retrieved: false,
+                                        waiting_for_delivery: false,
+                                        delivered: false,
+                                        cancelled: true,
+                                    },
+                                }));
+                            }}
+                        >
+                            Cancelado
+                        </button>
+                    </div>
+                    <button
+                        className="User_Order_Edit_Status_Save_Btn"
+                        onClick={async () => {
+                            try {
+                                const response = await axios.post(
+                                    `${UPDATE_SPECIFIC_ORDER_API}`,
+                                    { userId: user.currentUser?.id, orderId: order.order_external_reference, editedOrder },
+                                    {
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                    }
+                                );
+                                if (response.data.error) {
+                                    console.error(response.data.error);
+                                } else {
+                                    console.log(response.data.order_data);
+                                    updateOrder(response.data.order_data as Order);
+                                }
+                            } catch (error) {
+                                if (axios.isAxiosError(error)) {
+                                    console.error(error.response?.data);
+                                } else {
+                                    console.error("An unexpected error occurred:", error);
+                                }
+                            }
+                            setIsEditing(false);
+                        }}
+                    >
+                        Salvar Alterações
+                    </button>
+
+                    <button
+                        className="User_Order_Edit_Status_Cancel_Btn"
+                        onClick={() => {
+                            setIsEditing(false);
+                            setEditedOrder(order);
+                        }}
+                    >
+                        Cancelar Alterações
+                    </button>
+                </div>
+            )}
 
             <button className="Order_Expand_Btn" onClick={() => setIsExpanded(!isExpanded)}>
                 <span className={isExpanded ? "material-icons Order_Expand_Btn_Icon Active" : "material-icons Order_Expand_Btn_Icon"}>
@@ -272,12 +522,12 @@ const OrderControl = () => {
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user);
     const [orders, setOrders] = useState<Order[]>([]);
-    console.log(orders);
+
+    const [viewMode, setViewMode] = useState<"list" | "grid" | "fullscreen">("list");
 
     const sortedOrders = [...orders].sort((a, b) => new Date(b.order_date).getTime() - new Date(a.order_date).getTime());
 
     const [orderShippingOption, setOrderShippingOption] = useState("");
-
     const [orderStatus, setOrderStatus] = useState<OrderStatus>({
         confirmed_by_admin: false,
         waiting_payment: false,
@@ -288,7 +538,6 @@ const OrderControl = () => {
         delivered: false,
         cancelled: false,
     });
-
     const [dateRange, setDateRange] = useState("");
     const [customerName, setCustomerName] = useState("");
     const [orderReference, setOrderReference] = useState("");
@@ -308,20 +557,24 @@ const OrderControl = () => {
                     break;
                 case "Ontem":
                     startDate.setDate(today.getDate() - 1);
+                    startDate.setHours(0, 0, 0, 0);
                     // Set endDate to the end of yesterday
                     endDate = new Date(startDate);
                     endDate.setHours(23, 59, 59, 999);
                     break;
                 case "Últimos 7 dias":
                     startDate.setDate(today.getDate() - 7);
+                    startDate.setHours(0, 0, 0, 0);
                     endDate.setHours(23, 59, 59, 999); // Ensure endDate is end of today
                     break;
                 case "Últimos 30 dias":
                     startDate.setDate(today.getDate() - 30);
+                    startDate.setHours(0, 0, 0, 0);
                     endDate.setHours(23, 59, 59, 999); // Ensure endDate is end of today
                     break;
                 case "Últimos 90 dias":
                     startDate.setDate(today.getDate() - 90);
+                    startDate.setHours(0, 0, 0, 0);
                     endDate.setHours(23, 59, 59, 999); // Ensure endDate is end of today
                     break;
                 case "Este mês":
@@ -378,8 +631,25 @@ const OrderControl = () => {
 
     const filteredOrders = applyFilters();
 
+    function updateOrderInList(updatedOrder: Order) {
+        const ordersCopy = [...orders];
+        const orderIndex = ordersCopy.findIndex((order) => order.order_external_reference === updatedOrder.order_external_reference);
+
+        console.log("Updating order with external reference:", updatedOrder.order_external_reference); // Log the reference you're trying to update
+        console.log(
+            "Available external references in orders:",
+            ordersCopy.map((o) => o.order_external_reference)
+        ); // Log all available references
+
+        if (orderIndex !== -1) {
+            ordersCopy[orderIndex] = updatedOrder;
+            setOrders(ordersCopy);
+        } else {
+            console.log("Error updating order. Order with the given external reference not found.");
+        }
+    }
+
     const fetchOrders = async () => {
-        console.log("fetching orders");
         try {
             const response = await axios.post(
                 `${NEXT_PUBLIC_PATH_API_GET_ALL_ORDERS}`,
@@ -394,7 +664,6 @@ const OrderControl = () => {
                 console.error(response.data.error);
             } else {
                 setOrders(response.data as Order[]);
-                console.log(response.data);
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -407,7 +676,6 @@ const OrderControl = () => {
 
     useEffect(() => {
         if (user.currentUser) {
-            console.log(user.currentUser?.id);
             fetchOrders();
         } else {
             setOrders([]);
@@ -662,12 +930,36 @@ const OrderControl = () => {
                             }}
                         />
                     </div>
+
+                    <div className="Order_Conrol_Filter_ViewModes">
+                        <h4>
+                            <span className="material-icons">visibility</span>Modos de Visualização
+                        </h4>
+
+                        <div className={"ViewModes_Items"}>
+                            <button className="Order_Control_Filter_ViewMode">
+                                <span className="material-icons">view_list</span>Lista
+                            </button>
+                            <button className="Order_Control_Filter_ViewMode Active">
+                                <span className="material-icons">view_module</span>Grid
+                            </button>
+                            <button className="Order_Control_Filter_ViewMode">
+                                <span className="material-icons">panorama_wide_angle</span>Tela Cheia
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div className="Order_Control_List">
                 {filteredOrders.map((order, index) => (
-                    <OrderItem key={order.order_external_reference} order={order} index={index} order_number={`${index}`} />
+                    <OrderItem
+                        key={order.order_external_reference}
+                        order={order}
+                        index={index}
+                        order_number={`${index}`}
+                        updateOrder={updateOrderInList}
+                    />
                 ))}
             </div>
         </div>

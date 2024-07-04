@@ -148,6 +148,7 @@ body {
 a,
 button {
     transition: scale 0.3s ease-in-out;
+    cursor: pointer;
 }
 
 a:hover,
@@ -3033,7 +3034,7 @@ button:hover {
     color: var(--bg_color);
 
     position: relative;
-
+    width: 100%;
     max-width: 1000px;
     margin-inline: auto;
 }
@@ -3060,6 +3061,7 @@ button:hover {
     color: var(--bg_color);
     width: 100%;
     display: flex;
+    justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
 }
@@ -3067,6 +3069,11 @@ button:hover {
 .Order_Control_Item {
     flex: 1;
     flex-basis: 360px;
+    max-width: 540px;
+}
+
+.Order_Control_Item > .User_Order_Status {
+    min-height: 10.5rem;
 }
 
 .User_Order_Change_Status_Btn_Text {
@@ -3112,6 +3119,7 @@ button:hover {
     padding-inline: 1.5rem;
 
     height: 100%;
+    width: max-content;
 
     position: absolute;
     top: -1rem;
@@ -3142,9 +3150,9 @@ button:hover {
     gap: 0.35rem;
     margin-bottom: 0.5rem;
     max-width: 40rem;
-    min-width: 30rem;
 }
 
+.Order_Control_Filter_ViewMode,
 .Order_Control_Filter_Option {
     display: flex;
     align-items: center;
@@ -3156,8 +3164,11 @@ button:hover {
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     color: var(--bg_color);
     cursor: pointer;
+
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
+.Order_Control_Filter_ViewMode.Active,
 .Order_Control_Filter_Option.Active {
     background-color: var(--anchor_hover_color);
     color: var(--text_color);
@@ -3180,13 +3191,121 @@ button:hover {
 }
 
 .Order_Control_Filter_Item > input {
-    min-width: 20rem;
     max-width: 40rem;
     background-color: #461e0b;
     color: var(--bg_color);
     border: 1px solid var(--bg_color);
     padding: 0.5rem;
     border-radius: 0.5rem;
+}
+
+.Order_Conrol_Filter_ViewModes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.Order_Conrol_Filter_ViewModes > h4 {
+    font-size: 1.125rem;
+    font-weight: 400;
+    letter-spacing: 0.1rem;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ViewModes_Items {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.Order_Control_Filter_ViewMode {
+    padding-inline: 1rem;
+}
+
+.Order_Control_Filter_ViewMode > span {
+    font-size: 1.125rem;
+}
+
+.User_Order_Edit_Status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+
+    background-color: var(--bg_color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.User_Order_Edit_Status > h4 {
+    color: var(--text_color);
+}
+
+.User_Order_Edit_Status_Options {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.User_Order_Edit_Status_Option {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #461e0b;
+    border: none;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+    color: var(--bg_color);
+    cursor: pointer;
+
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.User_Order_Edit_Status_Option.Actual {
+    background-color: lightgray;
+    color: var(--text_color);
+}
+
+.User_Order_Edit_Status_Option.Active {
+    background-color: var(--anchor_hover_color);
+    color: var(--text_color);
+}
+
+.User_Order_Edit_Status_Save_Btn,
+.User_Order_Edit_Status_Cancel_Btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+
+    font-size: 1rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    letter-spacing: 0.05rem;
+}
+
+.User_Order_Edit_Status_Save_Btn {
+    background-color: lightgreen;
+    color: var(--text_color);
+}
+
+.User_Order_Edit_Status_Cancel_Btn {
+    background-color: lightcoral;
+    color: var(--text_color);
 }
 
 /* Barra de Progresso */

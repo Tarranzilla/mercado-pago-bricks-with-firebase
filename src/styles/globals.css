@@ -3032,10 +3032,11 @@ button:hover {
     border: 1px solid var(--bg_color);
     border-radius: 1rem;
     color: var(--bg_color);
+    background-color: var(--bg_color);
 
     position: relative;
     width: 100%;
-    max-width: 1000px;
+
     margin-inline: auto;
 }
 
@@ -3066,14 +3067,71 @@ button:hover {
     flex-wrap: wrap;
 }
 
+.User_Order_Actions {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    min-width: 15rem;
+}
+
+.Order_Control_List.list {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.Order_Control_List.fullscreen {
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 1rem;
+}
+
 .Order_Control_Item {
     flex: 1;
     flex-basis: 360px;
-    max-width: 540px;
+    max-width: 640px;
+    background-color: #d7bb92;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+}
+
+.Order_Control_List.list > .Order_Control_Item {
+    flex-basis: 100%;
+    flex: unset;
+    width: 100%;
+    flex-shrink: 0;
+    max-width: 100%;
+    min-height: 20vh;
+    flex-direction: row;
+}
+
+.Order_Control_List.fullscreen > .Order_Control_Item {
+    flex-basis: 100%;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 70vh;
 }
 
 .Order_Control_Item > .User_Order_Status {
     min-height: 10.5rem;
+}
+
+.Order_Control_List.list > .Order_Control_Item > .User_Order_Status {
+    margin: 0;
+    margin-inline: 0.5rem;
+    width: 100%;
+    max-width: 25rem;
+}
+
+.Order_Control_List.list > .Order_Control_Item > .User_Order_Extra_Info {
+    margin: 0;
+    margin-inline: 0.5rem;
+    width: 100%;
+    max-width: 25rem;
 }
 
 .User_Order_Change_Status_Btn_Text {
@@ -3098,12 +3156,15 @@ button:hover {
     width: 100%;
 
     margin-top: 1rem;
-
-    border: 1px solid var(--bg_color);
+    background-color: var(--text_color);
     border-radius: 1rem;
     padding: 2rem;
 
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
     position: relative;
+
+    max-width: 1280px;
 }
 
 .Order_Control_Filter_Title {
@@ -3114,6 +3175,7 @@ button:hover {
 
     flex: 1;
     background-color: var(--bg_color);
+    border: 1px solid var(--text_color);
     color: var(--text_color);
     border-radius: 1.5rem;
     padding-inline: 1.5rem;
@@ -3156,6 +3218,7 @@ button:hover {
 .Order_Control_Filter_Option {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
@@ -3163,7 +3226,12 @@ button:hover {
     border: none;
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     color: var(--bg_color);
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.06125rem;
     cursor: pointer;
+
+    flex-grow: 1;
 
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
@@ -3181,8 +3249,9 @@ button:hover {
 }
 .Order_Control_Filter_Item > h4 {
     font-size: 1.125rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.1rem;
+    color: var(--bg_color);
 
     display: flex;
     align-items: center;
@@ -3207,8 +3276,9 @@ button:hover {
 
 .Order_Conrol_Filter_ViewModes > h4 {
     font-size: 1.125rem;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.1rem;
+    color: var(--bg_color);
 
     display: flex;
     align-items: center;
@@ -3379,7 +3449,25 @@ circle {
     }
 }
 
+@media screen and (min-width: 480px) {
+    .Mobile_Only {
+        display: none;
+    }
+
+    .Non_Mobile_Only {
+        display: flex;
+    }
+}
+
 @media screen and (max-width: 480px) {
+    .Mobile_Only {
+        display: flex;
+    }
+
+    .Non_Mobile_Only {
+        display: none;
+    }
+
     .Main_Page_Content {
         top: 0.5rem;
         left: 0.5rem;
@@ -3759,6 +3847,10 @@ circle {
 
     .Contact_Open_Map_Btn {
         display: flex;
+    }
+
+    .Order_Control_Card {
+        margin-top: 8.5rem;
     }
 }
 

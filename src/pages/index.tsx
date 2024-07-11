@@ -11,8 +11,8 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Mercado Pago e Firebase no NEXT</title>
-                <meta name="description" content="Uma Loja Integrada com o Mercado Pago e o Google Firebase." />
+                <title>Farol das Idéias - Tropical Cacau</title>
+                <meta name="description" content="Uma Loja de Chocolates Integrada com o Mercado Pago e o Google Firebase." />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>

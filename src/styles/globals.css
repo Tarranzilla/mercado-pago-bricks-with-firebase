@@ -3601,6 +3601,8 @@ button:hover {
     border-radius: 1.5rem;
     border: 1px solid var(--text_color);
     color: var(--text_color);
+
+    z-index: 2;
 }
 
 .Control_List {
@@ -3614,7 +3616,9 @@ button:hover {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
-    width: 100%;
+    flex-grow: 1;
+    flex-basis: 30rem;
+    height: 16rem;
 
     background-color: #d7bb92;
     border-radius: 0.5rem;
@@ -3622,12 +3626,92 @@ button:hover {
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
 }
 
-.Control_Item > img {
-    width: 10rem;
-    height: 10rem;
+.Control_Item_Image {
+    width: 16rem;
+    height: 16rem;
     object-fit: cover;
     border-radius: 0.5rem;
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+}
+
+.Control_Item_Content {
+    padding-top: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+}
+
+.Control_Item_Id {
+    font-size: 1rem;
+    margin-bottom: -0.25rem;
+}
+
+.Control_Item_Title {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.8rem;
+}
+
+.Control_Item_Categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.Control_Item_Category {
+    background-color: #461e0b;
+    color: var(--bg_color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    letter-spacing: 0.05rem;
+}
+
+.Control_Item_Description {
+    font-size: 1.2rem;
+    overflow: hidden;
+    /* Prevents the text from wrapping */
+    width: 100%; /* Example width; adjust as needed */
+    text-overflow: ellipsis;
+}
+
+.Control_Item_Footer {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.Control_Item_Price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    background-color: var(--text_color);
+    color: var(--bg_color);
+    width: max-content;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.Control_Item_Edit_Btn {
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    letter-spacing: 0.05rem;
+    max-width: 6rem;
 }
 
 .Category_Control_List {
@@ -3635,22 +3719,23 @@ button:hover {
     flex-wrap: wrap;
     gap: 1rem;
     width: 100%;
+    min-height: 40vh;
 }
 
 .Category_Item {
     display: flex;
     flex-direction: row;
-    gap: 0.5rem;
+    gap: 1rem;
     align-items: center;
     justify-content: space-between;
-    gap: 0.25rem;
     background-color: #d7bb92;
     color: var(--text_color);
     padding: 1rem;
     border-radius: 1rem;
     flex-grow: 1;
+    flex: 1;
 
-    min-width: 20rem;
+    min-width: 30rem;
     max-width: 45rem;
 }
 
@@ -3683,10 +3768,186 @@ button:hover {
     color: var(--bg_color);
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     border: none;
+    max-width: unset;
 }
 
 .Add_Category_Btn > span {
     font-size: 4rem;
+}
+
+.Control_Filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+
+    margin-top: 1rem;
+    background-color: var(--text_color);
+    border-radius: 1rem;
+    padding: 2rem;
+
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+
+    position: relative;
+
+    max-width: 1280px;
+}
+
+.Control_Filter_Title {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 1;
+    background-color: var(--bg_color);
+    border: 1px solid var(--text_color);
+    color: var(--text_color);
+    border-radius: 1.5rem;
+    padding-inline: 1.5rem;
+
+    height: 100%;
+    width: max-content;
+
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    height: 2rem;
+}
+
+.Control_Text_Filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+    background-color: #461e0b;
+    color: var(--bg_color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--bg_color);
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.1ch;
+}
+
+.Control_Select_Filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+    background-color: #461e0b;
+    color: var(--bg_color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--bg_color);
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.1ch;
+}
+
+.Add_Category_Form {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(0.25rem);
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 1rem;
+
+    padding-block: 1.5rem;
+}
+
+.Add_Category_Form_Card {
+    background-color: var(--text_color);
+    color: var(--text_color);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 30rem;
+    max-height: 80%;
+
+    gap: 0.5rem;
+    position: relative;
+}
+
+.Control_Form_Title {
+    font-size: 1.5rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding-inline: 1.5rem;
+    background-color: var(--bg_color);
+    min-width: max-content;
+    border-radius: 3rem;
+}
+
+.Control_Form_Input_Header {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.Control_Form_Input_Header > button {
+    min-width: max-content;
+}
+
+.Control_Form_Input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+
+    background-color: #461e0b;
+    color: var(--bg_color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--bg_color);
+}
+
+.Control_Form_Tall_Input {
+    min-height: 4rem;
+}
+
+.Control_Form_Footer {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+}
+
+.Control_Form_Btn {
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    letter-spacing: 0.05rem;
+    flex-grow: 1;
 }
 
 /* Barra de Progresso */

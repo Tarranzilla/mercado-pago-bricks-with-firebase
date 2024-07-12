@@ -5,22 +5,75 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
 import Product from "@/types/Product";
+import Product_Category from "@/types/Product_Category";
 
 import { motion as m, AnimatePresence } from "framer-motion";
+import { set } from "firebase/database";
 
 const GET_ALL_PRODUCTS_URL = process.env.NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS;
 if (!GET_ALL_PRODUCTS_URL) {
     throw new Error("The NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS environment variable is not defined");
 }
 
-type Category = {
-    id: string;
-    name: string;
-    description: string;
-    product_ids: string[];
+const empty_product: Product = {
+    id: "",
+    category: "Todos",
+    type: "",
+    variant: {
+        id: "string",
+        name: "string",
+        price: 1,
+        description: "",
+    },
+
+    availableForSale: true,
+    isPromoted: false,
+    showInStore: true,
+
+    stockQtty: 1,
+
+    title: "",
+    subtitle: "",
+    description: ["", ""],
+    price: 1,
+    weight: "100g",
+
+    ingredients: [
+        {
+            id: "",
+            name: "",
+            description: ["", ""],
+        },
+    ],
+    images: [
+        {
+            src: "",
+            alt: "",
+            width: 128,
+            height: 128,
+        },
+    ],
+    url_page_link: "",
+    url_full: "",
 };
 
-const empty_category: Category = {
+const GET_ALL_PRODUCTS_CATEGORIES_URL = process.env.NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS_CATEGORIES;
+if (!GET_ALL_PRODUCTS_CATEGORIES_URL) {
+    throw new Error("The NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS_CATEGORIES environment variable is not defined");
+}
+
+// const { new_product_category_data, user_id } = req.body; // Extracting user_id along with product category data
+const CREATE_PRODUCT_CATEGORY_URL = process.env.NEXT_PUBLIC_PATH_API_CREATE_PRODUCT_CATEGORY;
+if (!CREATE_PRODUCT_CATEGORY_URL) {
+    throw new Error("The NEXT_PUBLIC_PATH_API_CREATE_PRODUCT_CATEGORY environment variable is not defined");
+}
+
+const REMOVE_PRODUCT_CATEGORY_URL = process.env.NEXT_PUBLIC_PATH_API_REMOVE_PRODUCT_CATEGORY;
+if (!REMOVE_PRODUCT_CATEGORY_URL) {
+    throw new Error("The NEXT_PUBLIC_PATH_API_REMOVE_PRODUCT_CATEGORY environment variable is not defined");
+}
+
+const empty_category: Product_Category = {
     id: "",
     name: "",
     description: "",
@@ -31,7 +84,7 @@ const categories_data = [
     {
         id: "0001",
         name: "Todos",
-        description: "Todas as categorias",
+        description: "Todos os Produtos",
         product_ids: [
             "tropical-sampa-barra",
             "tropical-rio-barra",
@@ -50,7 +103,6 @@ const categories_data = [
             "ovo-tropical-parana-amazonas",
             "ovo-tropical-rio",
             "ovo-tropical-sampa",
-            "",
         ],
     },
     {
@@ -119,33 +171,68 @@ const categories_data = [
 const ProductControl = () => {
     const local_user = useSelector((state: RootState) => state.user.currentUser);
     const [loadingProducts, setLoadingProducts] = useState(true);
-    const [categories, setCategories] = useState<Category[]>(categories_data);
+    const [loadingCategories, setLoadingCategories] = useState(true);
+    const [categories, setCategories] = useState<Product_Category[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [productSearchTextInput, setProductSearchTextInput] = useState("");
 
-    const [activeCategories, setActiveCategories] = useState<Category[]>([categories_data[0]]);
+    const [activeCategories, setActiveCategories] = useState<Product_Category[]>([]);
 
-    const [newCategory, setNewCategory] = useState<Category>(empty_category);
+    const [newCategory, setNewCategory] = useState<Product_Category>(empty_category);
     const [creatingNewCategory, setCreatingNewCategory] = useState(false);
 
-    const [editedCategory, setEditedCategory] = useState<Category>(empty_category);
+    const [editedCategory, setEditedCategory] = useState<Product_Category>(empty_category);
     const [editingCategory, setEditingCategory] = useState(false);
 
-    const filteredCategories = activeCategories.filter((category) =>
-        category.product_ids.some((productId) => products.some((product) => product.id === productId))
-    );
+    const [newProduct, setNewProduct] = useState<Product>(empty_product);
+    const [creatingNewProduct, setCreatingNewProduct] = useState(false);
 
-    const filteredProducts = products.filter((product) => {
-        // Check if product belongs to any of the filtered categories
-        const isInFilteredCategory = filteredCategories.some((category) => category.product_ids.includes(product.id));
-        if (!isInFilteredCategory) return false;
+    const [editedProduct, setEditedProduct] = useState<Product>(empty_product);
+    const [editingProduct, setEditingProduct] = useState(false);
 
-        // If there's a search text, further filter by matching the search text
-        if (productSearchTextInput === "") return true;
-        return product.title.toLowerCase().includes(productSearchTextInput.toLowerCase());
-    });
+    let filteredCategories: Product_Category[] = [];
+    let filteredProducts: Product[] = [];
+
+    if (categories.length > 0) {
+        console.log("Categories:", categories);
+        console.log("Active Categories:", activeCategories);
+        console.log("Products:", products);
+        filteredCategories = activeCategories.filter((category) => {
+            console.log("Filtering Category:", category.name);
+            return category.product_ids.some((productId) => {
+                const productExists = products.some((product) => {
+                    const match = product.id === productId;
+                    if (match) {
+                        console.log(`Match found for ${productId} in product ${product.title}`);
+                    }
+                    return match;
+                });
+                if (!productExists) {
+                    console.log(`No match found for ${productId}`);
+                }
+                return productExists;
+            });
+        });
+    } else {
+        filteredCategories = [];
+    }
+    if (products.length > 0) {
+        filteredProducts = products.filter((product) => {
+            // Check if product belongs to any of the filtered categories
+            const isInFilteredCategory = filteredCategories.some((category) => category.product_ids.includes(product.id));
+            if (!isInFilteredCategory) return false;
+
+            // If there's a search text, further filter by matching the search text
+            if (productSearchTextInput === "") return true;
+            return product.title.toLowerCase().includes(productSearchTextInput.toLowerCase());
+        });
+    } else {
+        filteredProducts = [];
+    }
 
     const createNewCategory = (id: string, name: string, description: string, product_ids: string[]) => {
+        if (!local_user) return;
+
         const newCategory = {
             id: id,
             name: name,
@@ -154,11 +241,14 @@ const ProductControl = () => {
         };
 
         setCategories([...categories, newCategory]);
+        axios.post(CREATE_PRODUCT_CATEGORY_URL, { new_product_category_data: newCategory, user_id: local_user.id });
 
         console.log("Creating new category");
     };
 
     const editCategory = (id: string, newName: string, newDescription: string, newProductIds: string[]) => {
+        if (!local_user) return;
+
         const categoryIndex = categories.findIndex((category) => category.id === id);
         if (categoryIndex === -1) return;
 
@@ -170,15 +260,19 @@ const ProductControl = () => {
         };
 
         setCategories([...categories.slice(0, categoryIndex), editedCategory, ...categories.slice(categoryIndex + 1)]);
+        axios.post(CREATE_PRODUCT_CATEGORY_URL, { new_product_category_data: editedCategory, user_id: local_user.id });
 
         console.log("Editing category");
     };
 
     const removeCategory = (id: string) => {
+        if (!local_user) return;
+
         const categoryIndex = categories.findIndex((category) => category.id === id);
         if (categoryIndex === -1) return;
 
         setCategories([...categories.slice(0, categoryIndex), ...categories.slice(categoryIndex + 1)]);
+        axios.post(REMOVE_PRODUCT_CATEGORY_URL, { category_id: id, user_id: local_user.id });
 
         console.log("Removing category");
     };
@@ -200,15 +294,79 @@ const ProductControl = () => {
         }
     };
 
-    //console.log(products);
-    //console.log(filteredProducts);
+    const createNewProduct = (product: Product) => {
+        editCategory("0001", "Todos", "Todas as categorias", [...categories[0].product_ids, product.id]);
+        setProducts([...products, product]);
+
+        console.log("Creating new product");
+    };
+
+    const editProduct = (product: Product) => {
+        const productIndex = products.findIndex((p) => p.id === product.id);
+        if (productIndex === -1) return;
+
+        setProducts([...products.slice(0, productIndex), product, ...products.slice(productIndex + 1)]);
+
+        console.log("Editing product");
+    };
+
+    const removeProduct = (id: string) => {
+        const productIndex = products.findIndex((product) => product.id === id);
+        if (productIndex === -1) return;
+
+        setProducts([...products.slice(0, productIndex), ...products.slice(productIndex + 1)]);
+
+        console.log("Removing product");
+    };
+
+    const handleRemoveProduct = (id: string) => {
+        // Display the confirmation dialog
+        const isConfirmed = window.confirm("Tem certeza que deseja excluir este produto?");
+
+        // Check the user's response
+        if (isConfirmed) {
+            // User clicked 'OK', proceed with the deletion logic
+            removeProduct(id);
+            setEditingProduct(false);
+            console.log("Produto excluído.");
+        } else {
+            // User clicked 'Cancel', do nothing or handle accordingly
+            console.log("Ação de exclusão cancelada.");
+        }
+    };
 
     useEffect(() => {
+        axios.get(GET_ALL_PRODUCTS_CATEGORIES_URL).then((response) => {
+            setCategories(response.data.productsCategories);
+            setLoadingCategories(false);
+        });
+
         axios.get(GET_ALL_PRODUCTS_URL).then((response) => {
             setProducts(response.data);
             setLoadingProducts(false);
         });
     }, []);
+
+    useEffect(() => {
+        setActiveCategories(categories);
+    }, [categories]);
+
+    useEffect(() => {
+        // if the products change the categories should be updated, removing any product that is not in the products list
+
+        if (products.length === 0 || categories.length === 0) return;
+
+        console.log("categories:", categories);
+
+        const updatedCategories = categories.map((category) => {
+            return {
+                ...category,
+                product_ids: category.product_ids.filter((productId) => products.some((product) => product.id === productId)),
+            };
+        });
+
+        setCategories(updatedCategories);
+    }, [products]);
 
     return (
         <>
@@ -362,34 +520,36 @@ const ProductControl = () => {
                 </AnimatePresence>
 
                 <div className="Category_Control_List">
-                    {categories.map((category, index) => (
-                        <div
-                            key={index}
-                            className={`Category_Item ${activeCategories.includes(category) ? "Active" : ""}`}
-                            onClick={() => {
-                                if (activeCategories.includes(category)) {
-                                    setActiveCategories(activeCategories.filter((activeCategory) => activeCategory !== category));
-                                } else {
-                                    setActiveCategories([...activeCategories, category]);
-                                }
-                            }}
-                        >
-                            <div className="Category_Item_Header">
-                                <h1>{category.name}</h1>
-                                <p>{category.description}</p>
-                                <h3>{category.product_ids.length} Produtos</h3>
-                            </div>
-
-                            <button
+                    {categories.length > 0 &&
+                        categories.map((category, index) => (
+                            <div
+                                key={index}
+                                className={`Category_Item ${activeCategories.includes(category) ? "Active" : ""}`}
                                 onClick={() => {
-                                    setEditedCategory(category);
-                                    setEditingCategory(true);
+                                    if (activeCategories.includes(category)) {
+                                        setActiveCategories(activeCategories.filter((activeCategory) => activeCategory !== category));
+                                    } else {
+                                        setActiveCategories([...activeCategories, category]);
+                                    }
                                 }}
                             >
-                                Editar
-                            </button>
-                        </div>
-                    ))}
+                                <div className="Category_Item_Header">
+                                    <h1>{category.name}</h1>
+                                    <p>{category.description}</p>
+                                    <h3>{category.product_ids.length} Produtos</h3>
+                                </div>
+
+                                <button
+                                    onClick={() => {
+                                        setEditedCategory(category);
+                                        setEditingCategory(true);
+                                    }}
+                                >
+                                    Editar
+                                </button>
+                            </div>
+                        ))}
+
                     <button
                         className="Category_Item Add_Category_Btn"
                         onClick={() => {
@@ -407,38 +567,276 @@ const ProductControl = () => {
 
             <div className="Product_Control_Card Control_Card">
                 <h2 className="Control_Title">Controle de Produtos</h2>
-                <div className="Product_Control_Filter Control_Filter">
-                    <h2 className="Control_Filter_Title">Filtro</h2>
-                    <input
-                        className="Control_Text_Filter"
-                        type="text"
-                        placeholder="Pesquisar produtos"
-                        onChange={(e) => {
-                            setProductSearchTextInput(e.target.value);
-                        }}
-                    ></input>
-                    <select
-                        className="Control_Select_Filter"
-                        onChange={(e) => {
-                            const findCategory = categories.find((category) => category.name === e.target.value);
-                            setActiveCategories(findCategory ? [findCategory] : []);
-                        }}
-                    >
-                        <option value="active">Disponíveis</option>
-                        <option value="inactive">Indisponíveis</option>
-                        <option value="discount">Com desconto</option>
-                        <option value="no_discount">Sem desconto</option>
-                        {categories.map((category, index) => (
-                            <option key={index} value={category.name}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+
+                <AnimatePresence>
+                    {editingProduct && (
+                        <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="Add_Category_Form">
+                            <div className="Add_Category_Form_Card">
+                                <h3 className="Control_Form_Title">Editar Produto</h3>
+
+                                <div className="Control_Form_Input_Header">
+                                    <input
+                                        className="Control_Form_Input"
+                                        onChange={(e) => {
+                                            setEditedProduct({ ...editedProduct, id: e.target.value });
+                                        }}
+                                        type="text"
+                                        placeholder="Novo ID do Produto"
+                                        value={editedProduct.id}
+                                    />
+
+                                    <button
+                                        onClick={() => {
+                                            handleRemoveProduct(editedProduct.id);
+                                        }}
+                                        className="Control_Form_Btn"
+                                    >
+                                        Excluir Produto
+                                    </button>
+                                </div>
+
+                                <input
+                                    className="Control_Form_Input"
+                                    onChange={(e) => {
+                                        setEditedProduct({ ...editedProduct, title: e.target.value });
+                                    }}
+                                    type="text"
+                                    placeholder="Novo Título do Produto"
+                                    value={editedProduct.title}
+                                ></input>
+                                <textarea
+                                    className="Control_Form_Input Control_Form_Tall_Input"
+                                    onChange={(e) => {
+                                        const descriptions = e.target.value.split(/\n\n|\n/);
+                                        setEditedProduct({ ...editedProduct, description: descriptions });
+                                    }}
+                                    placeholder="Nova Descrição do Produto"
+                                    value={editedProduct.description.join("\n\n")}
+                                ></textarea>
+
+                                <div className="Control_Form_Footer">
+                                    <button
+                                        className="Control_Form_Btn"
+                                        onClick={() => {
+                                            setEditingProduct(false);
+                                        }}
+                                    >
+                                        Fechar
+                                    </button>
+
+                                    <button
+                                        className="Control_Form_Btn"
+                                        onClick={() => {
+                                            editProduct(editedProduct);
+                                            setEditingProduct(false);
+                                        }}
+                                    >
+                                        Salvar Alterações no Produto
+                                    </button>
+                                </div>
+                            </div>
+                        </m.div>
+                    )}
+
+                    {creatingNewProduct && (
+                        <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="Add_Category_Form">
+                            <div className="Add_Category_Form_Card">
+                                <h3 className="Control_Form_Title">Criar Novo Produto</h3>
+
+                                <div className="Control_Form_Input_Header">
+                                    <input
+                                        className="Control_Form_Input"
+                                        onChange={(e) => {
+                                            setNewProduct({ ...newProduct, id: e.target.value });
+                                        }}
+                                        type="text"
+                                        placeholder="ID do Novo Produto (Ex: tropical-sampa-barra)"
+                                    />
+                                </div>
+
+                                <input
+                                    className="Control_Form_Input"
+                                    onChange={(e) => {
+                                        setNewProduct({ ...newProduct, title: e.target.value });
+                                    }}
+                                    type="text"
+                                    placeholder="Título do Novo Produto (Ex: Barra Tropical Sampa)"
+                                ></input>
+
+                                <input
+                                    className="Control_Form_Input"
+                                    onChange={(e) => {
+                                        setNewProduct({ ...newProduct, subtitle: e.target.value });
+                                    }}
+                                    type="text"
+                                    placeholder="Subtítulo do Novo Produto (Ex: Barra de Chocolate com 70% de Cacau)"
+                                ></input>
+
+                                <textarea
+                                    className="Control_Form_Input Control_Form_Tall_Input"
+                                    onChange={(e) => {
+                                        const descriptions = e.target.value.split(/\n\n|\n/);
+                                        setNewProduct({ ...newProduct, description: descriptions });
+                                    }}
+                                    placeholder="Descrição do Novo Produto (Separe os parágrafos com duas quebras de linha)"
+                                ></textarea>
+
+                                <input
+                                    className="Control_Form_Input"
+                                    onChange={(e) => {
+                                        setNewProduct({ ...newProduct, price: parseInt(e.target.value) });
+                                    }}
+                                    type="number"
+                                    min={0}
+                                    placeholder="Preço do Novo Produto (Ex: 10)"
+                                ></input>
+
+                                <input
+                                    className="Control_Form_Input"
+                                    onChange={(e) => {
+                                        setNewProduct({ ...newProduct, weight: e.target.value });
+                                    }}
+                                    type="text"
+                                    placeholder="Peso do Novo Produto (Ex: 100g)"
+                                ></input>
+
+                                <input
+                                    className="Control_Form_Input"
+                                    onChange={(e) => {
+                                        setNewProduct({ ...newProduct, stockQtty: parseInt(e.target.value) });
+                                    }}
+                                    type="number"
+                                    min={0}
+                                    placeholder="Quantidade em Estoque do Novo Produto (Ex: 10)"
+                                ></input>
+
+                                {/* URL da Imagem Principal e das secundárias separada por virgulas */}
+
+                                <textarea
+                                    className="Control_Form_Input Control_Medium_Input"
+                                    placeholder="URL das Imagens do Produto (Separe-as com virgula, a primeira imagem será a principal."
+                                    onChange={(e) => {
+                                        setNewProduct({
+                                            ...newProduct,
+                                            images: e.target.value.split(",").map((src, index) => ({
+                                                src,
+                                                alt: `Imagem nº ${index + 1} de ${newProduct.title}`,
+                                                width: 512,
+                                                height: 512,
+                                            })),
+                                        });
+                                    }}
+                                ></textarea>
+
+                                <div className="Control_Form_Checkbox_Group">
+                                    <div className="Control_Form_Checkbox">
+                                        <input
+                                            type="checkbox"
+                                            id="availableForSale"
+                                            name="availableForSale"
+                                            onChange={(e) => {
+                                                setNewProduct({ ...newProduct, availableForSale: e.target.checked });
+                                            }}
+                                        ></input>
+                                        <label htmlFor="availableForSale">Disponível para Venda</label>
+                                    </div>
+
+                                    <div className="Control_Form_Checkbox">
+                                        <input
+                                            type="checkbox"
+                                            id="isPromoted"
+                                            name="isPromoted"
+                                            onChange={(e) => {
+                                                setNewProduct({ ...newProduct, isPromoted: e.target.checked });
+                                            }}
+                                        ></input>
+                                        <label htmlFor="isPromoted">Produto em Destaque</label>
+                                    </div>
+
+                                    <div className="Control_Form_Checkbox">
+                                        <input
+                                            type="checkbox"
+                                            id="showInStore"
+                                            name="showInStore"
+                                            onChange={(e) => {
+                                                setNewProduct({ ...newProduct, showInStore: e.target.checked });
+                                            }}
+                                        ></input>
+                                        <label htmlFor="showInStore">Exibir na Loja</label>
+                                    </div>
+                                </div>
+
+                                <div className="Control_Form_Footer">
+                                    <button
+                                        className="Control_Form_Btn"
+                                        onClick={() => {
+                                            setCreatingNewProduct(false);
+                                        }}
+                                    >
+                                        Fechar
+                                    </button>
+
+                                    <button
+                                        className="Control_Form_Btn"
+                                        onClick={() => {
+                                            createNewProduct(newProduct);
+                                            setCreatingNewProduct(false);
+                                        }}
+                                    >
+                                        Criar Novo Produto
+                                    </button>
+                                </div>
+                            </div>
+                        </m.div>
+                    )}
+                </AnimatePresence>
+
+                {categories.length > 0 && (
+                    <div className="Product_Control_Filter Control_Filter">
+                        <h2 className="Control_Filter_Title">Filtro</h2>
+                        <input
+                            className="Control_Text_Filter"
+                            type="text"
+                            placeholder="Pesquisar produtos"
+                            onChange={(e) => {
+                                setProductSearchTextInput(e.target.value);
+                            }}
+                        ></input>
+                        <select
+                            className="Control_Select_Filter"
+                            onChange={(e) => {
+                                const findCategory = categories.find((category) => category.name === e.target.value);
+                                setActiveCategories(findCategory ? [findCategory] : []);
+                            }}
+                        >
+                            {categories.map((category, index) => (
+                                <option key={index} value={category.name}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+
                 {loadingProducts && <h1 className="Control_Loader">Carregando...</h1>}
                 {!loadingProducts && products.length === 0 && <h1>Nenhum produto encontrado</h1>}
+
                 {!loadingProducts && products.length > 0 && (
                     <div className="Product_Control_List Control_List">
+                        <button
+                            onClick={() => {
+                                setNewProduct(empty_product);
+                                setCreatingNewProduct(true);
+                            }}
+                            key={"create_product_button"}
+                            className="Control_Item Add_Category_Btn"
+                        >
+                            <span className="material-icons">add_circle</span>
+                            <div className="Control_Item_Header">
+                                <h1>Adicionar Produto</h1>
+                                <p>Crie um novo produto para a sua loja</p>
+                            </div>
+                        </button>
                         {filteredProducts.map((product, index) => (
                             <div key={index} className="Control_Item">
                                 <img className="Control_Item_Image" src={product.images[0].src}></img>
@@ -461,17 +859,21 @@ const ProductControl = () => {
 
                                     <div className="Control_Item_Footer">
                                         <p className="Control_Item_Price">R$ {product.price},00</p>
-                                        <button className="Control_Item_Edit_Btn">Editar</button>
+                                        <button
+                                            onClick={() => {
+                                                setEditedProduct(product);
+                                                setEditingProduct(true);
+                                            }}
+                                            className="Control_Item_Edit_Btn"
+                                        >
+                                            Editar
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 )}
-            </div>
-
-            <div className="Product_Control_Card Control_Card">
-                <h2 className="Control_Title">Criador de Produtos</h2>
             </div>
         </>
     );

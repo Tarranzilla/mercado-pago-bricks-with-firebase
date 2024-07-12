@@ -3601,8 +3601,6 @@ button:hover {
     border-radius: 1.5rem;
     border: 1px solid var(--text_color);
     color: var(--text_color);
-
-    z-index: 2;
 }
 
 .Control_List {
@@ -3762,6 +3760,7 @@ button:hover {
 
 .Add_Category_Btn {
     justify-content: center;
+    align-items: center;
     gap: 1rem;
 
     background-color: #461e0b;
@@ -3782,7 +3781,7 @@ button:hover {
     width: 100%;
 
     margin-top: 1rem;
-    background-color: var(--text_color);
+    background-color: #d7bb92;
     border-radius: 1rem;
     padding: 2rem;
 
@@ -3828,6 +3827,7 @@ button:hover {
     border-radius: 0.5rem;
     border: 1px solid var(--bg_color);
     font-family: "ProfilePro_WOFF2", sans-serif;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     font-size: 1rem;
     letter-spacing: 0.1ch;
 }
@@ -3842,13 +3842,14 @@ button:hover {
     padding: 0.5rem;
     border-radius: 0.5rem;
     border: 1px solid var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
     font-family: "ProfilePro_WOFF2", sans-serif;
     font-size: 1rem;
     letter-spacing: 0.1ch;
 }
 
 .Add_Category_Form {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -3858,12 +3859,18 @@ button:hover {
     z-index: 1;
 
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-
-    border-radius: 1rem;
+    justify-content: flex-start;
 
     padding-block: 1.5rem;
+
+    overflow-y: auto;
+    padding: 10rem;
+}
+
+.Add_Category_Form::-webkit-scrollbar {
+    display: none;
 }
 
 .Add_Category_Form_Card {
@@ -3878,8 +3885,7 @@ button:hover {
     justify-content: center;
 
     width: 100%;
-    max-width: 30rem;
-    max-height: 80%;
+    max-width: 40rem;
 
     gap: 0.5rem;
     position: relative;
@@ -3926,8 +3932,12 @@ button:hover {
     border: 1px solid var(--bg_color);
 }
 
+.Control_Medium_Input {
+    min-height: 8rem;
+}
+
 .Control_Form_Tall_Input {
-    min-height: 4rem;
+    min-height: 16rem;
 }
 
 .Control_Form_Footer {
@@ -3948,6 +3958,25 @@ button:hover {
     font-family: "ProfilePro_WOFF2", sans-serif;
     letter-spacing: 0.05rem;
     flex-grow: 1;
+}
+
+.Control_Form_Checkbox_Group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.Control_Form_Checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #461e0b;
+    color: var(--bg_color);
+    font-size: 1rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    letter-spacing: 0.05rem;
 }
 
 /* Barra de Progresso */

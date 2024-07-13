@@ -57,6 +57,12 @@ const empty_product: Product = {
     url_full: "",
 };
 
+// const { new_product_data, user_id } = req.body; // Extracting user_id along with product category data
+const CREATE_PRODUCT_URL = process.env.NEXT_PUBLIC_PATH_API_CREATE_PRODUCT;
+if (!CREATE_PRODUCT_URL) {
+    throw new Error("The NEXT_PUBLIC_PATH_API_CREATE_PRODUCT environment variable is not defined");
+}
+
 const GET_ALL_PRODUCTS_CATEGORIES_URL = process.env.NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS_CATEGORIES;
 if (!GET_ALL_PRODUCTS_CATEGORIES_URL) {
     throw new Error("The NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS_CATEGORIES environment variable is not defined");
@@ -295,17 +301,25 @@ const ProductControl = () => {
     };
 
     const createNewProduct = (product: Product) => {
-        editCategory("0001", "Todos", "Todas as categorias", [...categories[0].product_ids, product.id]);
+        if (!local_user) return;
+
+        editCategory("todos", "Todos", "Todas as categorias", [...categories[0].product_ids, product.id]);
         setProducts([...products, product]);
+
+        axios.post(CREATE_PRODUCT_URL, { new_product_data: product, user_id: local_user.id });
 
         console.log("Creating new product");
     };
 
     const editProduct = (product: Product) => {
+        if (!local_user) return;
+
         const productIndex = products.findIndex((p) => p.id === product.id);
         if (productIndex === -1) return;
 
         setProducts([...products.slice(0, productIndex), product, ...products.slice(productIndex + 1)]);
+
+        axios.post(CREATE_PRODUCT_URL, { new_product_data: product, user_id: local_user.id });
 
         console.log("Editing product");
     };
@@ -604,6 +618,7 @@ const ProductControl = () => {
                                     placeholder="Novo Título do Produto"
                                     value={editedProduct.title}
                                 ></input>
+
                                 <textarea
                                     className="Control_Form_Input Control_Form_Tall_Input"
                                     onChange={(e) => {
@@ -612,6 +627,24 @@ const ProductControl = () => {
                                     }}
                                     placeholder="Nova Descrição do Produto"
                                     value={editedProduct.description.join("\n\n")}
+                                ></textarea>
+
+                                <input
+                                    className="Control_Form_Input"
+                                    onChange={(e) => {
+                                        setEditedProduct({ ...editedProduct, price: parseInt(e.target.value) });
+                                    }}
+                                    type="number"
+                                    min={0}
+                                    placeholder="Novo Preço do Produto"
+                                    value={editedProduct.price}
+                                ></input>
+
+                                {/* URL da Imagem Principal e das secundárias separada por virgulas */}
+                                <textarea
+                                    className="Control_Form_Input Control_Medium_Input"
+                                    placeholder="URL das Imagens do Produto"
+                                    value={editedProduct.images.map((image) => image.src).join(",")}
                                 ></textarea>
 
                                 <div className="Control_Form_Footer">

@@ -512,7 +512,7 @@ button:hover {
     overflow-y: scroll;
 
     padding: 1.5rem 1.5rem;
-
+    background-color: var(--bg_color);
     border: 1px solid var(--text_color);
     border-radius: 1rem;
 
@@ -2103,6 +2103,7 @@ button:hover {
 
     padding: 1.5rem 1.5rem;
 
+    background-color: var(--bg_color);
     border: 1px solid var(--text_color);
     border-radius: 1rem;
 
@@ -3156,7 +3157,8 @@ button:hover {
     width: 100%;
 
     margin-top: 1rem;
-    background-color: var(--text_color);
+    background-color: #d7bb92;
+    color: var(--text_color);
     border-radius: 1rem;
     padding: 2rem;
 
@@ -3253,7 +3255,7 @@ button:hover {
     font-size: 1.125rem;
     font-weight: 600;
     letter-spacing: 0.1rem;
-    color: var(--bg_color);
+    color: var(--text_color);
 
     display: flex;
     align-items: center;
@@ -3280,7 +3282,7 @@ button:hover {
     font-size: 1.125rem;
     font-weight: 600;
     letter-spacing: 0.1rem;
-    color: var(--bg_color);
+    color: var(--text_color);
 
     display: flex;
     align-items: center;

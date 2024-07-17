@@ -12,6 +12,7 @@ import { motion as m, useScroll, useSpring } from "framer-motion";
 import { User } from "@/types/User";
 import { Cart_Item } from "@/types/Cart_Item";
 import { Order } from "@/types/Order";
+import axios from "axios";
 
 type createPreferenceResponse = {
     id: string;
@@ -38,6 +39,16 @@ const updateUserAPI = process.env.NEXT_PUBLIC_PATH_API_UPDATE_USER;
 
 if (!createPreferenceAPI || !createOrderAPI || !updateOrderAPI || !updateUserAPI) {
     throw new Error("API Paths are not defined!");
+}
+
+const getCounterAPI = process.env.NEXT_PUBLIC_PATH_API_GET_COUNTER;
+if (!getCounterAPI) {
+    throw new Error("Counter API Path is not defined!");
+}
+
+const updateCounterAPI = process.env.NEXT_PUBLIC_PATH_API_UPDATE_COUNTER;
+if (!updateCounterAPI) {
+    throw new Error("Counter API Path is not defined!");
 }
 
 const Client_Checkout = () => {
@@ -130,35 +141,18 @@ const Client_Checkout = () => {
                     return new_preference;
                 })
                 .then((new_preference) => {
-                    const order: Order = {
-                        order_preference_id: new_preference.id || "error-generating-id",
-                        order_external_reference: new_preference.external_reference || "default_reference",
-                        order_payment_link: new_preference.full_preference.init_point || "default_payment_link",
-                        order_items: cartItems,
-                        order_date: new Date(),
+                    // enviar apenas os dados necessários e gerenciar a criação do pedido no server-side
+                    // buscar o numero atual de pedidos do contador de pedidos
+
+                    /* customer, new_preference, cartItems, order_type, shipping_option, observation  */
+
+                    const create_order_data = {
+                        customer: customer,
+                        new_preference: new_preference,
+                        cartItems: cartItems,
                         order_type: "mercado-pago",
-
-                        shipping_option: receiveOption,
-                        shipping_cost: shipping_cost,
+                        receiveOption: receiveOption,
                         observation: receiveObservation,
-                        total: cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0) + shipping_cost,
-
-                        customer_ref: customer.id,
-                        customer_type: "web-client",
-                        customer_name: customer.name,
-                        customer_adress: `${customer.address.street}, ${customer.address.number}, ${customer.address.complement}, ${customer.address.city}, ${customer.address.state}, ${customer.address.zip}`,
-                        customer_phone: customer.telephone,
-
-                        status: {
-                            confirmed_by_admin: false,
-                            waiting_payment: true,
-                            in_production: false,
-                            waiting_for_retrieval: false,
-                            retrieved: false,
-                            waiting_for_delivery: false,
-                            delivered: false,
-                            cancelled: false,
-                        },
                     };
 
                     fetch(createOrderAPI, {
@@ -166,7 +160,7 @@ const Client_Checkout = () => {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify(order),
+                        body: JSON.stringify(create_order_data),
                     })
                         .then((response) => {
                             if (!response.ok) {

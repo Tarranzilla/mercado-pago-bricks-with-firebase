@@ -3,83 +3,124 @@ import { Order } from "@/types/Order";
 
 import { auth, firestore } from "@/lib/firebaseAdmin";
 
-/* Firebase Admin SDK
-import admin, { ServiceAccount } from "firebase-admin";
-
-if (!process.env.FIREBASE_PROJECT_ID) {
-    throw new Error("The FIREBASE_PROJECT_ID environment variable is not defined");
-}
-
-if (!process.env.FIREBASE_CLIENT_EMAIL) {
-    throw new Error("The FIREBASE_CLIENT_EMAIL environment variable is not defined");
-}
-
-if (!process.env.FIREBASE_PRIVATE_KEY) {
-    throw new Error("The FIREBASE_PRIVATE_KEY environment variable is not defined");
-}
-
-if (!process.env.FIREBASE_PRAGMATA_PROJECT_ID) {
-    throw new Error("The FIREBASE_PRAGMATA_PROJECT_ID environment variable is not defined");
-}
-
-const serviceAccount: admin.ServiceAccount = {
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+// orders_counter e subscriptions_counter
+type Counter = {
+    total_ammount: number;
 };
 
-if (!admin.apps.length) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: "https://pragmatas-dev.firebaseio.com",
-    });
-}
+/* Original Order Data Structure
+
+const order: Order = {
+    order_preference_id: new_preference.id || "error-generating-id",
+    order_external_reference: new_preference.external_reference || "default_reference",
+    order_serial_number: 0,
+    order_payment_link: new_preference.full_preference.init_point || "default_payment_link",
+    order_items: cartItems,
+    order_date: new Date(),
+    order_type: "mercado-pago",
+
+    shipping_option: receiveOption,
+    shipping_cost: shipping_cost,
+    observation: receiveObservation,
+    total: cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0) + shipping_cost,
+
+    customer_ref: customer.id,
+    customer_type: "web-client",
+    customer_name: customer.name,
+    customer_adress: `${customer.address.street}, ${customer.address.number}, ${customer.address.complement}, ${customer.address.city}, ${customer.address.state}, ${customer.address.zip}`,
+    customer_phone: customer.telephone,
+
+    status: {
+        confirmed_by_admin: false,
+        waiting_payment: true,
+        in_production: false,
+        waiting_for_retrieval: false,
+        retrieved: false,
+        waiting_for_delivery: false,
+        delivered: false,
+        cancelled: false,
+    },
+};
 
 */
 
-/* Exemplo de Objeto de Pedido para ser enviado no Body da Requisição
+/* customer, new_preference, cartItems, order_type, shipping_option, observation  */
 
-const order: CheckoutOrder = {
-            orderID: customReference,
-            customReference: customReference,
-            orderItems: translatedCartItems,
-            orderDate: Timestamp.now(),
-            orderType: orderType,
+/*  Order Creation Data Structure
 
-            shippingOption: shippingOption || "Retirada",
-            shippingCost: Number(shippingCost),
-            observation: observation,
-            total: cartTotal,
-
-            clientRef: checkoutUser.tropicalID,
-            clientType: registeredUser ? "registered" : "anonymous",
-            clientName: checkoutUser.name,
-            clientAdress: checkoutAdress.street + ", " + checkoutAdress.number + "( " + checkoutAdress.extra + " )" + " - " + checkoutAdress.city,
-
-            status: {
-                confirmed: false,
-                waitingPayment: false,
-                inProduction: false,
-                waitingForRetrieval: false,
-                waitingForDelivery: false,
-                delivered: false,
-                cancelled: false,
-            },
-        };
+    const create_order_data = {
+        customer: customer,
+        new_preference: new_preference,
+        cartItems: cartItems,
+        order_type: "mercado-pago",
+        receiveOption: receiveOption,
+        observation: receiveObservation,
+    };
 
 */
 
 export default async function orderCreationHandler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
-        const order_data: Order = req.body;
+        const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID; // UID do Projeto Espefífico no Firebase - Neste Caso a ID do projeto da Tropical Cacau
+
+        const counterDocRef = firestore.collection(`projects/${projectUID}/counters`).doc("orders_counter"); // orders_counter e subscriptions_counter
+        const counterDoc = await counterDocRef.get();
+        const counter = counterDoc.data();
+
+        if (!counter || !counterDoc.exists) {
+            return res.status(404).json({ error: "Counter not found" });
+        }
+
+        const order_data = req.body;
+        // importar tipos de cada um destes elementos!
+        const { customer, new_preference, cartItems, order_type, receiveOption, observation } = order_data;
         // console.log("Dados Recebidos para Criar o Pedido:", order_data);
 
-        const projectUID = process.env.FIREBASE_PRAGMATA_PROJECT_ID; // UID do Projeto Espefífico no Firebase - Neste Caso a ID do projeto da Tropical Cacau
+        const newShippingCost = receiveOption === "Retirada" ? 0 : 15;
+
+        const newOrder: Order = {
+            order_preference_id: new_preference.id || "error-generating-id",
+            order_external_reference: new_preference.external_reference || "default_reference",
+            order_serial_number: counter.total_ammount,
+            order_payment_link: new_preference.full_preference.init_point || "default_payment_link",
+            order_items: cartItems,
+            order_date: new Date().toISOString(),
+            order_type: order_type,
+
+            shipping_option: receiveOption,
+            shipping_cost: newShippingCost,
+            observation: observation,
+            total: cartItems.reduce((acc: any, item: any) => acc + item.product.price * item.quantity, 0) + newShippingCost,
+
+            customer_ref: customer.id,
+            customer_type: "web-client",
+            customer_name: customer.name,
+            customer_adress: `${customer.address.street}, ${customer.address.number}, ${customer.address.complement}, ${customer.address.city}, ${customer.address.state}, ${customer.address.zip}`,
+            customer_phone: customer.telephone,
+
+            status: {
+                confirmed_by_admin: false,
+                waiting_payment: true,
+                in_production: false,
+                waiting_for_retrieval: false,
+                retrieved: false,
+                waiting_for_delivery: false,
+                delivered: false,
+                cancelled: false,
+            },
+        };
+
         const ordersCollectionRef = firestore.collection(`projects/${projectUID}/orders`);
 
-        await ordersCollectionRef.doc(order_data.order_external_reference).set(order_data, { merge: true });
+        await ordersCollectionRef.doc(newOrder.order_external_reference).set(newOrder, { merge: true });
 
-        res.status(200).json({ status: "Order Created!", order_data: order_data }); // Retorna um JSON com o status da criação do pedido | Atuamente não retorna o ID do Pedido
+        const newCounterValue: Counter = {
+            total_ammount: counter.total_ammount + 1,
+        };
+
+        await counterDocRef.set(newCounterValue, { merge: true });
+
+        res.status(200).json({ status: "Order Created!", order_data: newOrder, counter_data: newCounterValue }); // Retorna um JSON com o status da criação do pedido | Atuamente não retorna o ID do Pedido
     } else {
         res.status(405).json({ error: "Method Not Allowed" }); // Retorna um JSON com o erro de método não permitido
     }

@@ -46,7 +46,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
             <m.div layout key="order_item_header" className="Order_Item_Header">
                 <div className="Order_Item_Text_Header_Item">
                     <h4 className="User_Info_Label">Pedido Nº</h4>
-                    <p className="User_Order_Number">#{order_number}</p>
+                    <p className="User_Order_Number">#{order.order_serial_number}</p>
                 </div>
 
                 <div className="Order_Item_Text_Header_Item">

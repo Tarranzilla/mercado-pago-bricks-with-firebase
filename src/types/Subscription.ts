@@ -4,8 +4,9 @@ export type Subscription = {
     subscription_payment_link: string;
 
     subscription_id: string;
+    subscription_serial_number: number;
     subscription_name: string;
-    subscription_date: Date;
+    subscription_date: string;
     subscription_duration: number;
     subscription_type: string;
 

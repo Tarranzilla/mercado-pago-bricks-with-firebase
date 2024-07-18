@@ -119,45 +119,18 @@ const Client_Subscription_Banner = () => {
                     return new_subscription_preference;
                 })
                 .then((new_subscription_preference) => {
-                    const new_subscription: Subscription = {
-                        subscription_preference_id: new_subscription_preference.id || "error-generating-id",
-                        subscription_external_reference: new_subscription_preference.external_reference || "default_reference",
-                        subscription_payment_link: new_subscription_preference.full_preference.init_point || "default_payment_link",
-
-                        subscription_id: "tropical-clube-3-meses",
-                        subscription_name: "Assinatura Clube Tropical 3 Meses",
-                        subscription_date: new Date(),
-                        subscription_duration: 3,
-                        subscription_type: "mercado-pago",
-
-                        total: 3 * 120,
-
-                        customer_ref: customer.id,
-                        customer_type: "web-client",
-                        customer_name: customer.name,
-                        customer_adress: `${customer.address.street}, ${customer.address.number}, ${customer.address.complement}, ${customer.address.city}, ${customer.address.state}, ${customer.address.zip}`,
-                        customer_phone: customer.telephone,
-
-                        status: {
-                            confirmed_by_admin: false,
-                            waiting_payment: false,
-                            in_production: false,
-                            waiting_for_retrieval: false,
-                            retrieved: false,
-                            waiting_for_delivery: false,
-                            delivered: false,
-                            cancelled: false,
-                        },
+                    const new_subscription_data = {
+                        customer: customer,
+                        new_preference: new_subscription_preference,
+                        subscription: subscriptionRequest,
                     };
-
-                    console.log("Subscription Created =>", new_subscription);
 
                     fetch(createSubscriptionAPI, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify(new_subscription),
+                        body: JSON.stringify(new_subscription_data),
                     })
                         .then((response) => {
                             if (!response.ok) {
@@ -170,30 +143,7 @@ const Client_Subscription_Banner = () => {
                             const subscription = JSON.parse(data);
                             // console.log("Order Created =>", order.order_data);
                             console.log(subscription);
-                            const updatedCustomer = {
-                                ...customer,
-                                subscriptions: [...customer.subscriptions, subscription.subscription_data.subscription_external_reference],
-                                isSubscriber: true,
-                            };
-
-                            fetch(updateUserAPI, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(updatedCustomer),
-                            }).then((response) => {
-                                if (!response.ok) {
-                                    throw new Error(`User Update Failed! HTTP Error: ${response.status}`);
-                                }
-
-                                // console.log("User Updated =>", updatedCustomer);
-                                // console.log("Order Created =>", order.order_data.order_preference_id);
-                                setTimeout(() => {
-                                    userTabNeedsUpdateAction();
-                                }, 2000);
-                                resolve(subscription.subscription_data.subscription_preference_id);
-                            });
+                            resolve(subscription.subscription_data.subscription_external_reference);
                         })
                         .catch((error) => {
                             console.log("Order Error =>", error);

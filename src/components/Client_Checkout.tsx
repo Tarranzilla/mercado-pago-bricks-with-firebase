@@ -171,31 +171,12 @@ const Client_Checkout = () => {
                         })
                         .then((data) => {
                             const order = JSON.parse(data);
-                            // console.log("Order Created =>", order.order_data);
+                            console.log("Order Created =>", order.order_data);
 
-                            const updatedCustomer = {
-                                ...customer,
-                                orders: [...customer.orders, order.order_data.order_external_reference],
-                            };
-
-                            fetch(updateUserAPI, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify(updatedCustomer),
-                            }).then((response) => {
-                                if (!response.ok) {
-                                    throw new Error(`User Update Failed! HTTP Error: ${response.status}`);
-                                }
-
-                                // console.log("User Updated =>", updatedCustomer);
-                                // console.log("Order Created =>", order.order_data.order_preference_id);
-                                setTimeout(() => {
-                                    userTabNeedsUpdateAction();
-                                }, 2000);
-                                resolve(order.order_data.order_preference_id);
-                            });
+                            setTimeout(() => {
+                                userTabNeedsUpdateAction();
+                            }, 2000);
+                            resolve(order.order_data.order_preference_id);
                         })
                         .catch((error) => {
                             console.log("Order Error =>", error);

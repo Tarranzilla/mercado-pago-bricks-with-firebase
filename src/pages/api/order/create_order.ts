@@ -120,6 +120,24 @@ export default async function orderCreationHandler(req: NextApiRequest, res: Nex
 
         await counterDocRef.set(newCounterValue, { merge: true });
 
+        const usersCollectionRef = firestore.collection(`projects/${projectUID}/users`);
+        const userDocRef = usersCollectionRef.doc(customer.id);
+        const userDoc = await userDocRef.get();
+
+        if (!userDoc.exists) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const userData = userDoc.data();
+        if (!userData) {
+            return res.status(404).json({ error: "User data not found" });
+        }
+
+        const userOrders = userData.orders;
+        const newUserOrders = [...userOrders, newOrder.order_external_reference];
+
+        await userDocRef.set({ orders: newUserOrders }, { merge: true });
+
         res.status(200).json({ status: "Order Created!", order_data: newOrder, counter_data: newCounterValue }); // Retorna um JSON com o status da criação do pedido | Atuamente não retorna o ID do Pedido
     } else {
         res.status(405).json({ error: "Method Not Allowed" }); // Retorna um JSON com o erro de método não permitido

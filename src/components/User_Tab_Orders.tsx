@@ -32,14 +32,14 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
             <div className="Order_Item_Header">
                 <div className="Order_Item_Text_Header_Item">
                     <h4 className="User_Info_Label">Pedido Nº</h4>
-                    <p className="User_Order_Number">#{order_number}</p>
+                    <p className="User_Order_Number">#{order.order_serial_number}</p>
                 </div>
 
                 <div className="Order_Item_Text_Header_Item">
                     <h4>Valor Total: </h4>
                     <p>
                         R$
-                        {order.order_items.reduce((total, order_item) => total + order_item.product.price * order_item.quantity, 0)}
+                        {order.total}
                         ,00
                     </p>
                 </div>
@@ -242,6 +242,8 @@ const User_Tab_Orders = () => {
     const orderList = useSelector((state: RootState) => state.user.currentUserOrders);
     const sortedOrders = [...orderList].sort((a, b) => new Date(b.order_date).getTime() - new Date(a.order_date).getTime());
     const displayedOrders = seeMore ? sortedOrders : sortedOrders.slice(0, 3);
+    console.log(orderList);
+    console.log(sortedOrders);
     const noOrders = orderList.length < 1;
 
     return (

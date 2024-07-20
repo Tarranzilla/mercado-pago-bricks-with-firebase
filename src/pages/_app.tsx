@@ -17,7 +17,6 @@ export default function App({ Component, pageProps }: AppProps) {
                 <Navbar />
                 <UserTab />
                 <Client_Cart />
-
                 <Main_Page_Content>
                     <Component {...pageProps} />
                 </Main_Page_Content>

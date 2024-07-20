@@ -8,12 +8,18 @@ import Product from "@/types/Product";
 import Product_Category from "@/types/Product_Category";
 
 import { motion as m, AnimatePresence } from "framer-motion";
+
 import { set } from "firebase/database";
+import { getStorage, ref, listAll, getDownloadURL, uploadBytes, uploadBytesResumable } from "firebase/storage";
+
+import { useFirebase } from "@/components/Firebase_Context";
 
 const GET_ALL_PRODUCTS_URL = process.env.NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS;
 if (!GET_ALL_PRODUCTS_URL) {
     throw new Error("The NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS environment variable is not defined");
 }
+
+/* full empty product with examples
 
 const empty_product: Product = {
     id: "",
@@ -53,6 +59,37 @@ const empty_product: Product = {
             height: 128,
         },
     ],
+    url_page_link: "",
+    url_full: "",
+};
+
+*/
+
+const empty_product: Product = {
+    id: "",
+    category: "Todos",
+    type: "",
+    variant: {
+        id: "string",
+        name: "string",
+        price: 1,
+        description: "",
+    },
+
+    availableForSale: true,
+    isPromoted: false,
+    showInStore: true,
+
+    stockQtty: 1,
+
+    title: "",
+    subtitle: "",
+    description: ["", ""],
+    price: 1,
+    weight: "100g",
+
+    ingredients: [],
+    images: [],
     url_page_link: "",
     url_full: "",
 };
@@ -174,7 +211,74 @@ const categories_data = [
     },
 ];
 
+type FirebaseImage = {
+    name: string;
+    url: string;
+};
+
 const ProductControl = () => {
+    const firebase = useFirebase();
+
+    if (!firebase || !firebase.storage || !firebase.auth || !firebase.firestore) {
+        throw new Error("Firebase not initialized properly");
+    }
+
+    const storageRef = ref(firebase.storage);
+    console.log(storageRef);
+
+    const projectRef = ref(storageRef, "pragmatas-shop");
+    console.log(projectRef);
+
+    const productImagesRef = ref(projectRef, "product-imgs");
+    console.log(productImagesRef);
+
+    const fetchProductImages = async () => {
+        console.log("Fetching Images...");
+        try {
+            const res = await listAll(productImagesRef);
+            if (res.prefixes.length === 0 && res.items.length === 0) {
+                console.log("No prefixes or items found.");
+            }
+            const imageUrls = await Promise.all(
+                res.items.map(async (itemRef) => {
+                    const url = await getDownloadURL(itemRef);
+                    // console.log(itemRef.name, url);
+                    return { name: itemRef.name, url };
+                })
+            );
+            setProductImages(imageUrls); // Set the state once with all URLs
+        } catch (error) {
+            console.error("Error fetching images:", error);
+        }
+    };
+
+    const uploadProductImage = async (file: File, name: string): Promise<Product> => {
+        const fileRef = ref(productImagesRef, name);
+        let newProductWithFirebaseImage;
+
+        try {
+            await uploadBytes(fileRef, file); // Upload the file to Firebase Storage
+            const fileUrl = await getDownloadURL(fileRef); // Get the download URL of the uploaded file
+
+            newProductWithFirebaseImage = {
+                ...newProduct,
+                images: [...newProduct.images, { src: fileUrl, alt: `Imagem do Produto ${newProduct.title}`, width: 512, height: 512 }],
+            };
+
+            setNewProduct(newProductWithFirebaseImage); // Assuming this updates some state
+            console.log("File Uploaded Successfully");
+        } catch (error) {
+            console.error("Error uploading the file", error);
+            // Handle the error appropriately
+            // You might want to return null or throw the error again after logging or handling it
+            throw error; // or return null;
+        } finally {
+            // Set uploading state to false or perform any cleanup if necessary
+        }
+
+        return newProductWithFirebaseImage; // Return the updated product outside the try-catch
+    };
+
     const local_user = useSelector((state: RootState) => state.user.currentUser);
     const [loadingProducts, setLoadingProducts] = useState(true);
     const [loadingCategories, setLoadingCategories] = useState(true);
@@ -192,6 +296,10 @@ const ProductControl = () => {
 
     const [newProduct, setNewProduct] = useState<Product>(empty_product);
     const [creatingNewProduct, setCreatingNewProduct] = useState(false);
+    const [newProductImageFile, setNewProductImageFile] = useState<File | null>(null);
+    const [newProductTemporaryImageURL, setNewProductTemporaryImageURL] = useState<string | null>(null);
+
+    const [productImages, setProductImages] = useState<FirebaseImage[]>([]);
 
     const [editedProduct, setEditedProduct] = useState<Product>(empty_product);
     const [editingProduct, setEditingProduct] = useState(false);
@@ -300,15 +408,26 @@ const ProductControl = () => {
         }
     };
 
-    const createNewProduct = (product: Product) => {
+    const createNewProduct = async (product: Product) => {
         if (!local_user) return;
-
-        editCategory("todos", "Todos", "Todas as categorias", [...categories[0].product_ids, product.id]);
-        setProducts([...products, product]);
-
-        axios.post(CREATE_PRODUCT_URL, { new_product_data: product, user_id: local_user.id });
-
         console.log("Creating new product");
+        let updatedProduct = product; // Initialize with the original product
+
+        if (newProductImageFile) {
+            console.log(newProductImageFile);
+            // Capture the updated product after image upload
+            updatedProduct = await uploadProductImage(newProductImageFile, newProductImageFile.name);
+        }
+
+        // Use updatedProduct for subsequent operations
+        editCategory("todos", "Todos", "Todas as categorias", [...categories[0].product_ids, updatedProduct.id]);
+        setProducts([...products, updatedProduct]); // Update state with the updated product
+
+        console.log(updatedProduct);
+
+        // Use updatedProduct for the Axios request
+        await axios.post(CREATE_PRODUCT_URL, { new_product_data: updatedProduct, user_id: local_user.id });
+        console.log("product_created");
     };
 
     const editProduct = (product: Product) => {
@@ -382,9 +501,27 @@ const ProductControl = () => {
         setCategories(updatedCategories);
     }, [products]);
 
+    useEffect(() => {
+        fetchProductImages();
+    }, []);
+
+    useEffect(() => {
+        console.log(productImages);
+    }, [productImages]);
+
     return (
         <>
             <div className="Product_Control_Card Control_Card">
+                {productImages.length > 0 && (
+                    <div className="Product_Control_Image_List">
+                        {productImages.map((image, index) => (
+                            <>
+                                <img key={index} className="Product_Control_Image" alt={image.name} src={image.url}></img>
+                            </>
+                        ))}
+                    </div>
+                )}
+
                 <h2 className="Control_Title">Controle de Categorias</h2>
 
                 <AnimatePresence>
@@ -761,6 +898,41 @@ const ProductControl = () => {
                                     }}
                                 ></textarea>
 
+                                <div className="Product_Creation_Image_Upload_Container">
+                                    <label htmlFor="product_creation_image_filepicker">
+                                        <span className="material-icons">image</span>Escolha uma Imagem (GIF, PNG, JPG)
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="product_creation_image_filepicker"
+                                        name="product_creation_image_filepicker"
+                                        accept=".gif, .png, .jpg, .jpeg"
+                                        onChange={(e) => {
+                                            if (!e.target.files) {
+                                                console.log("No Files Selected");
+                                                return;
+                                            }
+
+                                            console.log(e.target.files);
+                                            const firstFile = e.target.files[0];
+
+                                            if (!firstFile) {
+                                                console.log("No Files Selected");
+                                                return;
+                                            }
+
+                                            setNewProductImageFile(firstFile);
+                                            // const reader = new FileReader(); // estudar este conceito
+                                            const fileTempUrl = URL.createObjectURL(firstFile);
+                                            setNewProductTemporaryImageURL(fileTempUrl);
+                                        }}
+                                    />
+                                    <div className="Product_Creation_Image_Upload_Container_Image_Preview">
+                                        {newProductTemporaryImageURL && <img src={newProductTemporaryImageURL} alt="Imagem Temporária" />}
+                                        {newProductImageFile && <p>{newProductImageFile.name}</p>}
+                                    </div>
+                                </div>
+
                                 <div className="Control_Form_Checkbox_Group">
                                     <div className="Control_Form_Checkbox">
                                         <input
@@ -812,8 +984,15 @@ const ProductControl = () => {
                                     <button
                                         className="Control_Form_Btn"
                                         onClick={() => {
-                                            createNewProduct(newProduct);
-                                            setCreatingNewProduct(false);
+                                            createNewProduct(newProduct)
+                                                .then(() => {
+                                                    // Actions to perform after createNewProduct completes
+                                                    setCreatingNewProduct(false);
+                                                })
+                                                .catch((error) => {
+                                                    // Handle any errors that occur during createNewProduct
+                                                    console.error("Failed to create new product:", error);
+                                                });
                                         }}
                                     >
                                         Criar Novo Produto

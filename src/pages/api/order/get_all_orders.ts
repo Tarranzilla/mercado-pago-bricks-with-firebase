@@ -9,7 +9,6 @@ if (!projectUID) {
 
 export default async function getAllOrders(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
-        // Changed from GET to POST
         return res.status(405).json({ error: "Method Not Allowed" });
     }
 
@@ -33,8 +32,7 @@ export default async function getAllOrders(req: NextApiRequest, res: NextApiResp
         const snapshot = await ordersRef.get();
         const orders = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-        console.log(orders);
-
+        // console.log(orders);
         return res.status(200).json(orders);
     } catch (error) {
         if (error instanceof Error) {

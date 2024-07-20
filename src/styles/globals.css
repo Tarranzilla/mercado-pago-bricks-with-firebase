@@ -3981,6 +3981,66 @@ button:hover {
     letter-spacing: 0.05rem;
 }
 
+/* ------ Testes ------ */
+
+.Product_Control_Image_List {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.Product_Control_Image_List > img {
+    width: 10rem;
+    height: 10rem;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+}
+
+.Product_Creation_Image_Upload_Container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    color: var(--bg_color);
+}
+
+.Product_Creation_Image_Upload_Container > input {
+    display: none;
+}
+
+.Product_Creation_Image_Upload_Container > label {
+    background-color: #461e0b;
+    color: var(--bg_color);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: "ProfilePro_WOFF2", sans-serif;
+    letter-spacing: 0.05rem;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.Product_Creation_Image_Upload_Container_Image_Preview {
+    display: flex;
+    flex-direction: column;
+}
+
+.Product_Creation_Image_Upload_Container_Image_Preview > img {
+    width: 10rem;
+    height: 10rem;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.5);
+}
+
 /* Barra de Progresso */
 
 #progress {

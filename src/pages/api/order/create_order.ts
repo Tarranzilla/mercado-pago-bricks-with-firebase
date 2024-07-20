@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Order } from "@/types/Order";
 
-import { auth, firestore } from "@/lib/firebaseAdmin";
+import { auth, firestore, storage } from "@/lib/firebaseAdmin";
 
 // orders_counter e subscriptions_counter
 type Counter = {

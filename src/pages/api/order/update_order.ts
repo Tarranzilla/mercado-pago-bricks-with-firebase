@@ -118,6 +118,7 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                                         orderData = {
                                             mp_payment_status: fullPaymentInfo.data.status,
                                             mp_payment_info: paymentData,
+                                            paymentConfirmed: true, // apenas esta api pode mudar este valor.
                                             status: {
                                                 confirmed_by_admin: false,
                                                 waiting_payment: false,
@@ -133,6 +134,7 @@ export default async function orderUpdateHandler(req: NextApiRequest, res: NextA
                                         orderData = {
                                             mp_payment_status: fullPaymentInfo.data.status,
                                             mp_payment_info: paymentData,
+                                            paymentConfirmed: false,
                                             status: {
                                                 confirmed_by_admin: false,
                                                 waiting_payment: true,

@@ -67,6 +67,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 {Object.values(subscription.status).every((status) => status === false) && (
                     <>
                         <div className="Subscription_Status_State">
+                            <span className="material-icons">hourglass_bottom</span>
                             <p>Aguardando Pagamento</p>
                             <div className="Subscription_Status_Alert">
                                 <span className="material-icons">info</span>
@@ -90,6 +91,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 {subscription.status.confirmed_by_admin === true && (
                     <>
                         <div className="Subscription_Status_State">
+                            <span className="material-icons">check</span>
                             <p>Confirmado</p>
                         </div>
                     </>

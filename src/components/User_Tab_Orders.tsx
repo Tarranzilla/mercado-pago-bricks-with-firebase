@@ -69,6 +69,8 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 {Object.values(order.status).every((status) => status === false) && (
                     <>
                         <div className="User_Order_Status_State">
+                            <span className="material-icons">hourglass_bottom</span>
+
                             <p>Aguardando Pagamento</p>
                             <div className="Subscription_Status_Alert">
                                 <span className="material-icons">info</span>
@@ -90,16 +92,16 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 )}
                 {order.status.confirmed_by_admin === true && (
                     <>
+                        <p>Confirmado</p>
                         <div className="User_Order_Status_State">
-                            <p></p>
+                            <span className="material-icons">check</span>
                         </div>
-                        <span className="material-icons">hourglass_bottom</span>
-                        Confirmado
                     </>
                 )}
                 {order.status.waiting_payment === true && (
                     <>
                         <div className="User_Order_Status_State">
+                            <span className="material-icons">hourglass_bottom</span>
                             <p>Aguardando Pagamento</p>
                             <div className="Subscription_Status_Alert">
                                 <span className="material-icons">info</span>
@@ -122,6 +124,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 {order.status.in_production === true && (
                     <>
                         <div className="User_Order_Status_State">
+                            <span className="material-icons">countertops</span>
                             <p>Em Produção</p>
                         </div>
                     </>
@@ -129,6 +132,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 {order.status.waiting_for_retrieval === true && (
                     <>
                         <div className="User_Order_Status_State">
+                            <span className="material-icons">inventory</span>
                             <p>Aguardando Retirada</p>
                         </div>
                     </>
@@ -136,6 +140,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 {order.status.retrieved === true && (
                     <>
                         <div className="User_Order_Status_State">
+                            <span className="material-icons">store</span>
                             <p>Retirado no Balcão</p>
                         </div>
                     </>
@@ -143,6 +148,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 {order.status.waiting_for_delivery === true && (
                     <>
                         <div className="User_Order_Status_State">
+                            <span className="material-icons">conveyor_belt</span>
                             <p>Aguardando Entrega</p>
                         </div>
                     </>
@@ -150,6 +156,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 {order.status.delivered === true && (
                     <>
                         <div className="User_Order_Status_State">
+                            <span className="material-icons">markunread_mailbox</span>
                             <p>Entregue</p>
                         </div>
                     </>
@@ -157,6 +164,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
                 {order.status.cancelled === true && (
                     <>
                         <div className="User_Order_Status_State">
+                            <span className="material-icons">block</span>
                             <p>Cancelado</p>
                         </div>
                     </>
@@ -242,8 +250,8 @@ const User_Tab_Orders = () => {
     const orderList = useSelector((state: RootState) => state.user.currentUserOrders);
     const sortedOrders = [...orderList].sort((a, b) => new Date(b.order_date).getTime() - new Date(a.order_date).getTime());
     const displayedOrders = seeMore ? sortedOrders : sortedOrders.slice(0, 3);
-    console.log(orderList);
-    console.log(sortedOrders);
+    //console.log(orderList);
+    //console.log(sortedOrders);
     const noOrders = orderList.length < 1;
 
     return (

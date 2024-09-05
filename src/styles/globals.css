@@ -784,12 +784,19 @@ button:hover {
     border-radius: 0.5rem;
     background-color: var(--bg_color);
     color: var(--text_color);
+    position: relative;
 }
 
 .Subscription_Status_State {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
+
+.Subscription_Status_State > span {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
 }
 
 .Subscription_Status_Alert {
@@ -924,9 +931,11 @@ button:hover {
     position: relative;
 }
 
-.User_Order_Status > span {
+.User_Order_Status > span,
+.User_Order_Status_State > span {
     position: absolute;
     right: 0.5rem;
+    top: 0.5rem;
 }
 
 .User_Order_Status_State {
@@ -3829,6 +3838,7 @@ button:hover {
     justify-content: center;
     align-items: center;
     gap: 1rem;
+    padding: 1rem;
 
     background-color: #461e0b;
     color: var(--bg_color);
@@ -4581,7 +4591,11 @@ circle {
         margin-top: 8.5rem;
     }
 
-    .Control_Card,
+    .Control_Card {
+        margin-top: 2rem;
+    }
+
+    .Control_Card:first-of-type,
     .User_Control_Card {
         margin-top: 8.5rem;
     }
@@ -4590,6 +4604,10 @@ circle {
         min-width: 100%;
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .Add_Category_Btn {
+        flex-direction: column;
     }
 
     .Add_Category_Btn > span {
@@ -4615,6 +4633,24 @@ circle {
 
     .Order_Control_Filter_Inputs {
         min-width: 100%;
+    }
+
+    .Order_Control_Item > .User_Order_Status {
+        min-height: unset;
+    }
+
+    .Control_Item {
+        height: auto;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .Control_Item_Content {
+        padding: 1rem;
+    }
+
+    .Control_Item_Image {
+        width: 100%;
     }
 }
 

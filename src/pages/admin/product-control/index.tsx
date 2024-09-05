@@ -512,16 +512,6 @@ const ProductControl = () => {
     return (
         <>
             <div className="Product_Control_Card Control_Card">
-                {productImages.length > 0 && (
-                    <div className="Product_Control_Image_List">
-                        {productImages.map((image, index) => (
-                            <>
-                                <img key={index} className="Product_Control_Image" alt={image.name} src={image.url}></img>
-                            </>
-                        ))}
-                    </div>
-                )}
-
                 <h2 className="Control_Title">Controle de Categorias</h2>
 
                 <AnimatePresence>
@@ -1092,3 +1082,17 @@ const ProductControl = () => {
 };
 
 export default ProductControl;
+
+/*
+
+                {productImages.length > 0 && (
+                    <div className="Product_Control_Image_List">
+                        {productImages.map((image, index) => (
+                            <>
+                                <img key={index} className="Product_Control_Image" alt={image.name} src={image.url}></img>
+                            </>
+                        ))}
+                    </div>
+                )}
+
+*/

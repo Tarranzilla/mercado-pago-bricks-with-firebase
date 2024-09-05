@@ -224,13 +224,13 @@ const ProductControl = () => {
     }
 
     const storageRef = ref(firebase.storage);
-    console.log(storageRef);
+    //console.log(storageRef);
 
     const projectRef = ref(storageRef, "pragmatas-shop");
-    console.log(projectRef);
+    //console.log(projectRef);
 
     const productImagesRef = ref(projectRef, "product-imgs");
-    console.log(productImagesRef);
+    //console.log(productImagesRef);
 
     const fetchProductImages = async () => {
         console.log("Fetching Images...");
@@ -677,17 +677,28 @@ const ProductControl = () => {
                                 <div className="Category_Item_Header">
                                     <h1>{category.name}</h1>
                                     <p>{category.description}</p>
-                                    <h3>{category.product_ids.length} Produtos</h3>
                                 </div>
 
-                                <button
-                                    onClick={() => {
-                                        setEditedCategory(category);
-                                        setEditingCategory(true);
-                                    }}
-                                >
-                                    Editar
-                                </button>
+                                <div className="Category_Item_Footer">
+                                    <h3>
+                                        {category.product_ids.length === 0 ? (
+                                            "Nenhum Produto"
+                                        ) : (
+                                            <>
+                                                {category.product_ids.length} {category.product_ids.length === 1 ? "Produto" : "Produtos"}
+                                            </>
+                                        )}
+                                    </h3>
+
+                                    <button
+                                        onClick={() => {
+                                            setEditedCategory(category);
+                                            setEditingCategory(true);
+                                        }}
+                                    >
+                                        Editar Categoria
+                                    </button>
+                                </div>
                             </div>
                         ))}
 
@@ -996,14 +1007,19 @@ const ProductControl = () => {
                 {categories.length > 0 && (
                     <div className="Product_Control_Filter Control_Filter">
                         <h2 className="Control_Filter_Title">Filtro</h2>
-                        <input
-                            className="Control_Text_Filter"
-                            type="text"
-                            placeholder="Pesquisar produtos"
-                            onChange={(e) => {
-                                setProductSearchTextInput(e.target.value);
-                            }}
-                        ></input>
+
+                        <div className="Control_Text_Filter_Container">
+                            <input
+                                className="Control_Text_Filter"
+                                type="text"
+                                placeholder="Pesquisar produtos"
+                                onChange={(e) => {
+                                    setProductSearchTextInput(e.target.value);
+                                }}
+                            ></input>
+                            <span className="material-icons">search</span>
+                        </div>
+
                         <select
                             className="Control_Select_Filter"
                             onChange={(e) => {

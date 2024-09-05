@@ -1038,13 +1038,12 @@ const OrderControl = () => {
                     </div>
 
                     <div className="Order_Control_Filter_Inputs">
-                        <div className="Order_Control_Filter_Item">
-                            <h4>
-                                <span className="material-icons">search</span>Buscar Pedido
-                            </h4>
+                        <div className="Order_Control_Filter_Item Order_Control_General_Search_Filter">
+                            <span className="material-icons">search</span>
+
                             <input
                                 type="text"
-                                placeholder="Nome do Cliente, Código de Pedido, Endereço de Entrega, etc."
+                                placeholder="Buscar Pedido (Nome do Cliente, Código de Pedido, Endereço de Entrega, etc.)"
                                 onChange={(e) => {
                                     setGeneralSearch(e.target.value);
                                 }}

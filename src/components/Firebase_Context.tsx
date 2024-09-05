@@ -16,6 +16,7 @@ import {
     setCurrentUserSubscriptions,
     setCurrentUserOrders,
 } from "@/store/slices/user_slice";
+import { setAvailableProducts } from "@/store/slices/cart_slice";
 import { useDispatch } from "react-redux";
 
 import { User as User_Local } from "@/types/User";
@@ -43,6 +44,8 @@ const NEXT_PUBLIC_PATH_API_GET_SUBSCRIPTION = process.env.NEXT_PUBLIC_PATH_API_G
 
 const NEXT_PUBLIC_PATH_API_GET_ORDER = process.env.NEXT_PUBLIC_PATH_API_GET_ORDER;
 
+const NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS = process.env.NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS;
+
 if (
     !FIREBASE_CLIENT_PROJECT_ID ||
     !FIREBASE_CLIENT_API_KEY ||
@@ -55,7 +58,9 @@ if (
     !NEXT_PUBLIC_PATH_API_GET_USER ||
     !NEXT_PUBLIC_PATH_API_CREATE_USER ||
     !NEXT_PUBLIC_PATH_API_UPDATE_USER ||
-    !NEXT_PUBLIC_PATH_API_GET_ORDER
+    !NEXT_PUBLIC_PATH_API_GET_ORDER ||
+    !NEXT_PUBLIC_PATH_API_GET_SUBSCRIPTION ||
+    !NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS
 ) {
     throw new Error("One or more of the API PATHS environment variables are not defined");
 }
@@ -343,6 +348,17 @@ export const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
             return undefined;
         }
     };
+
+    const fetchProducts = async () => {
+        axios.get(NEXT_PUBLIC_PATH_API_GET_ALL_PRODUCTS).then((response) => {
+            console.log("Produtos Recebidos:", response.data);
+            dispatch(setAvailableProducts(response.data));
+        });
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
     useEffect(() => {
         const app = initializeApp(firebaseConfig);

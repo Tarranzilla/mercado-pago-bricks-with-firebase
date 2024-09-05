@@ -566,6 +566,11 @@ const OrderControl = () => {
     const [customerName, setCustomerName] = useState("");
     const [orderReference, setOrderReference] = useState("");
     const [deliveryAddress, setDeliveryAddress] = useState("");
+    const [generalSearch, setGeneralSearch] = useState("");
+
+    const [shippingFilterOpen, setShippingFilterOpen] = useState(false);
+    const [statusFilterOpen, setStatusFilterOpen] = useState(false);
+    const [dateFilterOpen, setDateFilterOpen] = useState(false);
 
     const applyFilters = () => {
         // Helper function to get start and end dates based on dateRange
@@ -648,7 +653,13 @@ const OrderControl = () => {
                 (isStatusMatch || Object.values(orderStatus).every((v) => !v)) &&
                 (customerName ? order.customer_name.toLowerCase().includes(customerName.toLowerCase().trim()) : true) &&
                 (orderReference ? order.order_external_reference.toLowerCase().includes(orderReference.toLowerCase().trim()) : true) &&
-                (deliveryAddress ? order.customer_adress.toLowerCase().includes(deliveryAddress.toLowerCase().trim()) : true)
+                (deliveryAddress ? order.customer_adress.toLowerCase().includes(deliveryAddress.toLowerCase().trim()) : true) &&
+                (generalSearch
+                    ? order.customer_name.toLowerCase().includes(generalSearch.toLowerCase().trim()) ||
+                      order.order_external_reference.toLowerCase().includes(generalSearch.toLowerCase().trim()) ||
+                      order.customer_adress.toLowerCase().includes(generalSearch.toLowerCase().trim()) ||
+                      order.order_items.some((order_item) => order_item.product.title.toLowerCase().includes(generalSearch.toLowerCase().trim()))
+                    : true)
             );
         });
     };
@@ -715,269 +726,301 @@ const OrderControl = () => {
 
                 <div className="Order_Control_Filter_Buttons">
                     <div className="Order_Control_Filter_Item">
-                        <h4>
-                            <span className="material-icons">local_shipping</span>Tipo de Recebimento
-                        </h4>
-                        <div className={"Order_Control_Filter_Options"}>
-                            <button
-                                className={orderShippingOption === "Entrega" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                        <div className="Order_Control_Filter_Item_Header">
+                            <span className="material-icons">local_shipping</span>
+                            <h4>Tipo de Recebimento</h4>
+                            <span
+                                className={
+                                    shippingFilterOpen
+                                        ? "material-icons Order_Control_Filter_Item_Arrow Active"
+                                        : "material-icons Order_Control_Filter_Item_Arrow"
+                                }
                                 onClick={() => {
-                                    setOrderShippingOption(orderShippingOption === "Entrega" ? "" : "Entrega");
+                                    setShippingFilterOpen(!shippingFilterOpen);
                                 }}
                             >
-                                Entrega
-                            </button>
-                            <button
-                                className={orderShippingOption === "Retirada" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderShippingOption(orderShippingOption === "Retirada" ? "" : "Retirada");
-                                }}
-                            >
-                                Retirada
-                            </button>
-                            <button
-                                className={orderShippingOption === "" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderShippingOption("");
-                                }}
-                            >
-                                Todos os Tipos
-                            </button>
+                                expand_more
+                            </span>
                         </div>
+
+                        {shippingFilterOpen && (
+                            <div className={"Order_Control_Filter_Options"}>
+                                <button
+                                    className={
+                                        orderShippingOption === "Entrega" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"
+                                    }
+                                    onClick={() => {
+                                        setOrderShippingOption(orderShippingOption === "Entrega" ? "" : "Entrega");
+                                    }}
+                                >
+                                    Entrega
+                                </button>
+                                <button
+                                    className={
+                                        orderShippingOption === "Retirada" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"
+                                    }
+                                    onClick={() => {
+                                        setOrderShippingOption(orderShippingOption === "Retirada" ? "" : "Retirada");
+                                    }}
+                                >
+                                    Retirada
+                                </button>
+                                <button
+                                    className={orderShippingOption === "" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setOrderShippingOption("");
+                                    }}
+                                >
+                                    Todos os Tipos
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <div className="Order_Control_Filter_Item">
-                        <h4>
-                            <span className="material-icons">published_with_changes</span>Status
-                        </h4>
-                        <div className="Order_Control_Filter_Options">
-                            <button
-                                className={orderStatus.waiting_payment ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                        <div className="Order_Control_Filter_Item_Header">
+                            <span className="material-icons">published_with_changes</span>
+                            <h4>Status</h4>
+                            <span
+                                className={
+                                    statusFilterOpen
+                                        ? "material-icons Order_Control_Filter_Item_Arrow Active"
+                                        : "material-icons Order_Control_Filter_Item_Arrow"
+                                }
                                 onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        waiting_payment: !currentStatus.waiting_payment,
-                                    }));
+                                    setStatusFilterOpen(!statusFilterOpen);
                                 }}
                             >
-                                Aguardando Pagamento
-                            </button>
-                            <button
-                                className={orderStatus.confirmed_by_admin ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        confirmed_by_admin: !currentStatus.confirmed_by_admin,
-                                    }));
-                                }}
-                            >
-                                Confirmado
-                            </button>
-                            <button
-                                className={orderStatus.in_production ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        in_production: !currentStatus.in_production,
-                                    }));
-                                }}
-                            >
-                                Em Produção
-                            </button>
-                            <button
-                                className={orderStatus.waiting_for_retrieval ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        waiting_for_retrieval: !currentStatus.waiting_for_retrieval,
-                                    }));
-                                }}
-                            >
-                                Aguardando Retirada
-                            </button>
-                            <button
-                                className={orderStatus.retrieved ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        retrieved: !currentStatus.retrieved,
-                                    }));
-                                }}
-                            >
-                                Retirado no Balcão
-                            </button>
-                            <button
-                                className={orderStatus.waiting_for_delivery ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        waiting_for_delivery: !currentStatus.waiting_for_delivery,
-                                    }));
-                                }}
-                            >
-                                Aguardando Entrega
-                            </button>
-                            <button
-                                className={orderStatus.delivered ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        delivered: !currentStatus.delivered,
-                                    }));
-                                }}
-                            >
-                                Entregue
-                            </button>
-                            <button
-                                className={orderStatus.cancelled ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        cancelled: !currentStatus.cancelled,
-                                    }));
-                                }}
-                            >
-                                Cancelado
-                            </button>
-
-                            <button
-                                className={allStatusFalse ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setOrderStatus((currentStatus) => ({
-                                        ...currentStatus,
-                                        waiting_payment: false,
-                                        confirmed_by_admin: false,
-                                        in_production: false,
-                                        waiting_for_retrieval: false,
-                                        retrieved: false,
-                                        waiting_for_delivery: false,
-                                        delivered: false,
-                                        cancelled: false,
-                                    }));
-                                }}
-                            >
-                                Qualquer Status
-                            </button>
+                                expand_more
+                            </span>
                         </div>
+
+                        {statusFilterOpen && (
+                            <div className="Order_Control_Filter_Options">
+                                <button
+                                    className={orderStatus.waiting_payment ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            waiting_payment: !currentStatus.waiting_payment,
+                                        }));
+                                    }}
+                                >
+                                    Aguardando Pagamento
+                                </button>
+                                <button
+                                    className={orderStatus.confirmed_by_admin ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            confirmed_by_admin: !currentStatus.confirmed_by_admin,
+                                        }));
+                                    }}
+                                >
+                                    Confirmado
+                                </button>
+                                <button
+                                    className={orderStatus.in_production ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            in_production: !currentStatus.in_production,
+                                        }));
+                                    }}
+                                >
+                                    Em Produção
+                                </button>
+                                <button
+                                    className={
+                                        orderStatus.waiting_for_retrieval ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"
+                                    }
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            waiting_for_retrieval: !currentStatus.waiting_for_retrieval,
+                                        }));
+                                    }}
+                                >
+                                    Aguardando Retirada
+                                </button>
+                                <button
+                                    className={orderStatus.retrieved ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            retrieved: !currentStatus.retrieved,
+                                        }));
+                                    }}
+                                >
+                                    Retirado no Balcão
+                                </button>
+                                <button
+                                    className={
+                                        orderStatus.waiting_for_delivery ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"
+                                    }
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            waiting_for_delivery: !currentStatus.waiting_for_delivery,
+                                        }));
+                                    }}
+                                >
+                                    Aguardando Entrega
+                                </button>
+                                <button
+                                    className={orderStatus.delivered ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            delivered: !currentStatus.delivered,
+                                        }));
+                                    }}
+                                >
+                                    Entregue
+                                </button>
+                                <button
+                                    className={orderStatus.cancelled ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            cancelled: !currentStatus.cancelled,
+                                        }));
+                                    }}
+                                >
+                                    Cancelado
+                                </button>
+
+                                <button
+                                    className={allStatusFalse ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setOrderStatus((currentStatus) => ({
+                                            ...currentStatus,
+                                            waiting_payment: false,
+                                            confirmed_by_admin: false,
+                                            in_production: false,
+                                            waiting_for_retrieval: false,
+                                            retrieved: false,
+                                            waiting_for_delivery: false,
+                                            delivered: false,
+                                            cancelled: false,
+                                        }));
+                                    }}
+                                >
+                                    Qualquer Status
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <div className="Order_Control_Filter_Item">
-                        <h4>
-                            <span className="material-icons">calendar_month</span>Data do Pedido
-                        </h4>
-                        <div className="Order_Control_Filter_Options">
-                            <button
-                                className={dateRange === "Hoje" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                        <div className="Order_Control_Filter_Item_Header">
+                            <span className="material-icons">calendar_month</span>
+                            <h4>Data do Pedido</h4>
+                            <span
+                                className={
+                                    dateFilterOpen
+                                        ? "material-icons Order_Control_Filter_Item_Arrow Active"
+                                        : "material-icons Order_Control_Filter_Item_Arrow"
+                                }
                                 onClick={() => {
-                                    setDateRange("Hoje");
+                                    setDateFilterOpen(!dateFilterOpen);
                                 }}
                             >
-                                Hoje
-                            </button>
-                            <button
-                                className={dateRange === "Ontem" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setDateRange("Ontem");
-                                }}
-                            >
-                                Ontem
-                            </button>
-                            <button
-                                className={dateRange === "Últimos 7 dias" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setDateRange("Últimos 7 dias");
-                                }}
-                            >
-                                Últimos 7 dias
-                            </button>
-                            <button
-                                className={dateRange === "Últimos 30 dias" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setDateRange("Últimos 30 dias");
-                                }}
-                            >
-                                Últimos 30 dias
-                            </button>
-                            <button
-                                className={dateRange === "Últimos 90 dias" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setDateRange("Últimos 90 dias");
-                                }}
-                            >
-                                Últimos 90 dias
-                            </button>
-                            <button
-                                className={dateRange === "Este mês" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setDateRange("Este mês");
-                                }}
-                            >
-                                Este mês
-                            </button>
-                            <button
-                                className={dateRange === "Mês passado" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setDateRange("Mês passado");
-                                }}
-                            >
-                                Mês passado
-                            </button>
-                            <button
-                                className={dateRange === "Este ano" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setDateRange("Este ano");
-                                }}
-                            >
-                                Este ano
-                            </button>
-                            <button
-                                className={dateRange === "Todos os Pedidos" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
-                                onClick={() => {
-                                    setDateRange("Todos os Pedidos");
-                                }}
-                            >
-                                Todos os Pedidos
-                            </button>
+                                expand_more
+                            </span>
                         </div>
+
+                        {dateFilterOpen && (
+                            <div className="Order_Control_Filter_Options">
+                                <button
+                                    className={dateRange === "Hoje" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setDateRange("Hoje");
+                                    }}
+                                >
+                                    Hoje
+                                </button>
+                                <button
+                                    className={dateRange === "Ontem" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setDateRange("Ontem");
+                                    }}
+                                >
+                                    Ontem
+                                </button>
+                                <button
+                                    className={dateRange === "Últimos 7 dias" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setDateRange("Últimos 7 dias");
+                                    }}
+                                >
+                                    Últimos 7 dias
+                                </button>
+                                <button
+                                    className={dateRange === "Últimos 30 dias" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setDateRange("Últimos 30 dias");
+                                    }}
+                                >
+                                    Últimos 30 dias
+                                </button>
+                                <button
+                                    className={dateRange === "Últimos 90 dias" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setDateRange("Últimos 90 dias");
+                                    }}
+                                >
+                                    Últimos 90 dias
+                                </button>
+                                <button
+                                    className={dateRange === "Este mês" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setDateRange("Este mês");
+                                    }}
+                                >
+                                    Este mês
+                                </button>
+                                <button
+                                    className={dateRange === "Mês passado" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setDateRange("Mês passado");
+                                    }}
+                                >
+                                    Mês passado
+                                </button>
+                                <button
+                                    className={dateRange === "Este ano" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"}
+                                    onClick={() => {
+                                        setDateRange("Este ano");
+                                    }}
+                                >
+                                    Este ano
+                                </button>
+                                <button
+                                    className={
+                                        dateRange === "Todos os Pedidos" ? "Order_Control_Filter_Option Active" : "Order_Control_Filter_Option"
+                                    }
+                                    onClick={() => {
+                                        setDateRange("Todos os Pedidos");
+                                    }}
+                                >
+                                    Todos os Pedidos
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <div className="Order_Control_Filter_Inputs">
                     <div className="Order_Control_Filter_Item">
                         <h4>
-                            <span className="material-icons">account_circle</span>Nome do Cliente
+                            <span className="material-icons">search</span>Buscar Pedido
                         </h4>
                         <input
                             type="text"
-                            placeholder="Nome do Cliente"
+                            placeholder="Nome do Cliente, Código de Pedido, Endereço de Entrega, etc."
                             onChange={(e) => {
-                                setCustomerName(e.target.value);
-                            }}
-                        />
-                    </div>
-
-                    <div className="Order_Control_Filter_Item">
-                        <h4>
-                            <span className="material-icons">qr_code_2</span>Código de Pedido
-                        </h4>
-                        <input
-                            type="text"
-                            placeholder="Código de Pedido"
-                            onChange={(e) => {
-                                setOrderReference(e.target.value);
-                            }}
-                        />
-                    </div>
-
-                    <div className="Order_Control_Filter_Item">
-                        <h4>
-                            <span className="material-icons">markunread_mailbox</span>Endereço de Entrega
-                        </h4>
-                        <input
-                            type="text"
-                            placeholder="Endereço de Entrega"
-                            onChange={(e) => {
-                                setDeliveryAddress(e.target.value);
+                                setGeneralSearch(e.target.value);
                             }}
                         />
                     </div>

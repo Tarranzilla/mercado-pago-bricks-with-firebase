@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import Product from "@/types/Product";
-import products_list, { productCategories } from "@/data/products_list";
+// import products_list, { productCategories } from "@/data/products_list";
 import { Order } from "@/types/Order";
 import { Cart_Item } from "@/types/Cart_Item";
 
@@ -12,12 +12,14 @@ export type TranslatedCartItem = {
 };
 
 type CartState = {
+    availableProducts: Product[];
     cartItems: Cart_Item[];
     cartTotal: number;
     checkoutOrder: Order[];
 };
 
 const initialCartState: CartState = {
+    availableProducts: [],
     cartItems: [],
     cartTotal: 0,
     checkoutOrder: [],
@@ -49,7 +51,7 @@ const cartSlice = createSlice({
             if (product_exists_in_cart) {
                 product_exists_in_cart.quantity += 1;
             } else {
-                const product_available = findProductByID(product.id, products_list);
+                const product_available = findProductByID(product.id, state.availableProducts);
 
                 if (product_available) {
                     state.cartItems.push({
@@ -90,8 +92,11 @@ const cartSlice = createSlice({
         setCheckoutOrder: (state, action: PayloadAction<Order[]>) => {
             state.checkoutOrder = action.payload;
         },
+        setAvailableProducts: (state, action: PayloadAction<Product[]>) => {
+            state.availableProducts = action.payload;
+        },
     },
 });
 
-export const { addCartItem, decrementCartItem, removeCartItem, setCheckoutOrder, clearCart } = cartSlice.actions;
+export const { addCartItem, decrementCartItem, removeCartItem, setCheckoutOrder, clearCart, setAvailableProducts } = cartSlice.actions;
 export default cartSlice.reducer;

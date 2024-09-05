@@ -1,40 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Este é um projeto focado no desenvolvimento de uma loja em ReactJS e NEXTjs integrada com o mercado pago, firebase e whatsapp.
 
-## Getting Started
+Com este projeto busco estudar a melhor maneira de se construir uma loja independente
+de plataformas de e-commerce e com o mínimo de bibliotecas externas necessárias.
 
-First, run the development server:
+Além disso busco estudar as melhores maneiras de se apresentar um produto, seus
+ingredientes, e caracterísicas, buscando futuramente desenvolver mapas e grafos
+capazes de representar as origens deste produto.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+A usabilidade do cliente foi um dos fatores centrais na construção desta plataforma,
+o cliente pode acompanhar o andamento de seu pedido e entrar em contato diretamente
+pelo whatsapp com a loja caso haja alguma dúvida sobre quaisquer pedido que já realizou - esta funcionalidade abre portas para o desenvolvimento e implementação de chatbots e sistemas de conversação da marca com IA e atendentes especializados futuramente.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Finalmente a usabilidade do gerenciador do sistema também foi central - logo todos os produtos, e suas categorias podem ser alterados e editados a qualquer momento - refletindo imediatamente na loja.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+O site tem a possibilidade de ser baixado em qualquer tipo de dispositivo móvel e
+pode funcionar por exemplo em um tablet como ponto de venda na loja - bastando apenas poucas configurações. (Um modo PDV pode ser desenvolvido)

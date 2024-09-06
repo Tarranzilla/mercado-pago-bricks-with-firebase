@@ -140,7 +140,7 @@ const Client_Product_List = () => {
                     >
                         <span className="material-icons">expand_less</span>
                     </button>
-                    <h2 className="Product_List_Filter_Title">Encontre seu Chocolate Ideal</h2>
+                    <h2 className="Product_List_Filter_Title">Encontre Seu Chocolate Ideal</h2>
 
                     <AnimatePresence>
                         {!isFilterCollapsed && (

@@ -3095,7 +3095,7 @@ button:hover {
 }
 
 .Order_Control_Title {
-    font-size: 2rem;
+    font-size: 1.8rem;
     height: 3rem;
     display: flex;
     align-items: center;
@@ -3460,11 +3460,22 @@ button:hover {
     display: flex;
     flex-direction: row;
     align-items: center;
+    background-color: #461e0b;
+    padding: 0.25rem;
+    padding-left: 2rem;
+    position: relative;
 }
 
 .Order_Control_General_Search_Filter > input {
     width: 100%;
     max-width: unset;
+    border: none;
+}
+
+.Order_Control_General_Search_Filter > span {
+    position: absolute;
+    left: 0.5rem;
+    color: var(--bg_color);
 }
 
 /* ------ Controle de Usuários / User Control ------ */
@@ -3491,11 +3502,11 @@ button:hover {
 .User_Control_Filter {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
     width: 100%;
 
     margin-top: 1rem;
-    background-color: var(--text_color);
+    background-color: #d7bb92;
     border-radius: 1rem;
     padding: 2rem;
 
@@ -3673,7 +3684,7 @@ button:hover {
 }
 
 .Control_Title {
-    font-size: 2rem;
+    font-size: 1.8rem;
     height: 3rem;
     display: flex;
     align-items: center;
@@ -3878,7 +3889,7 @@ button:hover {
 .Control_Filter {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
     width: 100%;
 
     margin-top: 1rem;
@@ -4704,6 +4715,11 @@ circle {
     .Control_Form_Footer {
         flex-direction: column;
         gap: 0.5rem;
+    }
+
+    .Order_Control_Filter_Options {
+        flex-direction: column;
+        flex-wrap: nowrap;
     }
 }
 

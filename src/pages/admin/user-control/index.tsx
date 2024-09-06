@@ -160,15 +160,18 @@ const UserControl = () => {
                     <option value="subscriber">Assinantes</option>
                 </select>
 
-                <input
-                    className="User_Control_Filter_Item"
-                    type="number"
-                    min="0" // Set minimum value to 0
-                    placeholder="Quantidade Mínima de Pedidos"
-                    onChange={(e) => {
-                        setMinimumOrders(parseInt(e.target.value));
-                    }}
-                />
+                <div className="Control_Text_Filter_Container">
+                    <input
+                        className="User_Control_Filter_Item"
+                        type="number"
+                        min="0" // Set minimum value to 0
+                        placeholder="Quantidade Mínima de Pedidos"
+                        onChange={(e) => {
+                            setMinimumOrders(parseInt(e.target.value));
+                        }}
+                    />
+                    <span className="material-icons">receipt_long</span>
+                </div>
             </div>
 
             <div className="User_Control_Users_List">

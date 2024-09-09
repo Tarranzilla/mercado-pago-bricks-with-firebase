@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useMediaQuery } from "react-responsive";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
@@ -18,6 +19,8 @@ import { motion as m, AnimatePresence, LayoutGroup, useScroll, useSpring } from 
 
 const Client_Cart_Content = () => {
     const router = useRouter();
+
+    const isMobile = useMediaQuery({ query: "(max-width: 480px)" });
 
     const isCheckoutPage = router.pathname.startsWith("/checkout");
 
@@ -170,6 +173,8 @@ const Client_Cart_Content = () => {
                                                 className="Cart_Footer_Warning"
                                                 onClick={() => {
                                                     setUserTabOpenAction(true);
+
+                                                    isMobile && setCartOpenAction(false);
                                                 }}
                                             >
                                                 <span className="material-icons">badge</span>

@@ -124,6 +124,8 @@ const User_Tab_General_Information = () => {
         customer?.telephone === "Nenhum Número de Telefone Definido" ||
         customer?.telephone === "";
 
+    const isTempImage = customer?.avatar_url === "Nenhuma Imagem Definida" || customer?.avatar_url === "";
+
     return (
         <>
             {customer && editedCustomer && (
@@ -137,10 +139,15 @@ const User_Tab_General_Information = () => {
                     )}
                     <div className="User_Tab_Card_Info">
                         <div className="User_Tab_Card_Info_Image_Container">
-                            {customer.avatar_url && customer.name && (
+                            {!isTempImage && (
                                 <Image className="User_Tab_Card_Info_Image" width={128} height={128} src={customer.avatar_url} alt={customer.name} />
                             )}
-                            {!customer.avatar_url && <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>}
+                            {isTempImage && (
+                                <>
+                                    <span className="material-icons User_Tab_Card_Info_No_Image">person_pin</span>
+                                    <p>Nenhuma Imagem Definida</p>
+                                </>
+                            )}
 
                             <span className="User_Info_Item_Icon Avatar_Img material-icons">mode_edit</span>
                         </div>

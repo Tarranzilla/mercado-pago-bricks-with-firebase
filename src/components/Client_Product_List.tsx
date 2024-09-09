@@ -35,7 +35,7 @@ const Client_Product_List = () => {
     const dispatch = useDispatch();
     const [products, setProducts] = useState<Product[]>([]);
 
-    const [isFilterCollapsed, setIsFilterCollapsed] = useState(false);
+    const [isFilterCollapsed, setIsFilterCollapsed] = useState(true);
     // all, barras clásssicas, discos, bombons, dia dos pais, dia dos namorados, páscoa,
     const categories = ["Todos", "Barras Clássicas", "Barras Especiais", "Discos", "Bombons", "Dia dos Pais", "Dia dos Namorados", "Páscoa"];
 
@@ -138,7 +138,11 @@ const Client_Product_List = () => {
                             setIsFilterCollapsed(!isFilterCollapsed);
                         }}
                     >
-                        <span className="material-icons">expand_less</span>
+                        {isFilterCollapsed ? (
+                            <span className="material-icons Filter_Icon_Alt">filter_list</span>
+                        ) : (
+                            <span className="material-icons">expand_less</span>
+                        )}
                     </button>
                     <h2 className="Product_List_Filter_Title">Encontre Seu Chocolate Ideal</h2>
 

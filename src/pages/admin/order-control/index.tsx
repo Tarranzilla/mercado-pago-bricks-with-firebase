@@ -1051,10 +1051,6 @@ const OrderControl = () => {
                         </div>
 
                         <div className="Order_Conrol_Filter_ViewModes Non_Mobile_Only">
-                            <h4>
-                                <span className="material-icons">visibility</span>Modos de Visualização
-                            </h4>
-
                             <div className={"ViewModes_Items"}>
                                 <button
                                     className={viewMode === "list" ? "Order_Control_Filter_ViewMode Active" : "Order_Control_Filter_ViewMode"}

@@ -151,6 +151,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 {subscription.status.in_production === true && (
                     <>
                         <div className="Subscription_Status_State">
+                            <span className="material-icons">loyalty</span>
                             <p>Assinatura Ativa</p>
                         </div>
                     </>
@@ -158,6 +159,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 {subscription.status.waiting_for_retrieval === true && (
                     <>
                         <div className="Subscription_Status_State">
+                            <span className="material-icons">inventory</span>
                             <p>Aguardando Retirada</p>
                         </div>
                     </>
@@ -165,6 +167,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 {subscription.status.retrieved === true && (
                     <>
                         <div className="Subscription_Status_State">
+                            <span className="material-icons">store</span>
                             <p>Retirado no Balcão</p>
                         </div>
                     </>
@@ -172,6 +175,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 {subscription.status.waiting_for_delivery === true && (
                     <>
                         <div className="Subscription_Status_State">
+                            <span className="material-icons">conveyor_belt</span>
                             <p>Aguardando Entrega</p>
                         </div>
                     </>
@@ -179,6 +183,8 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 {subscription.status.delivered === true && (
                     <>
                         <div className="Subscription_Status_State">
+                            <span className="material-icons">markunread_mailbox</span>
+
                             <p>Entregue</p>
                         </div>
                     </>
@@ -186,286 +192,289 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription
                 {subscription.status.cancelled === true && (
                     <>
                         <div className="Subscription_Status_State">
+                            <span className="material-icons">block</span>
                             <p>Cancelado</p>
                         </div>
                     </>
                 )}
             </div>
 
-            <m.a
-                className="User_Order_Status_Call_Btn"
-                href={generate_whatsapp_url_for_contacting_client(subscription.customer_name, cleanPhoneNumber(subscription.customer_phone))}
-                target="_blank"
-                rel="noopener noreferrer"
-                layout
-            >
-                <span className="material-icons">support_agent</span> Entrar em Contato com o Cliente
-            </m.a>
+            <m.div layout key="order_item_actions" className="User_Order_Actions">
+                <m.a
+                    className="User_Order_Status_Call_Btn"
+                    href={generate_whatsapp_url_for_contacting_client(subscription.customer_name, cleanPhoneNumber(subscription.customer_phone))}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    layout
+                >
+                    <span className="material-icons">support_agent</span> Entrar em Contato com o Cliente
+                </m.a>
 
-            <AnimatePresence>
-                {!isEditing && (
-                    <m.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
-                        className="User_Order_Status_Call_Btn User_Order_Change_Status_Btn"
-                        key={"User_Order_Status_Btn"}
-                        layout
-                        onClick={() => {
-                            setIsEditing(true);
-                        }}
-                    >
-                        <span className="material-icons">published_with_changes</span>
-                        <p className="User_Order_Change_Status_Btn_Text">Alterar Status da Assinatura</p>
-                    </m.button>
-                )}
-
-                {isEditing && (
-                    <m.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
-                        className="User_Order_Edit_Status"
-                        key={"User_Order_Edit_Status"}
-                        layout
-                    >
-                        <h4>Alterar Status do Pedido</h4>
-                        <div className="User_Order_Edit_Status_Options">
-                            <button
-                                className={`User_Order_Edit_Status_Option ${editedSubscription.status.waiting_payment ? "Active" : ""} ${
-                                    subscription.status.waiting_payment ? "Actual" : ""
-                                }`}
-                                onClick={() => {
-                                    setEditedSubscription((currentSubscription) => ({
-                                        ...currentSubscription,
-                                        status: {
-                                            ...currentSubscription.status,
-                                            confirmed_by_admin: false,
-                                            waiting_payment: true,
-                                            in_production: false,
-                                            waiting_for_retrieval: false,
-                                            retrieved: false,
-                                            waiting_for_delivery: false,
-                                            delivered: false,
-                                            cancelled: false,
-                                        },
-                                    }));
-                                }}
-                            >
-                                Aguardando Pagamento
-                            </button>
-                            <button
-                                className={`User_Order_Edit_Status_Option ${editedSubscription.status.confirmed_by_admin ? "Active" : ""} ${
-                                    subscription.status.confirmed_by_admin ? "Actual" : ""
-                                }`}
-                                onClick={() => {
-                                    setEditedSubscription((currentSubscription) => ({
-                                        ...currentSubscription,
-                                        status: {
-                                            ...currentSubscription.status,
-                                            confirmed_by_admin: true,
-                                            waiting_payment: false,
-                                            in_production: false,
-                                            waiting_for_retrieval: false,
-                                            retrieved: false,
-                                            waiting_for_delivery: false,
-                                            delivered: false,
-                                            cancelled: false,
-                                        },
-                                    }));
-                                }}
-                            >
-                                Confirmado
-                            </button>
-                            <button
-                                className={`User_Order_Edit_Status_Option ${editedSubscription.status.in_production ? "Active" : ""} ${
-                                    subscription.status.in_production ? "Actual" : ""
-                                }`}
-                                onClick={() => {
-                                    setEditedSubscription((currentSubscription) => ({
-                                        ...currentSubscription,
-                                        status: {
-                                            ...currentSubscription.status,
-                                            confirmed_by_admin: false,
-                                            waiting_payment: false,
-                                            in_production: true,
-                                            waiting_for_retrieval: false,
-                                            retrieved: false,
-                                            waiting_for_delivery: false,
-                                            delivered: false,
-                                            cancelled: false,
-                                        },
-                                    }));
-                                }}
-                            >
-                                Em Produção
-                            </button>
-                            <button
-                                className={`User_Order_Edit_Status_Option ${editedSubscription.status.waiting_for_retrieval ? "Active" : ""} ${
-                                    subscription.status.waiting_for_retrieval ? "Actual" : ""
-                                }`}
-                                onClick={() => {
-                                    setEditedSubscription((currentSubscription) => ({
-                                        ...currentSubscription,
-                                        status: {
-                                            ...currentSubscription.status,
-                                            confirmed_by_admin: false,
-                                            waiting_payment: false,
-                                            in_production: false,
-                                            waiting_for_retrieval: true,
-                                            retrieved: false,
-                                            waiting_for_delivery: false,
-                                            delivered: false,
-                                            cancelled: false,
-                                        },
-                                    }));
-                                }}
-                            >
-                                Aguardando Retirada
-                            </button>
-                            <button
-                                className={`User_Order_Edit_Status_Option ${editedSubscription.status.retrieved ? "Active" : ""} ${
-                                    subscription.status.retrieved ? "Actual" : ""
-                                }`}
-                                onClick={() => {
-                                    setEditedSubscription((currentSubscription) => ({
-                                        ...currentSubscription,
-                                        status: {
-                                            ...currentSubscription.status,
-                                            confirmed_by_admin: false,
-                                            waiting_payment: false,
-                                            in_production: false,
-                                            waiting_for_retrieval: false,
-                                            retrieved: true,
-                                            waiting_for_delivery: false,
-                                            delivered: false,
-                                            cancelled: false,
-                                        },
-                                    }));
-                                }}
-                            >
-                                Retirado no Balcão
-                            </button>
-                            <button
-                                className={`User_Order_Edit_Status_Option ${editedSubscription.status.waiting_for_delivery ? "Active" : ""} ${
-                                    subscription.status.waiting_for_delivery ? "Actual" : ""
-                                }`}
-                                onClick={() => {
-                                    setEditedSubscription((currentSubscription) => ({
-                                        ...currentSubscription,
-                                        status: {
-                                            ...currentSubscription.status,
-                                            confirmed_by_admin: false,
-                                            waiting_payment: false,
-                                            in_production: false,
-                                            waiting_for_retrieval: false,
-                                            retrieved: false,
-                                            waiting_for_delivery: true,
-                                            delivered: false,
-                                            cancelled: false,
-                                        },
-                                    }));
-                                }}
-                            >
-                                Aguardando Entrega
-                            </button>
-                            <button
-                                className={`User_Order_Edit_Status_Option ${editedSubscription.status.delivered ? "Active" : ""} ${
-                                    subscription.status.delivered ? "Actual" : ""
-                                }`}
-                                onClick={() => {
-                                    setEditedSubscription((currentSubscription) => ({
-                                        ...currentSubscription,
-                                        status: {
-                                            ...currentSubscription.status,
-                                            confirmed_by_admin: false,
-                                            waiting_payment: false,
-                                            in_production: false,
-                                            waiting_for_retrieval: false,
-                                            retrieved: false,
-                                            waiting_for_delivery: false,
-                                            delivered: true,
-                                            cancelled: false,
-                                        },
-                                    }));
-                                }}
-                            >
-                                Entregue
-                            </button>
-                            <button
-                                className={`User_Order_Edit_Status_Option ${editedSubscription.status.cancelled ? "Active" : ""} ${
-                                    subscription.status.cancelled ? "Actual" : ""
-                                }`}
-                                onClick={() => {
-                                    setEditedSubscription((currentSubscription) => ({
-                                        ...currentSubscription,
-                                        status: {
-                                            ...currentSubscription.status,
-                                            confirmed_by_admin: false,
-                                            waiting_payment: false,
-                                            in_production: false,
-                                            waiting_for_retrieval: false,
-                                            retrieved: false,
-                                            waiting_for_delivery: false,
-                                            delivered: false,
-                                            cancelled: true,
-                                        },
-                                    }));
-                                }}
-                            >
-                                Cancelado
-                            </button>
-                        </div>
-                        <button
-                            className="User_Order_Edit_Status_Save_Btn"
-                            onClick={async () => {
-                                try {
-                                    const response = await axios.post(
-                                        `${UPDATE_SPECIFIC_SUBSCRIPTION_API}`,
-                                        {
-                                            userId: user.currentUser?.id,
-                                            subscriptionId: subscription.subscription_external_reference,
-                                            editedSubscription,
-                                        },
-                                        {
-                                            headers: {
-                                                "Content-Type": "application/json",
-                                            },
-                                        }
-                                    );
-                                    if (response.data.error) {
-                                        console.error(response.data.error);
-                                    } else {
-                                        console.log(response.data.subscription_data);
-                                        updateSubscription(response.data.subscription_data as Subscription);
-                                    }
-                                } catch (error) {
-                                    if (axios.isAxiosError(error)) {
-                                        console.error(error.response?.data);
-                                    } else {
-                                        console.error("An unexpected error occurred:", error);
-                                    }
-                                }
-                                setIsEditing(false);
-                            }}
-                        >
-                            Salvar Alterações
-                        </button>
-
-                        <button
-                            className="User_Order_Edit_Status_Cancel_Btn"
+                <AnimatePresence>
+                    {!isEditing && (
+                        <m.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
+                            className="User_Order_Status_Call_Btn User_Order_Change_Status_Btn"
+                            key={"User_Order_Status_Btn"}
+                            layout
                             onClick={() => {
-                                setIsEditing(false);
-                                setEditedSubscription(subscription);
+                                setIsEditing(true);
                             }}
                         >
-                            Cancelar Alterações
-                        </button>
-                    </m.div>
-                )}
-            </AnimatePresence>
+                            <span className="material-icons">published_with_changes</span>
+                            <p className="User_Order_Change_Status_Btn_Text">Alterar Status da Assinatura</p>
+                        </m.button>
+                    )}
+
+                    {isEditing && (
+                        <m.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
+                            className="User_Order_Edit_Status"
+                            key={"User_Order_Edit_Status"}
+                            layout
+                        >
+                            <h4>Alterar Status do Pedido</h4>
+                            <div className="User_Order_Edit_Status_Options">
+                                <button
+                                    className={`User_Order_Edit_Status_Option ${editedSubscription.status.waiting_payment ? "Active" : ""} ${
+                                        subscription.status.waiting_payment ? "Actual" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setEditedSubscription((currentSubscription) => ({
+                                            ...currentSubscription,
+                                            status: {
+                                                ...currentSubscription.status,
+                                                confirmed_by_admin: false,
+                                                waiting_payment: true,
+                                                in_production: false,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        }));
+                                    }}
+                                >
+                                    Aguardando Pagamento
+                                </button>
+                                <button
+                                    className={`User_Order_Edit_Status_Option ${editedSubscription.status.confirmed_by_admin ? "Active" : ""} ${
+                                        subscription.status.confirmed_by_admin ? "Actual" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setEditedSubscription((currentSubscription) => ({
+                                            ...currentSubscription,
+                                            status: {
+                                                ...currentSubscription.status,
+                                                confirmed_by_admin: true,
+                                                waiting_payment: false,
+                                                in_production: false,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        }));
+                                    }}
+                                >
+                                    Confirmado
+                                </button>
+                                <button
+                                    className={`User_Order_Edit_Status_Option ${editedSubscription.status.in_production ? "Active" : ""} ${
+                                        subscription.status.in_production ? "Actual" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setEditedSubscription((currentSubscription) => ({
+                                            ...currentSubscription,
+                                            status: {
+                                                ...currentSubscription.status,
+                                                confirmed_by_admin: false,
+                                                waiting_payment: false,
+                                                in_production: true,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        }));
+                                    }}
+                                >
+                                    Assinatura Ativa
+                                </button>
+                                <button
+                                    className={`User_Order_Edit_Status_Option ${editedSubscription.status.waiting_for_retrieval ? "Active" : ""} ${
+                                        subscription.status.waiting_for_retrieval ? "Actual" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setEditedSubscription((currentSubscription) => ({
+                                            ...currentSubscription,
+                                            status: {
+                                                ...currentSubscription.status,
+                                                confirmed_by_admin: false,
+                                                waiting_payment: false,
+                                                in_production: false,
+                                                waiting_for_retrieval: true,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        }));
+                                    }}
+                                >
+                                    Aguardando Retirada
+                                </button>
+                                <button
+                                    className={`User_Order_Edit_Status_Option ${editedSubscription.status.retrieved ? "Active" : ""} ${
+                                        subscription.status.retrieved ? "Actual" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setEditedSubscription((currentSubscription) => ({
+                                            ...currentSubscription,
+                                            status: {
+                                                ...currentSubscription.status,
+                                                confirmed_by_admin: false,
+                                                waiting_payment: false,
+                                                in_production: false,
+                                                waiting_for_retrieval: false,
+                                                retrieved: true,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        }));
+                                    }}
+                                >
+                                    Retirado no Balcão
+                                </button>
+                                <button
+                                    className={`User_Order_Edit_Status_Option ${editedSubscription.status.waiting_for_delivery ? "Active" : ""} ${
+                                        subscription.status.waiting_for_delivery ? "Actual" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setEditedSubscription((currentSubscription) => ({
+                                            ...currentSubscription,
+                                            status: {
+                                                ...currentSubscription.status,
+                                                confirmed_by_admin: false,
+                                                waiting_payment: false,
+                                                in_production: false,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: true,
+                                                delivered: false,
+                                                cancelled: false,
+                                            },
+                                        }));
+                                    }}
+                                >
+                                    Aguardando Entrega
+                                </button>
+                                <button
+                                    className={`User_Order_Edit_Status_Option ${editedSubscription.status.delivered ? "Active" : ""} ${
+                                        subscription.status.delivered ? "Actual" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setEditedSubscription((currentSubscription) => ({
+                                            ...currentSubscription,
+                                            status: {
+                                                ...currentSubscription.status,
+                                                confirmed_by_admin: false,
+                                                waiting_payment: false,
+                                                in_production: false,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: true,
+                                                cancelled: false,
+                                            },
+                                        }));
+                                    }}
+                                >
+                                    Entregue
+                                </button>
+                                <button
+                                    className={`User_Order_Edit_Status_Option ${editedSubscription.status.cancelled ? "Active" : ""} ${
+                                        subscription.status.cancelled ? "Actual" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setEditedSubscription((currentSubscription) => ({
+                                            ...currentSubscription,
+                                            status: {
+                                                ...currentSubscription.status,
+                                                confirmed_by_admin: false,
+                                                waiting_payment: false,
+                                                in_production: false,
+                                                waiting_for_retrieval: false,
+                                                retrieved: false,
+                                                waiting_for_delivery: false,
+                                                delivered: false,
+                                                cancelled: true,
+                                            },
+                                        }));
+                                    }}
+                                >
+                                    Cancelado
+                                </button>
+                            </div>
+                            <button
+                                className="User_Order_Edit_Status_Save_Btn"
+                                onClick={async () => {
+                                    try {
+                                        const response = await axios.post(
+                                            `${UPDATE_SPECIFIC_SUBSCRIPTION_API}`,
+                                            {
+                                                userId: user.currentUser?.id,
+                                                subscriptionId: subscription.subscription_external_reference,
+                                                editedSubscription,
+                                            },
+                                            {
+                                                headers: {
+                                                    "Content-Type": "application/json",
+                                                },
+                                            }
+                                        );
+                                        if (response.data.error) {
+                                            console.error(response.data.error);
+                                        } else {
+                                            console.log(response.data.subscription_data);
+                                            updateSubscription(response.data.subscription_data as Subscription);
+                                        }
+                                    } catch (error) {
+                                        if (axios.isAxiosError(error)) {
+                                            console.error(error.response?.data);
+                                        } else {
+                                            console.error("An unexpected error occurred:", error);
+                                        }
+                                    }
+                                    setIsEditing(false);
+                                }}
+                            >
+                                Salvar Alterações
+                            </button>
+
+                            <button
+                                className="User_Order_Edit_Status_Cancel_Btn"
+                                onClick={() => {
+                                    setIsEditing(false);
+                                    setEditedSubscription(subscription);
+                                }}
+                            >
+                                Cancelar Alterações
+                            </button>
+                        </m.div>
+                    )}
+                </AnimatePresence>
+            </m.div>
         </div>
     );
 };

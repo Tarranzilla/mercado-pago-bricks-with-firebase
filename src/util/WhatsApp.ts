@@ -9,7 +9,7 @@ export const generate_whatsapp_url_for_more_order_info = (orderNumber: string, b
 };
 
 export const generate_whatsapp_url_for_contacting_client = (clientName: string, clientTelephone: string) => {
-    let message = "Olá" + { clientName } + ", aqui é a Letícia da Tropical Cacau!";
+    let message = "Olá " + clientName + ", aqui é a Letícia da Tropical Cacau!";
 
     // Encode the message in a URL
     const encodedMessage = encodeURIComponent(message);

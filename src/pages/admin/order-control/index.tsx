@@ -41,6 +41,10 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
     const [isEditing, setIsEditing] = useState(false);
     const [editedOrder, setEditedOrder] = useState<Order>(order);
 
+    const cleanPhoneNumber = (phoneNumber: string): string => {
+        return phoneNumber.replace(/[-()\s]/g, "");
+    };
+
     return (
         <m.div className="User_Order_Item Order_Control_Item" key={index} layout transition={{ duration: 0.1 }}>
             <m.div layout key="order_item_header" className="Order_Item_Header">
@@ -191,7 +195,7 @@ export const OrderItem: React.FC<OrderItemProps> = ({ order, index, order_number
             <m.div layout key="order_item_actions" className="User_Order_Actions">
                 <m.a
                     className="User_Order_Status_Call_Btn"
-                    href={generate_whatsapp_url_for_contacting_client(order.customer_name, order.customer_phone)}
+                    href={generate_whatsapp_url_for_contacting_client(order.customer_name, cleanPhoneNumber(order.customer_phone))}
                     target="_blank"
                     rel="noopener noreferrer"
                     layout
